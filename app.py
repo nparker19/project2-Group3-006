@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import flask
 import requests
 import os
@@ -35,3 +36,20 @@ def index():
 app.register_blueprint(bp)
 
 app.run()
+=======
+import flask
+import os
+from flask_sqlalchemy import SQLAlchemy
+from dotenv import load_dotenv, find_dotenv
+
+load_dotenv(find_dotenv())
+
+app = flask.Flask(__name__, static_folder="./build/static")
+db_url = os.getenv("DATABASE_URL")
+if db_url.startswith("postgres://"):
+    db_url = db_url.replace("postgres://", "postgresql://", 1)
+app.config["SQLALCHEMY_DATABASE_URI"] = db_url
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+app.secret_key = b"I am a secret key!"
+db = SQLAlchemy(app)
+>>>>>>> 3e97b34fdfe07a90c001e264da531b16cdeb6793
