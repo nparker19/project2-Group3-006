@@ -106,9 +106,6 @@ def login_post():
 @login_required
 def hello_world():
     email = dict(session)["profile"]["email"]
-<<<<<<< HEAD
-    return flask.render_template("home.html", currentUserEmail={email})
-=======
     email_user = User.query.filter_by(email=email).first()
     if email_user:
         pass
@@ -116,8 +113,8 @@ def hello_world():
         email_user = User(email=email)
         db.session.add(email_user)
         db.session.commit()
->>>>>>> f8fd32df519753d28201212cf9b8e4a8fad9de12
-    return f"Hello, you are logged in as {email}!"
+    return flask.render_template("home.html", currentUserEmail=email_user)
+    # return f"Hello, you are logged in as {email}!"
 
 
 @app.route("/login/google")
