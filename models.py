@@ -4,13 +4,13 @@ from flask_login import UserMixin
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80))
+    email = db.Column(db.String(80))
 
     def __repr__(self):
-        return f"<User {self.username}>"
+        return f"<User {self.email}>"
 
     def get_username(self):
-        return self.username
+        return self.email
 
 
 db.create_all()
