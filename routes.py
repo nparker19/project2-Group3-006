@@ -4,7 +4,7 @@ from app import app, db
 from models import User
 import os
 from authlib.integrations.flask_client import OAuth
-from datetime import timedelta
+from datetime import timedelta, datetime
 from flask import session
 from functools import wraps
 import flask
@@ -115,7 +115,6 @@ def hello_world():
         db.session.add(email_user)
         db.session.commit()
     return flask.render_template("home.html", currentUserEmail=email_user)
-    # return f"Hello, you are logged in as {email}!"
 
 
 @app.route("/login/google")
@@ -145,7 +144,10 @@ def logout():
 def suggestions():
 
     scheduleDict = flask.request.json.get("scheduleDict")
-    print(scheduleDict)
+    # Schedule must be sorted in chronological order or the times will not be accurate
+    scheduleDict = sorted(
+        scheduleDict, key=lambda x: datetime.strptime(x["time"], "%I:%M %p")
+    )
 
     message = ""
     try:
