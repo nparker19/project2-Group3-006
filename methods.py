@@ -1,10 +1,11 @@
 from datetime import datetime, timedelta
 
-# A function which takes in a list of times (as a string), and outputs schedule suggestions
+# A function which takes in a list of times (as a string, IN chronological order), and outputs schedule suggestions
 def suggest(scheduleDict):
     timeList = []
     eventList = []
     suggestList = []
+
     for item in scheduleDict:
         task_time = datetime.strptime(item["time"], "%I:%M %p")
         timeList.append(task_time)
@@ -43,15 +44,4 @@ def suggest(scheduleDict):
                     + ". This would be a great time to study or get in quick nap."
                 )
             initialTime = timeList[i]
-
     return suggestList
-
-
-if __name__ == "__main__":
-    suggest(
-        scheduleDict=[
-            {"event": "class", "time": "09:00 AM"},
-            {"event": "meeting", "time": "10:30 PM"},
-            {"event": "meeting2", "time": "06:00 PM"},
-        ]
-    )
