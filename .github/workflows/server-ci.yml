@@ -5,9 +5,9 @@ name: Python Server CI
 # Controls when the action will run. 
 on:
   push:
-    branches: [ p2-nparker19 ]
+    branches: [ main ]
   pull_request:
-    branches: [ p2-nparker19 ]
+    branches: [ main ]
 
 
   # Allows you to run this workflow manually from the Actions tab
