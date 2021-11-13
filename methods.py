@@ -43,15 +43,4 @@ def suggest(scheduleDict):
                     + ". This would be a great time to study or get in quick nap."
                 )
             initialTime = timeList[i]
-
     return suggestList
-
-
-if __name__ == "__main__":
-    suggest(
-        scheduleDict=[
-            {"event": "class", "time": "09:00 AM"},
-            {"event": "meeting", "time": "10:30 PM"},
-            {"event": "meeting2", "time": "06:00 PM"},
-        ]
-    )
