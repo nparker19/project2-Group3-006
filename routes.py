@@ -13,6 +13,7 @@ from flask_login.utils import login_required
 from methods import suggest
 import json
 
+
 login_manager = LoginManager()
 login_manager.login_view = "login"
 login_manager.init_app(app)
@@ -159,6 +160,23 @@ def suggestions():
         )
 
     return flask.jsonify({"schedule_server": scheduleDict, "message_server": message})
+
+
+@app.route("/complete", methods=["POST"])
+def complete():
+
+    currentDate = flask.request.json.get("currentDate")
+    print(currentDate)
+    scheduleDict = flask.request.json.get("scheduleDict")
+    scheduleDict = sorted(
+        scheduleDict, key=lambda x: datetime.strptime(x["time"], "%I:%M %p")
+    )
+    return flask.jsonify(
+        {
+            "schedule_server": scheduleDict,
+            "date_server": currentDate,
+        }
+    )
 
 
 bp = flask.Blueprint("bp", __name__, template_folder="./build")
