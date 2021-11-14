@@ -25,7 +25,7 @@ class getSuggestionsTests(unittest.TestCase):
         self.success_test_params = [
             {
                 INPUT: [],
-                EXPECTED_OUTPUT: (""),
+                EXPECTED_OUTPUT: [],
             },
             {
                 INPUT: {
@@ -36,8 +36,10 @@ class getSuggestionsTests(unittest.TestCase):
                     ]
                 },
                 EXPECTED_OUTPUT: (
-                    "You have a good amount of time between class and meeting You could get in a workout and a study session. ",
-                    "You have some time between meeting and meeting2. This would be a great time to study or get in quick nap.",
+                    [
+                        "You have a good amount of time between class and meeting You could get in a workout and a study session. ",
+                        "You have some time between meeting and meeting2. This would be a great time to study or get in quick nap.",
+                    ]
                 ),
             },
         ]
