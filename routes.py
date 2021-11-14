@@ -5,7 +5,7 @@ from models import User
 import os
 from authlib.integrations.flask_client import OAuth
 from datetime import timedelta, datetime
-from flask import session
+from flask import session, request
 from functools import wraps
 import flask
 from flask_login import login_user, current_user, LoginManager
@@ -146,9 +146,10 @@ def suggestions():
 
     scheduleDict = flask.request.json.get("scheduleDict")
     # Schedule must be sorted in chronological order or the times will not be accurate
-    scheduleDict = sorted(
-        scheduleDict, key=lambda x: datetime.strptime(x["time"], "%I:%M %p")
-    )
+    if len(scheduleDict) != 0:
+        scheduleDict = sorted(
+            scheduleDict, key=lambda x: datetime.strptime(x["time"], "%I:%M %p")
+        )
 
     message = ""
     try:
@@ -166,17 +167,13 @@ def suggestions():
 def complete():
 
     currentDate = flask.request.json.get("currentDate")
-    print(currentDate)
     scheduleDict = flask.request.json.get("scheduleDict")
-    scheduleDict = sorted(
-        scheduleDict, key=lambda x: datetime.strptime(x["time"], "%I:%M %p")
-    )
-    return flask.jsonify(
-        {
-            "schedule_server": scheduleDict,
-            "date_server": currentDate,
-        }
-    )
+    if len(scheduleDict) != 0:
+        scheduleDict = sorted(
+            scheduleDict, key=lambda x: datetime.strptime(x["time"], "%I:%M %p")
+        )
+
+    return flask.jsonify({"schedule_server": scheduleDict})
 
 
 bp = flask.Blueprint("bp", __name__, template_folder="./build")

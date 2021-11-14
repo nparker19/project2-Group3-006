@@ -1,19 +1,16 @@
 import './App.css';
 import React, { useState, useRef } from 'react';
-import { privateEncrypt } from 'crypto';
+
 
 
 
 function App() {
 
   const [scheduleDict, setScheduleDict] = useState([]);
-  console.log(scheduleDict);
   const textInput = useRef('');
   const timeInput = useRef('');
   const dateInput = useRef('');
   const messages = useRef('');
-  const [scheduleDate, setDate] = useState('');
-  console.log(scheduleDate);
 
   function Schedule(props) {
 
@@ -44,36 +41,34 @@ function App() {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ "scheduleDict": scheduleDict }, { "messages": messages }),
+      body: JSON.stringify({ "scheduleDict": scheduleDict, "messages": messages }),
     }).then(response => response.json()).then(data => {
       for (let i = 0; i < data.message_server.length; i++) {
         alert(data.message_server[i]);
-        console.log(data.message_server);
       }
       setScheduleDict(data.schedule_server);
-    })
+    });
   }
 
   function onCompleteClick() {
-    let newDate = dateInput.current.value;
-    setDate(JSON.stringify(newDate));
-
+    const response_data = JSON.stringify({ "scheduleDict": scheduleDict, "currentDate": dateInput.current.value });
     fetch('/complete', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ "scheduleDict": scheduleDict }, { "currentDate": scheduleDate }),
+      body: response_data,
     }).then(response => response.json()).then(data => {
       setScheduleDict(data.schedule_server);
-      setDate(data.date_server);
-      //window.location.href = "/";
-    })
+      window.location.replace("/");
+    });
+
   }
 
   return (
     <>
       <h1>Create Schedule</h1>
+
       <input ref={dateInput} type="date" />
 
       <div class="idList" align="center">
