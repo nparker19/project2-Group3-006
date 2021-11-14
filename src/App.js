@@ -2,13 +2,12 @@ import './App.css';
 import React, { useState, useRef } from 'react';
 
 
-
-
 function App() {
 
   const [scheduleDict, setScheduleDict] = useState([]);
-  const textInput = useRef('');
-  const timeInput = useRef('');
+  const eventInput = useRef('');
+  const startTimeInput = useRef('');
+  const endTimeInput = useRef('');
   const dateInput = useRef('');
   const messages = useRef('');
 
@@ -19,19 +18,21 @@ function App() {
       setScheduleDict(newDict);
     }
     return (
-      <h3>{props.item} at {props.time} <button onClick={onDelete}>X</button></h3>
+      <h3>{props.item} from {props.startTime} to {props.endTime}<button onClick={onDelete}>X</button></h3>
     );
   }
 
   function onAddClick() {
-    let newTask = textInput.current.value;
-    let newTime = timeInput.current.value;
-    let newScheduleDict = [...scheduleDict, { "event": newTask, "time": newTime }];
+    let newEvent = eventInput.current.value;
+    let newStartTime = startTimeInput.current.value;
+    let newEndTime = endTimeInput.current.value;
+    let newScheduleDict = [...scheduleDict, { "event": newEvent, "startTime": newStartTime, "endTime": newEndTime }];
 
     setScheduleDict(newScheduleDict);
 
-    textInput.current.value = "";
-    timeInput.current.value = "";
+    eventInput.current.value = "";
+    startTimeInput.current.value = "";
+    endTimeInput.current.value = "";
   }
 
   function onSaveClick() {
@@ -72,13 +73,15 @@ function App() {
       <input ref={dateInput} type="date" />
 
       <div class="idList" align="center">
-        <h3>{scheduleDict.map((dictItem) => <Schedule item={dictItem.event} time={dictItem.time} />)}</h3>
+        <h3>{scheduleDict.map((dictItem) => <Schedule item={dictItem.event} startTime={dictItem.startTime} endTime={dictItem.endTime} />)}</h3>
       </div>
 
       <div class="editSchedule">
-        <input ref={textInput} type="text" placeholder="Input event" />
-        <input ref={timeInput} type="text" placeholder="Input starting time for event" />
-
+        <input ref={eventInput} type="text" placeholder="Input event" />
+        <label for="start">Input event start time</label>
+        <input ref={startTimeInput} type="time" id="start" />
+        <label for="end">Input event end time</label>
+        <input ref={endTimeInput} type="time" id="end" />
         <button onClick={() => onAddClick()}> Add Event to Schedule </button>
         <button onClick={() => onSaveClick()}> Save Schedule and receive suggestions</button>
         <button onClick={() => onCompleteClick()}> Complete Schedule and save to google calendar</button>

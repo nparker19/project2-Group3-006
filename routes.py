@@ -140,22 +140,17 @@ def logout():
     return redirect("/")
 
 
-# This route will handle the fetch API Post call from the new schedule html
+# This route will handle the fetch API Post call from the create schedule page
 @app.route("/suggestions", methods=["POST"])
 def suggestions():
 
     scheduleDict = flask.request.json.get("scheduleDict")
-    # Schedule must be sorted in chronological order or the times will not be accurate
-    if len(scheduleDict) != 0:
-        scheduleDict = sorted(
-            scheduleDict, key=lambda x: datetime.strptime(x["time"], "%I:%M %p")
-        )
-
-    message = ""
+    print(scheduleDict)
+    message = []
     try:
         message = suggest(scheduleDict)
     except ValueError:
-        message = "Invalid time entered. Pls enter time in 00:00 AM/PM format"
+        message = ["Invalid time entered. Pls enter time in 00:00 AM/PM format"]
         return flask.jsonify(
             {"schedule_server": scheduleDict, "message_server": message}
         )
@@ -170,7 +165,7 @@ def complete():
     scheduleDict = flask.request.json.get("scheduleDict")
     if len(scheduleDict) != 0:
         scheduleDict = sorted(
-            scheduleDict, key=lambda x: datetime.strptime(x["time"], "%I:%M %p")
+            scheduleDict, key=lambda x: datetime.strptime(x["startTime"], "%H:%M")
         )
 
     return flask.jsonify({"schedule_server": scheduleDict})
