@@ -49,11 +49,11 @@ def Create_Service(client_secret_file, api_name, api_version, *scopes, prefix=''
 def convert_to_RFC_datetime(year=1900, month=1, day=1, hour=0, minute=0):
     dt = datetime.datetime(year, month, day, hour, minute, 0).isoformat() + 'Z'
     return dt
+    
 
 if __name__ == '__main__':
-    API_NAME = 'SchedularApp'
+    API_NAME = 'calendar'
     API_VERSION = 'v3'
     SCOPES = ['https://www.googleapis.com/auth/calendar']
-    # SCOPES = ['https://www.googleapis.com/auth/calendar.readonly']
     CLIENT_FILE = 'credentials.json'
     service = Create_Service(CLIENT_FILE, API_NAME, API_VERSION, SCOPES, 'x')
