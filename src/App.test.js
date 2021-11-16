@@ -20,7 +20,7 @@ test('add event', () => {
   fireEvent.change(eventInput, { target: { value: 'Analysis II' } });
   fireEvent.click(addButton);
 
-  const eventEntry = screen.getByText('Analysis II from  to  ');
+  const eventEntry = screen.getByText('/Analysis II/');
   const deleteButton = screen.getByText('X');
   expect(eventEntry).toBeInTheDocument();
   expect(deleteButton).toBeInTheDocument();
@@ -36,7 +36,7 @@ test('delete event', () => {
   fireEvent.change(eventInput, { target: { value: 'Analysis II' } });
   fireEvent.click(addButton);
 
-  const eventEntry = screen.getByText('Analysis II from  to  ');
+  const eventEntry = screen.getByText('/Analysis II/');
   const deleteButton = screen.getByText('X');
   expect(eventEntry).toBeInTheDocument();
   expect(deleteButton).toBeInTheDocument();
