@@ -158,7 +158,8 @@ def complete():
     if len(scheduleDict) != 0:
         scheduleDict = sorted(
             scheduleDict, key=lambda x: datetime.strptime(x["startTime"], "%H:%M")
-        )    
+        )
+        
         try:
             checkConnect()
             createSchedules(scheduleDict)

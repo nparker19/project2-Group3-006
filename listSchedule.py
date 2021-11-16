@@ -21,4 +21,5 @@ def listSchedules():
     for event in events:
         start = event['start'].get('dateTime', event['start'].get('date'))
         print(start, event['summary'])
+        print(listSchedules())
 listSchedules()
