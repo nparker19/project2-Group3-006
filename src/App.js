@@ -18,7 +18,7 @@ function App() {
       setScheduleDict(newDict);
     }
     return (
-      <h3>{props.item} from {props.startTime} to {props.endTime}<button onClick={onDelete}>X</button></h3>
+      <h2>{props.item} from {props.startTime} to {props.endTime}<button onClick={onDelete}>X</button></h2>
     );
   }
 
@@ -67,26 +67,33 @@ function App() {
   }
 
   return (
-    <>
+    <div class="display" align="center">
       <h1>Create Schedule</h1>
 
       <input ref={dateInput} type="date" />
 
-      <div class="idList" align="center">
-        <h3>{scheduleDict.map((dictItem) => <Schedule item={dictItem.event} startTime={dictItem.startTime} endTime={dictItem.endTime} />)}</h3>
+      <div class="scheduleList" align="center">
+        <h2>{scheduleDict.map((dictItem) => <Schedule item={dictItem.event} startTime={dictItem.startTime} endTime={dictItem.endTime} />)}</h2>
       </div>
 
-      <div class="editSchedule">
-        <input ref={eventInput} type="text" placeholder="Input event" />
+      <div class="editSchedule" align="center">
+        <input ref={eventInput} type="text" placeholder="Input event" data-testid="event_input" />
         <label for="start">Input event start time</label>
-        <input ref={startTimeInput} type="time" id="start" />
+        <input ref={startTimeInput} type="time" id="start" data-testid="start_input" />
         <label for="end">Input event end time</label>
-        <input ref={endTimeInput} type="time" id="end" />
-        <button onClick={() => onAddClick()}> Add Event to Schedule </button>
-        <button onClick={() => onSaveClick()}> Save Schedule and receive suggestions</button>
-        <button onClick={() => onCompleteClick()}> Complete Schedule and save to google calendar</button>
+        <input ref={endTimeInput} type="time" id="end" data-testid="end_input" />
+
+        <button onClick={() => onAddClick()}> Add Event </button>
+
+        <div class="Save" align="center">
+          <button onClick={() => onSaveClick()}> Save Schedule and receive suggestions</button>
+        </div>
+        <div class="Complete" align="center">
+          <button onClick={() => onCompleteClick()}> Complete Schedule and save to google calendar</button>
+        </div>
+
       </div>
-    </>
+    </div>
 
 
   );
