@@ -12,8 +12,8 @@ API_NAME = 'calendar'
 API_VERSION = 'v3'
 SCOPES = ['https://www.googleapis.com/auth/calendar']
 
-# scheduleDict=[{"event":"class", "startTime":"09:00 AM","endTime":"10:04 AM"}, 
-#              {"event":"class1", "startTime":"09:00 AM","endTime":"10:04 AM"},
+# scheduleDict=[{"event":"gymm", "startTime":"09:00 PM","endTime":"10:04 PM"}, 
+#              {"event":"class1", "startTime":"09:00 PM","endTime":"10:04 PM"},
 #              {"event":"class1", "startTime":"09:00 AM","endTime":"10:04 AM"}]
 
 def creatSchedules(x):
@@ -30,19 +30,19 @@ def creatSchedules(x):
         startTime = arrow.get(str(today)+' '+ startTime, frmt).isoformat()
         endTime = arrow.get(str(today)+' '+ endTime, frmt).isoformat()
 
-        event_res= service.events().insert(calendarId='primary',sendNotifications=True,
+        event_result= service.events().insert(calendarId='primary',sendNotifications=True,
         body={
-            "summary": 'event', 
+            "summary": event, 
             "description": 'testing app',
-            "start": {"dateTime": startTime, "timeZone": 'GMT-5'}, 
-            "end": {"dateTime": endTime, "timeZone": 'GMT-5'},
+            "start": {"dateTime": startTime, "timeZone": 'America/New_York'}, 
+            "end": {"dateTime": endTime, "timeZone": 'America/New_York'},
             }
         ).execute()
 
         print("created event")
-        print("id: ", event_res['id'])
-        print("summary: ", event_res['summary'])
-        print("starts at: ", event_res['start']['dateTime'])
-        print("ends at: ", event_res['end']['dateTime'])
-        print(event_res)
+        print("id: ", event_result['id'])
+        print("summary: ", event_result['summary'])
+        print("starts at: ", event_result['start']['dateTime'])
+        print("ends at: ", event_result['end']['dateTime'])
+        # print(event_result)
 # creatSchedules(scheduleDict)

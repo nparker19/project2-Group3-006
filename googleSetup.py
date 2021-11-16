@@ -51,7 +51,7 @@ def convert_to_RFC_datetime(year=1900, month=1, day=1, hour=0, minute=0):
     return dt
 
 if __name__ == '__main__':
-    API_NAME = 'SchedularApp'
+    API_NAME = 'calendar'
     API_VERSION = 'v3'
     SCOPES = ['https://www.googleapis.com/auth/calendar']
     CLIENT_FILE = 'credentials.json'
