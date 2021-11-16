@@ -5,13 +5,12 @@ from models import User
 import os
 from authlib.integrations.flask_client import OAuth
 from datetime import timedelta
+import flask
 from flask import session
 from functools import wraps
-import flask
 from flask_login import login_user, current_user, LoginManager
 from flask_login.utils import login_required
-
-from createSchedule import createSchedules
+from createSchedule import creatSchedules
 from checkConnection import checkConnect
 
 login_manager = LoginManager()
@@ -162,7 +161,7 @@ def complete():
         
         try:
             checkConnect()
-            createSchedules(scheduleDict)
+            creatSchedules(scheduleDict)
         except KeyError:
             pass
 
@@ -186,4 +185,10 @@ def index():
 
 app.register_blueprint(bp)
 
-app.run(debug=True)
+if __name__ == "__main__":
+    app.run(
+        host=os.getenv("IP", "0.0.0.0"),
+        # port=int(os.getenv("PORT", "8081")
+        port=int(os.getenv("PORT", "8080")),
+        # debug=True,
+    )
