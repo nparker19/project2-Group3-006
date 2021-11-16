@@ -10,7 +10,7 @@ from functools import wraps
 import flask
 from flask_login import login_user, current_user, LoginManager
 from flask_login.utils import login_required
-from methods import suggest
+from methods import suggest, sortDictTimeMilitary
 import json
 
 
@@ -145,8 +145,10 @@ def logout():
 def suggestions():
 
     scheduleDict = flask.request.json.get("scheduleDict")
-    print(scheduleDict)
     message = []
+
+    scheduleDict = sortDictTimeMilitary(scheduleDict)
+
     try:
         message = suggest(scheduleDict)
     except ValueError:
@@ -162,11 +164,9 @@ def suggestions():
 def complete():
 
     currentDate = flask.request.json.get("currentDate")
+    print(currentDate)
     scheduleDict = flask.request.json.get("scheduleDict")
-    if len(scheduleDict) != 0:
-        scheduleDict = sorted(
-            scheduleDict, key=lambda x: datetime.strptime(x["startTime"], "%H:%M")
-        )
+    scheduleDict = sortDictTimeMilitary(scheduleDict)
 
     return flask.jsonify({"schedule_server": scheduleDict})
 
@@ -177,8 +177,8 @@ bp = flask.Blueprint("bp", __name__, template_folder="./build")
 @bp.route("/index")
 def index():
     """
-    Create schedule page which allows the user to edit
-    their current daily schedule and save to their google calendar
+    Renders the creat schedule page which allows the user to edit
+    their current daily schedule, receive suggestions, and save to their google calendar
     """
 
     return flask.render_template("index.html")
