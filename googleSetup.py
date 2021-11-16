@@ -54,6 +54,5 @@ if __name__ == '__main__':
     API_NAME = 'SchedularApp'
     API_VERSION = 'v3'
     SCOPES = ['https://www.googleapis.com/auth/calendar']
-    # SCOPES = ['https://www.googleapis.com/auth/calendar.readonly']
     CLIENT_FILE = 'credentials.json'
     service = Create_Service(CLIENT_FILE, API_NAME, API_VERSION, SCOPES, 'x')
