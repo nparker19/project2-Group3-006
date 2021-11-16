@@ -20,3 +20,9 @@ requests==2.23.0
 six==1.14.0
 urllib3==1.25.8
 Werkzeug==1.0.1
+Flask
+requests
+python-dotenv
+flask-login
+Flask-SQLAlchemy
+psycopg2-binary
