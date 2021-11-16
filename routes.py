@@ -13,7 +13,7 @@ from flask_login.utils import login_required
 from methods import suggest, sortDictTimeMilitary
 import json
 
-from createSchedule import createSchedules
+from createSchedule import creatSchedules
 from checkConnection import checkConnect
 
 login_manager = LoginManager()
@@ -174,7 +174,7 @@ def complete():
 
         try:
             checkConnect()
-            createSchedules(scheduleDict)
+            creatSchedules(scheduleDict)
         except KeyError:
             pass
 
@@ -196,4 +196,9 @@ def index():
 
 app.register_blueprint(bp)
 
-app.run(debug=True)
+if __name__ == "__main__":
+    app.run(
+        # host=os.getenv("IP", "0.0.0.0"),
+        # port=int(os.getenv("PORT", "8080")),
+        debug=True,
+    )
