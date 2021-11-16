@@ -16,21 +16,13 @@ test('add event', () => {
   render(<App />);
   const addButton = screen.getByText('Add Event');
   const eventInput = screen.getByTestId('event_input');
-  const endInput = screen.getByTestId('end_input');
-  const startInput = screen.getByTestId('start_input');
 
-  fireEvent.change(eventInput, { target: { value: 'Workout' } });
-  fireEvent.change(startInput, { target: { value: '10:00 AM' } });
-  fireEvent.change(endInput, { target: { value: '11:00 AM' } });
+  fireEvent.change(eventInput, { target: { value: 'Analysis II' } });
   fireEvent.click(addButton);
 
-  const eventEntry = screen.getByText('Workout');
-  const startEntry = screen.getByText('10:00');
-  const endEntry = screen.getByText('11:00');
+  const eventEntry = screen.getByText((content) => content.startsWith('Analysis'));
   const deleteButton = screen.getByText('X');
   expect(eventEntry).toBeInTheDocument();
-  expect(startEntry).toBeInTheDocument();
-  expect(endEntry).toBeInTheDocument();
   expect(deleteButton).toBeInTheDocument();
 });
 
@@ -38,25 +30,18 @@ test('delete event', () => {
   render(<App />);
   const addButton = screen.getByText('Add Event');
   const eventInput = screen.getByTestId('event_input');
-  const endInput = screen.getByTestId('end_input');
-  const startInput = screen.getByTestId('start_input');
-  fireEvent.change(eventInput, { target: { value: 'Workout' } });
-  fireEvent.change(startInput, { target: { value: '10:00 AM' } });
-  fireEvent.change(endInput, { target: { value: '11:00 AM' } });
+
+
+
+  fireEvent.change(eventInput, { target: { value: 'Analysis II' } });
   fireEvent.click(addButton);
 
-  const eventEntry = screen.getByText('Workout');
-  const startEntry = screen.getByText('10:00');
-  const endEntry = screen.getByText('11:00');
+  const eventEntry = screen.getByText((content) => content.startsWith('Analysis'));
   const deleteButton = screen.getByText('X');
   expect(eventEntry).toBeInTheDocument();
-  expect(startEntry).toBeInTheDocument();
-  expect(endEntry).toBeInTheDocument();
   expect(deleteButton).toBeInTheDocument();
 
   fireEvent.click(deleteButton);
   expect(eventEntry).not.toBeInTheDocument();
-  expect(startEntry).not.toBeInTheDocument();
-  expect(endEntry).not.toBeInTheDocument();
   expect(deleteButton).not.toBeInTheDocument();
 });
