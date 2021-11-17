@@ -24,6 +24,7 @@ Flask
 requests
 python-dotenv
 flask-login
+raw
 Flask-SQLAlchemy
 psycopg2-binary
 google-api-python-client==2.30.0
