@@ -13,7 +13,7 @@ from flask_login.utils import login_required
 from methods import suggest, sortDictTimeMilitary
 import json
 
-from createSchedule import createSchedules
+from createSchedule import creatSchedules
 from checkConnection import checkConnect
 
 login_manager = LoginManager()
@@ -174,7 +174,7 @@ def complete():
 
         try:
             checkConnect()
-            createSchedules(scheduleDict)
+            creatSchedules(scheduleDict)
         except KeyError:
             pass
 
