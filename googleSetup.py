@@ -60,6 +60,9 @@ if __name__ == "__main__":
     API_NAME = "calendar"
     API_VERSION = "v3"
     SCOPES = ["https://www.googleapis.com/auth/calendar"]
-    cred = json.dumps(os.getenv("CRED"))
-    CLIENT_FILE = json.loads(cred)
-    service = Create_Service(CLIENT_FILE, API_NAME, API_VERSION, SCOPES, "x")
+    credentials = json.dumps(os.getenv("GOOGLE_APPLICATION_CREDENTIALS"))
+    GOOGLE_APPLICATION_CREDENTIALS = json.loads(credentials)
+
+    service = Create_Service(
+        GOOGLE_APPLICATION_CREDENTIALS, API_NAME, API_VERSION, SCOPES, "x"
+    )
