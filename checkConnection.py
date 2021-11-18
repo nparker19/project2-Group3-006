@@ -6,8 +6,8 @@ import json
 
 load_dotenv(find_dotenv())
 
-credentials = json.dumps(os.getenv("GOOGLE_APPLICATION_CREDENTIALS"))
-GOOGLE_APPLICATION_CREDENTIALS = json.loads(credentials)
+# credentials = json.dumps(os.getenv("GOOGLE_APPLICATION_CREDENTIALS"))
+GOOGLE_APPLICATION_CREDENTIALS = json.loads(os.getenv("GOOGLE_APPLICATION_CREDENTIALS"))
 API_NAME = "calendar"
 API_VERSION = "v3"
 SCOPES = ["https://www.googleapis.com/auth/calendar"]

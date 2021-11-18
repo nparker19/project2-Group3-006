@@ -8,7 +8,7 @@ import arrow
 from googleSetup import Create_Service
 
 credentials = json.dumps(os.getenv("GOOGLE_APPLICATION_CREDENTIALS"))
-GOOGLE_APPLICATION_CREDENTIALS = json.loads(credentials)
+GOOGLE_APPLICATION_CREDENTIALS = json.loads(os.getenv("GOOGLE_APPLICATION_CREDENTIALS"))
 API_NAME = "calendar"
 API_VERSION = "v3"
 SCOPES = ["https://www.googleapis.com/auth/calendar"]
