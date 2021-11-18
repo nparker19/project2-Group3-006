@@ -2,6 +2,7 @@ import pickle
 import os
 import datetime
 import json
+import google_auth_oauthlib.flow
 from dotenv import load_dotenv, find_dotenv
 from google_auth_oauthlib.flow import Flow, InstalledAppFlow
 from googleapiclient.discovery import build
@@ -34,7 +35,9 @@ def Create_Service(client_secret_file, api_name, api_version, *scopes, prefix=""
         if cred and cred.expired and cred.refresh_token:
             cred.refresh(Request())
         else:
-            flow = InstalledAppFlow.from_client_secrets_file(CLIENT_SECRET_FILE, SCOPES)
+            flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(
+                CLIENT_SECRET_FILE, SCOPES
+            )
             cred = flow.run_local_server()
 
         with open(os.path.join(working_dir, token_dir, pickle_file), "wb") as token:
