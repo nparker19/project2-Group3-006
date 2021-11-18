@@ -165,7 +165,7 @@ def suggestions():
 @app.route("/complete", methods=["POST"])
 def complete():
 
-    currentDate = flask.request.json.get("currentDate")
+    scheduleDate = flask.request.json.get("currentDate")
     scheduleDict = flask.request.json.get("scheduleDict")
     if len(scheduleDict) != 0:
         scheduleDict = sorted(

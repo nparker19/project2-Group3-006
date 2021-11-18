@@ -1,14 +1,14 @@
 from __future__ import print_function
 from pprint import pprint
 from datetime import datetime, timedelta
-
-# from httplib2 import Http
-# from apiclient.discovery import build
+import json
 import time
+import os
 import arrow
 from googleSetup import Create_Service
 
-CLIENT_SECRET_FILE = "credentials.json"
+cred = json.dumps(os.getenv("CRED"))
+CLIENT_SECRET_FILE = json.loads(cred)
 API_NAME = "calendar"
 API_VERSION = "v3"
 SCOPES = ["https://www.googleapis.com/auth/calendar"]
@@ -48,4 +48,3 @@ def creatSchedules(x):
         print("summary: ", event_result["summary"])
         print("starts at: ", event_result["start"]["dateTime"])
         print("ends at: ", event_result["end"]["dateTime"])
-        # print(event_result)
