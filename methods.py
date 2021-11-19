@@ -2,25 +2,28 @@ from datetime import datetime, timedelta
 
 # A function which takes in a list of times (as a string), and outputs schedule suggestions
 def suggest(scheduleDict):
-    timeList = []
+    timeStartList = []
+    timeEndList = []
     eventList = []
     suggestList = []
-    for item in scheduleDict:
 
-        try:
-            task_time = datetime.strptime(item["time"], "%I:%M %p")
-            timeList.append(task_time)
+    # Schedule must have items
+    if len(scheduleDict) != 0:
+        scheduleDict = sortDictTimeMilitary(scheduleDict)
+        # Schedule must be sorted in chronological order or the suggestions will not be accurate
+        for item in scheduleDict:
+            task_start_time = datetime.strptime(item["startTime"], "%H:%M")
+            task_end_time = datetime.strptime(item["endTime"], "%H:%M")
+            timeStartList.append(task_start_time)
+            timeEndList.append(task_end_time)
             eventList.append(item["event"])
-        except ValueError:
-            print("Incorrect format")
 
-    if len(timeList) != 0:
-        start = timeList[0]
-        for i in range(1, len(timeList)):
-            time_difference = timeList[i] - start
+        initialTime = timeEndList[0]
+        for i in range(1, len(timeStartList)):
+            time_difference = timeStartList[i] - initialTime
             if time_difference >= timedelta(hours=10):
                 suggestList.append(
-                    "You have a large amount of time between "
+                    "You have a over 9 hours of free time between "
                     + eventList[i - 1]
                     + " and "
                     + eventList[i]
@@ -30,33 +33,37 @@ def suggest(scheduleDict):
                 hours=10
             ):
                 suggestList.append(
-                    "You have a good amount of time between "
+                    "You have over 5 hours of free time between "
                     + eventList[i - 1]
                     + " and "
                     + eventList[i]
-                    + " You could get in a workout and a study session. "
+                    + ". You could get in a workout and a study session!"
                 )
             if time_difference >= timedelta(hours=3) and time_difference < timedelta(
                 hours=6
             ):
                 suggestList.append(
-                    "You have some time between "
+                    "You have a few hours of free time between "
                     + eventList[i - 1]
                     + " and "
                     + eventList[i]
-                    + ". This would be a great time to study or get in quick nap"
+                    + ". This would be a great time to study or get in quick nap."
                 )
-            start = timeList[i]
-
-    for i in suggestList:
-        print(i + "    ")
+            initialTime = timeEndList[i]
+    return suggestList
 
 
-if __name__ == "__main__":
-    suggest(
-        scheduleDict=[
-            {"event": "class", "time": "09:00 AM"},
-            {"event": "meeting", "time": "10:30 AM"},
-            {"event": "meeting2", "time": "06:00 PM"},
-        ]
-    )
+def sortDictTimeMilitary(scheduleDict):
+    if len(scheduleDict) != 0:
+        scheduleDict = sorted(
+            scheduleDict, key=lambda x: datetime.strptime(x["startTime"], "%H:%M")
+        )
+    return scheduleDict
+
+
+def sortDictTimeRegular(scheduleDict):
+    if len(scheduleDict) != 0:
+        scheduleDict = sorted(
+            scheduleDict, key=lambda x: datetime.strptime(x["startTime"], "%I:%M %p")
+        )
+    return scheduleDict

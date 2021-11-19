@@ -1,6 +1,14 @@
+<<<<<<< HEAD
 .env
 __pycache__
 credentials.json
 token_files
+node_modules/
+build/
+=======
+.env/
+__pycache__/
+credentials.json/
+token_files/
 node_modules/
 build/

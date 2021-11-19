@@ -10,6 +10,9 @@ from flask import session
 from functools import wraps
 from flask_login import login_user, current_user, LoginManager
 from flask_login.utils import login_required
+from methods import suggest, sortDictTimeMilitary
+import json
+
 from createSchedule import creatSchedules
 from checkConnection import checkConnect
 
@@ -115,7 +118,6 @@ def hello_world():
         db.session.add(email_user)
         db.session.commit()
     return flask.render_template("home.html", currentUserEmail=email_user)
-    # return f"Hello, you are logged in as {email}!"
 
 
 @app.route("/login/google")
@@ -140,10 +142,35 @@ def logout():
     return redirect("/")
 
 
-# This route will handle the fetch API Post call from the new schedule html
-@app.route("/suggest", methods=["POST"])
-def suggest():
-    pass
+# This route will handle the fetch API Post call from the create schedule page
+@app.route("/suggestions", methods=["POST"])
+def suggestions():
+
+    scheduleDict = flask.request.json.get("scheduleDict")
+    message = []
+
+    scheduleDict = sortDictTimeMilitary(scheduleDict)
+
+    try:
+        message = suggest(scheduleDict)
+    except ValueError:
+        message = ["Invalid time entered. Pls enter time in 00:00 AM/PM format"]
+        return flask.jsonify(
+            {"schedule_server": scheduleDict, "message_server": message}
+        )
+
+    return flask.jsonify({"schedule_server": scheduleDict, "message_server": message})
+
+
+@app.route("/complete", methods=["POST"])
+def complete():
+
+    currentDate = flask.request.json.get("currentDate")
+    print(currentDate)
+    scheduleDict = flask.request.json.get("scheduleDict")
+    scheduleDict = sortDictTimeMilitary(scheduleDict)
+
+    return flask.jsonify({"schedule_server": scheduleDict})
 
 
 bp = flask.Blueprint("bp", __name__, template_folder="./build")
@@ -174,8 +201,8 @@ bp = flask.Blueprint("bp", __name__, template_folder="./build")
 @bp.route("/index")
 def index():
     """
-    Create schedule page which allows the user to edit
-    their current daily schedule and save to their google calendar
+    Renders the creat schedule page which allows the user to edit
+    their current daily schedule, receive suggestions, and save to their google calendar
     """
 
     return flask.render_template("index.html")
