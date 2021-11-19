@@ -171,8 +171,6 @@ bp = flask.Blueprint("bp", __name__, template_folder="./build")
 
 
 
-
-
 @bp.route("/index")
 def index():
     """
@@ -187,8 +185,7 @@ app.register_blueprint(bp)
 
 if __name__ == "__main__":
     app.run(
-        host=os.getenv("IP", "0.0.0.0"),
-        # port=int(os.getenv("PORT", "8081")
-        port=int(os.getenv("PORT", "8080")),
-        # debug=True,
+        # host=os.getenv("IP", "0.0.0.0"),
+        # port=int(os.getenv("PORT", "8080")),
+        debug=True,
     )
