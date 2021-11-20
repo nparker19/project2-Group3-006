@@ -14,7 +14,11 @@ API_VERSION = "v3"
 SCOPES = ["https://www.googleapis.com/auth/calendar"]
 
 
-def creatSchedules(x):
+def creatSchedules(x, militaryTime):
+    """
+    Function takes in a list of dictionary events and a boolean value which is true if the
+    events are in military time and false if they are in a regular 12 hour time format
+    """
     service = Create_Service(
         GOOGLE_APPLICATION_CREDENTIALS, API_NAME, API_VERSION, SCOPES
     )
@@ -25,8 +29,12 @@ def creatSchedules(x):
         event = dict["event"]
         startTime = dict["startTime"]
         endTime = dict["endTime"]
+        # format is initially set for regular 12 hour time format
+        frmt = "YYYY-MM-DD HH:mm A"
+        # If the events are in military time, the format is adjusted
+        if militaryTime:
+            frmt = "YYYY-MM-DD HH:mm"
 
-        frmt = "YYYY-MM-DD HH:mm"
         startTime = arrow.get(str(today) + " " + startTime, frmt).isoformat()
         endTime = arrow.get(str(today) + " " + endTime, frmt).isoformat()
 
