@@ -9,5 +9,5 @@ SCOPES = ['https://www.googleapis.com/auth/calendar']
 
 def checkConnect():
     service = Create_Service(CLIENT_SECRET_FILE, API_NAME, API_VERSION, SCOPES)
-    # print(dir(service))
+    print(dir(service))
 checkConnect()
