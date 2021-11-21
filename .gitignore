@@ -2,4 +2,4 @@
 __pycache__/
 token_files/
 node_modules/
-credentials.json
+build/credentials.json
