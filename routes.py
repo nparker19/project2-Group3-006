@@ -10,7 +10,7 @@ from functools import wraps
 import flask
 from flask_login import login_user, current_user, LoginManager
 from flask_login.utils import login_required
-from methods import suggest, sortDictTimeMilitary
+from methods import suggest, sortDictTimeMilitary, sortDictTimeRegular
 import json
 
 from createSchedule import creatSchedules
@@ -167,31 +167,42 @@ def logout():
 def suggestions():
 
     scheduleDict = flask.request.json.get("scheduleDict")
+    suggestDict = flask.request.json.get("suggestDict")
     message = []
-
-    scheduleDict = sortDictTimeMilitary(scheduleDict)
-
+    militaryTime = False
     try:
-        message = suggest(scheduleDict)
+        scheduleDict = sortDictTimeRegular(scheduleDict)
     except ValueError:
-        message = ["Invalid time entered. Pls enter time in 00:00 AM/PM format"]
-        return flask.jsonify(
-            {"schedule_server": scheduleDict, "message_server": message}
-        )
-
-    return flask.jsonify({"schedule_server": scheduleDict, "message_server": message})
+        try:
+            militaryTime = True
+            scheduleDict = sortDictTimeMilitary(scheduleDict)
+        except:
+            message = ["Invalid time entered"]
+            return flask.jsonify(
+                {
+                    "schedule_server": scheduleDict,
+                    "suggest_server": suggestDict,
+                    "message_server": message,
+                }
+            )
+    message = ["success"]
+    return flask.jsonify(
+        {
+            "schedule_server": scheduleDict,
+            "suggest_server": suggestDict,
+            "message_server": message,
+        }
+    )
 
 
 @app.route("/complete", methods=["POST"])
 def complete():
-
-    currentDate = flask.request.json.get("currentDate")
+    militaryTime = True
+    scheduleDate = flask.request.json.get("currentDate")
     scheduleDict = flask.request.json.get("scheduleDict")
-    if len(scheduleDict) != 0:
-        scheduleDict = sorted(
-            scheduleDict, key=lambda x: datetime.strptime(x["startTime"], "%H:%M")
-        )
-
+    try:
+        scheduleDict = sortDictTimeMilitary(scheduleDict)
+    except ValueError:
         try:
             checkConnect()
             creatSchedules(scheduleDict)

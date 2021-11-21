@@ -1,13 +1,23 @@
 from pprint import pprint
+import os
 from googleSetup import Create_Service
+from dotenv import load_dotenv, find_dotenv
+import json
 
+load_dotenv(find_dotenv())
 
-CLIENT_SECRET_FILE = 'credentials.json'
-API_NAME = 'calendar'
-API_VERSION = 'v3'
-SCOPES = ['https://www.googleapis.com/auth/calendar']
+credentials = json.dumps(os.getenv("GOOGLE_APPLICATION_CREDENTIALS"))
+GOOGLE_APPLICATION_CREDENTIALS = json.loads(credentials)
+API_NAME = "calendar"
+API_VERSION = "v3"
+SCOPES = ["https://www.googleapis.com/auth/calendar"]
+
 
 def checkConnect():
-    service = Create_Service(CLIENT_SECRET_FILE, API_NAME, API_VERSION, SCOPES)
+    service = Create_Service(
+        GOOGLE_APPLICATION_CREDENTIALS, API_NAME, API_VERSION, SCOPES
+    )
     # print(dir(service))
+
+
 checkConnect()

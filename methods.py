@@ -1,19 +1,20 @@
 from datetime import datetime, timedelta
 
 # A function which takes in a list of times (as a string), and outputs schedule suggestions
-def suggest(scheduleDict):
+def suggest(scheduleDict, militaryTime):
     timeStartList = []
     timeEndList = []
     eventList = []
     suggestList = []
 
-    # Schedule must have items
     if len(scheduleDict) != 0:
-        scheduleDict = sortDictTimeMilitary(scheduleDict)
-        # Schedule must be sorted in chronological order or the suggestions will not be accurate
         for item in scheduleDict:
-            task_start_time = datetime.strptime(item["startTime"], "%H:%M")
-            task_end_time = datetime.strptime(item["endTime"], "%H:%M")
+            if militaryTime:
+                task_start_time = datetime.strptime(item["startTime"], "%H:%M")
+                task_end_time = datetime.strptime(item["endTime"], "%H:%M")
+            elif not militaryTime:
+                task_start_time = datetime.strptime(item["startTime"], "%I:%M %p")
+                task_end_time = datetime.strptime(item["endTime"], "%I:%M %p")
             timeStartList.append(task_start_time)
             timeEndList.append(task_end_time)
             eventList.append(item["event"])
