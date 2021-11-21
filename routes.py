@@ -10,7 +10,7 @@ from flask import session
 from functools import wraps
 from flask_login import login_user, current_user, LoginManager
 from flask_login.utils import login_required
-from methods import suggest, sortDictTimeMilitary
+from methods import suggest, sortDictTimeMilitary, sortDictTimeRegular
 import json
 
 from createSchedule import creatSchedules
@@ -147,57 +147,72 @@ def logout():
 def suggestions():
 
     scheduleDict = flask.request.json.get("scheduleDict")
+    suggestDict = flask.request.json.get("suggestDict")
     message = []
-
-    scheduleDict = sortDictTimeMilitary(scheduleDict)
-
+    militaryTime = False
     try:
-        message = suggest(scheduleDict)
+        scheduleDict = sortDictTimeRegular(scheduleDict)
     except ValueError:
-        message = ["Invalid time entered. Pls enter time in 00:00 AM/PM format"]
-        return flask.jsonify(
-            {"schedule_server": scheduleDict, "message_server": message}
-        )
-
-    return flask.jsonify({"schedule_server": scheduleDict, "message_server": message})
-
-
-@app.route("/complete", methods=["POST"])
-def complete():
-
-    currentDate = flask.request.json.get("currentDate")
-    print(currentDate)
-    scheduleDict = flask.request.json.get("scheduleDict")
-    scheduleDict = sortDictTimeMilitary(scheduleDict)
-
-    return flask.jsonify({"schedule_server": scheduleDict})
-
-
-bp = flask.Blueprint("bp", __name__, template_folder="./build")
-
-
-@app.route("/complete", methods=["POST"])
-def complete():
-
-    currentDate = flask.request.json.get("currentDate")
-    scheduleDict = flask.request.json.get("scheduleDict")
-    if len(scheduleDict) != 0:
-        scheduleDict = sorted(
-            scheduleDict, key=lambda x: datetime.strptime(x["startTime"], "%H:%M")
-        )
-        
         try:
+            militaryTime = True
+            scheduleDict = sortDictTimeMilitary(scheduleDict)
+        except:
+            message = ["Invalid time entered"]
+            return flask.jsonify(
+                {
+                    "schedule_server": scheduleDict,
+                    "suggest_server": suggestDict,
+                    "message_server": message,
+                }
+            )
+    message = ["success"]
+    return flask.jsonify(
+        {
+            "schedule_server": scheduleDict,
+            "suggest_server": suggestDict,
+            "message_server": message,
+        }
+    )
+
+
+@app.route("/complete", methods=["POST"])
+def complete():
+    militaryTime = True
+    scheduleDate = flask.request.json.get("currentDate")
+    scheduleDict = flask.request.json.get("scheduleDict")
+    try:
+        scheduleDict = sortDictTimeMilitary(scheduleDict)
+    except ValueError:
+        try:
+<<<<<<< HEAD
             checkConnect()
             creatSchedules(scheduleDict)
         except KeyError:
             pass
+=======
+            scheduleDict = sortDictTimeRegular(scheduleDict)
+            militaryTime = False
+        except:
+            message = ["Invalid time entered"]
+            return flask.jsonify(
+                {"schedule_server": scheduleDict, "message_server": message}
+            )
+    try:
+        checkConnect()
+        creatSchedules(scheduleDict, militaryTime)
+    except KeyError:
+        pass
+>>>>>>> 174fff7daba68dc4ae55671c6dde4a0331be8f1d
 
     return flask.jsonify({"schedule_server": scheduleDict})
 
+
+<<<<<<< HEAD
+=======
 bp = flask.Blueprint("bp", __name__, template_folder="./build")
 
 
-
+>>>>>>> 174fff7daba68dc4ae55671c6dde4a0331be8f1d
 @bp.route("/index")
 def index():
     """
@@ -210,9 +225,16 @@ def index():
 
 app.register_blueprint(bp)
 
+<<<<<<< HEAD
 if __name__ == "__main__":
     app.run(
         # host=os.getenv("IP", "0.0.0.0"),
         # port=int(os.getenv("PORT", "8080")),
         debug=True,
     )
+=======
+app.run(
+    # host=os.getenv("IP", "0.0.0.0"),
+    # port=int(os.getenv("PORT", 8080)),
+)
+>>>>>>> 174fff7daba68dc4ae55671c6dde4a0331be8f1d
