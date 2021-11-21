@@ -26,6 +26,26 @@ def load_user(user_name):
     return User.query.get(user_name)
 
 
+@app.route("/landingpage")
+def landingpage():
+    return flask.render_template("landingpage.html")
+
+
+@app.route("/functionality")
+def functionality():
+    return flask.render_template("functionality.html")
+
+
+@app.route("/purpose")
+def purpose():
+    return flask.render_template("purpose.html")
+
+
+@app.route("/contact")
+def contact():
+    return flask.render_template("contact.html")
+
+
 @app.route("/signup")
 def signup():
     return flask.render_template("signup.html")
@@ -139,7 +159,7 @@ def main():
 def logout():
     for key in list(session.keys()):
         session.pop(key)
-    return redirect("/")
+    return redirect("landingpage")
 
 
 # This route will handle the fetch API Post call from the create schedule page

@@ -30,7 +30,7 @@ def creatSchedules(x):
         startTime = dict["startTime"]
         endTime = dict["endTime"]
 
-        frmt = "YYYY-MM-DD HH:mm A"
+        frmt = "YYYY-MM-DD HH:mm"
         startTime = arrow.get(str(today) + " " + startTime, frmt).isoformat()
         endTime = arrow.get(str(today) + " " + endTime, frmt).isoformat()
 
@@ -54,7 +54,7 @@ def creatSchedules(x):
         print("summary: ", event_result["summary"])
         print("starts at: ", event_result["start"]["dateTime"])
         print("ends at: ", event_result["end"]["dateTime"])
-        print(event_result)
+        # print(event_result)
 
 
 creatSchedules(scheduleDict)
