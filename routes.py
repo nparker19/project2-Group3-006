@@ -169,13 +169,17 @@ def suggestions():
     scheduleDict = flask.request.json.get("scheduleDict")
     suggestDict = flask.request.json.get("suggestDict")
     message = []
+    # Boolean value will keep track of time format
     militaryTime = False
+    # First try to sort schedule in regular time format
     try:
         scheduleDict = sortDictTimeRegular(scheduleDict)
     except ValueError:
+        # If a value error arises, try to sort in military time format and adjust boolean value
         try:
             militaryTime = True
             scheduleDict = sortDictTimeMilitary(scheduleDict)
+        # If another error arises the times entered are invalid and an error is thrown back to the user
         except:
             message = ["Invalid time entered"]
             return flask.jsonify(
@@ -185,7 +189,8 @@ def suggestions():
                     "message_server": message,
                 }
             )
-    message = ["success"]
+    message = suggest(scheduleDict, suggestDict, militaryTime)
+    print(message)
     return flask.jsonify(
         {
             "schedule_server": scheduleDict,
