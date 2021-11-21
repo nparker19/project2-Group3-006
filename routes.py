@@ -184,12 +184,6 @@ def complete():
         scheduleDict = sortDictTimeMilitary(scheduleDict)
     except ValueError:
         try:
-<<<<<<< HEAD
-            checkConnect()
-            creatSchedules(scheduleDict)
-        except KeyError:
-            pass
-=======
             scheduleDict = sortDictTimeRegular(scheduleDict)
             militaryTime = False
         except:
@@ -202,17 +196,13 @@ def complete():
         creatSchedules(scheduleDict, militaryTime)
     except KeyError:
         pass
->>>>>>> 174fff7daba68dc4ae55671c6dde4a0331be8f1d
 
     return flask.jsonify({"schedule_server": scheduleDict})
 
 
-<<<<<<< HEAD
-=======
 bp = flask.Blueprint("bp", __name__, template_folder="./build")
 
 
->>>>>>> 174fff7daba68dc4ae55671c6dde4a0331be8f1d
 @bp.route("/index")
 def index():
     """
@@ -225,16 +215,7 @@ def index():
 
 app.register_blueprint(bp)
 
-<<<<<<< HEAD
-if __name__ == "__main__":
-    app.run(
-        # host=os.getenv("IP", "0.0.0.0"),
-        # port=int(os.getenv("PORT", "8080")),
-        debug=True,
-    )
-=======
 app.run(
     # host=os.getenv("IP", "0.0.0.0"),
     # port=int(os.getenv("PORT", 8080)),
 )
->>>>>>> 174fff7daba68dc4ae55671c6dde4a0331be8f1d

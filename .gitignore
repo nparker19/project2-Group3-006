@@ -1,21 +1,5 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
 .env
-__pycache__
-credentials.json
-token_files
-node_modules/
-build/
-=======
-.env/
-=======
-.env
->>>>>>> 174fff7daba68dc4ae55671c6dde4a0331be8f1d
 __pycache__/
 token_files/
 node_modules/
-<<<<<<< HEAD
-build/
-=======
 credentials.json
->>>>>>> 174fff7daba68dc4ae55671c6dde4a0331be8f1d

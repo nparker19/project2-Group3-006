@@ -17,7 +17,6 @@ def listSchedules():
         GOOGLE_APPLICATION_CREDENTIALS, API_NAME, API_VERSION, SCOPES
     )
     # Call the Calendar API
-<<<<<<< HEAD
     now = datetime.datetime.utcnow().isoformat() + 'Z'
     print('Getting List of 5 shedules')
     events_result = service.events().list(calendarId='primary', timeMin=now,
@@ -25,34 +24,11 @@ def listSchedules():
                                         orderBy='startTime').execute()
     events = events_result.get('items', [])
     
-=======
-    now = datetime.datetime.utcnow().isoformat() + "Z"
-    print("Getting List of 5 shedules")
-    events_result = (
-        service.events()
-        .list(
-            calendarId="primary",
-            timeMin=now,
-            maxResults=5,
-            singleEvents=True,
-            orderBy="startTime",
-        )
-        .execute()
-    )
-    events = events_result.get("items", [])
-
->>>>>>> 174fff7daba68dc4ae55671c6dde4a0331be8f1d
     if not events:
         print("No upcoming events found.")
     for event in events:
         start = event["start"].get("dateTime", event["start"].get("date"))
         print(start, event["summary"])
         print(listSchedules())
-<<<<<<< HEAD
         print(events)
 listSchedules()
-=======
-
-
-listSchedules()
->>>>>>> 174fff7daba68dc4ae55671c6dde4a0331be8f1d
