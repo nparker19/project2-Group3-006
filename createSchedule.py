@@ -14,12 +14,6 @@ API_NAME = "calendar"
 API_VERSION = "v3"
 SCOPES = ["https://www.googleapis.com/auth/calendar"]
 
-scheduleDict = [
-    {"event": "gymm", "startTime": "09:00 PM", "endTime": "10:04 PM"},
-    {"event": "class1", "startTime": "09:00 PM", "endTime": "10:04 PM"},
-    {"event": "class1", "startTime": "09:00 AM", "endTime": "10:04 AM"},
-]
-
 
 def creatSchedules(x):
     service = Create_Service(CLIENT_SECRET_FILE, API_NAME, API_VERSION, SCOPES)
@@ -49,13 +43,3 @@ def creatSchedules(x):
             )
             .execute()
         )
-
-        print("created event")
-        print("id: ", event_result["id"])
-        print("summary: ", event_result["summary"])
-        print("starts at: ", event_result["start"]["dateTime"])
-        print("ends at: ", event_result["end"]["dateTime"])
-        # print(event_result)
-
-
-creatSchedules(scheduleDict)
