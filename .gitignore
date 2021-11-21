@@ -1,8 +1,4 @@
 .env
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 5645d0b3be6a8081a36c100163ea44c42edad937
 __pycache__
 /node_modules
 /.pnp
@@ -11,13 +7,3 @@ __pycache__
 /build
 token_files
 credentials.json
-<<<<<<< HEAD
-=======
-__pycache__/
-token_files/
-node_modules/
-build/credentials.json
->>>>>>> 74454e1d7949fe6107d0d78ddb3d35c882b5d4ea
-=======
-
->>>>>>> 5645d0b3be6a8081a36c100163ea44c42edad937
