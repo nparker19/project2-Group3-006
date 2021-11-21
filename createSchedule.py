@@ -44,5 +44,4 @@ def creatSchedules(x):
         print("summary: ", event_result['summary'])
         print("starts at: ", event_result['start']['dateTime'])
         print("ends at: ", event_result['end']['dateTime'])
-        print(event_result)
 # creatSchedules(scheduleDict)
