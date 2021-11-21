@@ -43,6 +43,3 @@ def creatSchedules(x):
             )
             .execute()
         )
-
-    
-
