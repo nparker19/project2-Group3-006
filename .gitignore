@@ -1,5 +1,9 @@
 .env
-__pycache__/
-token_files/
-node_modules/
+__pycache__
+/node_modules
+/.pnp
+.pnp.js
+/coverage
+/build
+token_files
 credentials.json
