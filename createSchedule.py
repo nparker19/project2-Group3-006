@@ -54,7 +54,8 @@ def creatSchedules(x, militaryTime):
         )
 
         print("created event")
-        print("id: ", event_result["id"])
-        print("summary: ", event_result["summary"])
-        print("starts at: ", event_result["start"]["dateTime"])
-        print("ends at: ", event_result["end"]["dateTime"])
+        print("id: ", event_result['id'])
+        print("summary: ", event_result['summary'])
+        print("starts at: ", event_result['start']['dateTime'])
+        print("ends at: ", event_result['end']['dateTime'])
+# creatSchedules(scheduleDict)
