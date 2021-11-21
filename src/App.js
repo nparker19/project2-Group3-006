@@ -109,7 +109,7 @@ function App() {
             <input ref={suggestInput} type="text" placeholder="Input activity" />
             <label for="len">Duration: </label>
             <input ref={suggestDuration} type="text" placeholder="00:00 (Hour:Min)" id="len" />
-            <button onClick={() => onAddClickSuggest()}> Add Event</button>
+            <button onClick={() => onAddClickSuggest()}> Add </button>
           </div>
         </td>
         <td class="schedule">
