@@ -3,13 +3,6 @@ import React, { useState, useRef } from "react";
 
 function App() {
   const [scheduleDict, setScheduleDict] = useState([]);
-<<<<<<< HEAD
-  const eventInput = useRef("");
-  const startTimeInput = useRef("");
-  const endTimeInput = useRef("");
-  const dateInput = useRef("");
-  const messages = useRef("");
-=======
   const [suggestDict, setSuggestDict] = useState([]);
   const eventInput = useRef('');
   const startTimeInput = useRef('');
@@ -18,7 +11,6 @@ function App() {
   const messages = useRef('');
   const suggestDuration = useRef('');
   const suggestInput = useRef('');
->>>>>>> 174fff7daba68dc4ae55671c6dde4a0331be8f1d
 
   //React component which returns the schedule list
   function Schedule(props) {
@@ -81,17 +73,6 @@ function App() {
       headers: {
         "Content-Type": "application/json",
       },
-<<<<<<< HEAD
-      body: JSON.stringify({ scheduleDict: scheduleDict, messages: messages }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        for (let i = 0; i < data.message_server.length; i++) {
-          alert(data.message_server[i]);
-        }
-        setScheduleDict(data.schedule_server);
-      });
-=======
       body: JSON.stringify({ "scheduleDict": scheduleDict, "suggestDict": suggestDict, "messages": messages }),
     }).then(response => response.json()).then(data => {
       for (let i = 0; i < data.message_server.length; i++) {
@@ -100,7 +81,6 @@ function App() {
       setScheduleDict(data.schedule_server);
       setSuggestDict(data.suggest_server);
     });
->>>>>>> 174fff7daba68dc4ae55671c6dde4a0331be8f1d
   }
 
   function onCompleteClick() {
@@ -123,38 +103,6 @@ function App() {
   }
 
   return (
-<<<<<<< HEAD
-    <div class="display" align="center">
-      <h1>Create Schedule</h1>
-
-      <input ref={dateInput} type="date" />
-
-      <div class="scheduleList" align="center">
-        <h2>
-          {scheduleDict.map((dictItem) => (
-            <Schedule item={dictItem.event} startTime={dictItem.startTime} endTime={dictItem.endTime} />
-          ))}
-        </h2>
-      </div>
-
-      <div class="editSchedule" align="center">
-        <input ref={eventInput} type="text" placeholder="Input event" data-testid="event_input" />
-        <label for="start">Input event start time</label>
-        <input ref={startTimeInput} type="time" id="start" data-testid="start_input" />
-        <label for="end">Input event end time</label>
-        <input ref={endTimeInput} type="time" id="end" data-testid="end_input" />
-
-        <button onClick={() => onAddClick()}> Add Event </button>
-
-        <div class="Save" align="center">
-          <button onClick={() => onSaveClick()}> Save Schedule and receive suggestions</button>
-        </div>
-        <div class="Complete" align="center">
-          <button onClick={() => onCompleteClick()}> Complete Schedule and save to google calendar</button>
-        </div>
-      </div>
-    </div>
-=======
     <div>
       <table>
         <td class="suggestions">
@@ -201,7 +149,6 @@ function App() {
       </div>
     </div>
 
->>>>>>> 174fff7daba68dc4ae55671c6dde4a0331be8f1d
   );
 }
 
