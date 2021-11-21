@@ -1,7 +1,13 @@
 from datetime import datetime, timedelta
 
-# A function which takes in a list of times (as a string), and outputs schedule suggestions
-def suggest(scheduleDict, militaryTime):
+"""
+    A function which takes in a schedule list with times (in chronological order as a string),
+    a list of items not currently in the schedule along with their durations, and a boolean value which keeps track of time formatting.
+    It outputs a list of suggestions on where to fit the items not currently in the schedule.
+"""
+
+
+def suggest(scheduleDict, suggestDict, militaryTime):
     timeStartList = []
     timeEndList = []
     eventList = []
@@ -22,38 +28,22 @@ def suggest(scheduleDict, militaryTime):
         initialTime = timeEndList[0]
         for i in range(1, len(timeStartList)):
             time_difference = timeStartList[i] - initialTime
-            if time_difference >= timedelta(hours=10):
-                suggestList.append(
-                    "You have a over 9 hours of free time between "
-                    + eventList[i - 1]
-                    + " and "
-                    + eventList[i]
-                    + ". Plenty of time to work out, or run errands"
-                )
-            if time_difference >= timedelta(hours=6) and time_difference < timedelta(
-                hours=10
-            ):
-                suggestList.append(
-                    "You have over 5 hours of free time between "
-                    + eventList[i - 1]
-                    + " and "
-                    + eventList[i]
-                    + ". You could get in a workout and a study session!"
-                )
-            if time_difference >= timedelta(hours=3) and time_difference < timedelta(
-                hours=6
-            ):
-                suggestList.append(
-                    "You have a few hours of free time between "
-                    + eventList[i - 1]
-                    + " and "
-                    + eventList[i]
-                    + ". This would be a great time to study or get in quick nap."
-                )
+            for item in suggestDict:
+                t = datetime.strptime(item["duration"], "%I:%M")
+                delta = timedelta(hours=t.hour + 1, minutes=t.minute)
+                if time_difference > delta:
+                    suggest = item["suggestion"]
+                    start = initialTime.time().strftime("%I:%M %p")
+                    end = timeStartList[i].time().strftime("%I:%M %p")
+
+                    suggestList.append(
+                        f"You have enough time to {suggest} between {start} and {end} today "
+                    )
             initialTime = timeEndList[i]
     return suggestList
 
 
+# This function sorts the schedule dictionary in chronological order when events are in military time
 def sortDictTimeMilitary(scheduleDict):
     if len(scheduleDict) != 0:
         scheduleDict = sorted(
@@ -62,6 +52,7 @@ def sortDictTimeMilitary(scheduleDict):
     return scheduleDict
 
 
+# This function sorts the schedule dictionary in chronological order when events are in regular 12 hour time
 def sortDictTimeRegular(scheduleDict):
     if len(scheduleDict) != 0:
         scheduleDict = sorted(
