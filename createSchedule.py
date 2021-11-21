@@ -1,27 +1,28 @@
 from __future__ import print_function
 from pprint import pprint
 from datetime import datetime, timedelta
-import json
+
+# from httplib2 import Http
+# from apiclient.discovery import build
 import time
 import os
 import arrow
 from googleSetup import Create_Service
 
-credentials = json.dumps(os.getenv("GOOGLE_APPLICATION_CREDENTIALS"))
-GOOGLE_APPLICATION_CREDENTIALS = json.loads(credentials)
+CLIENT_SECRET_FILE = "credentials.json"
 API_NAME = "calendar"
 API_VERSION = "v3"
 SCOPES = ["https://www.googleapis.com/auth/calendar"]
 
+scheduleDict = [
+    {"event": "gymm", "startTime": "09:00 PM", "endTime": "10:04 PM"},
+    {"event": "class1", "startTime": "09:00 PM", "endTime": "10:04 PM"},
+    {"event": "class1", "startTime": "09:00 AM", "endTime": "10:04 AM"},
+]
 
-def creatSchedules(x, militaryTime):
-    """
-    Function takes in a list of dictionary events and a boolean value which is true if the
-    events are in military time and false if they are in a regular 12 hour time format
-    """
-    service = Create_Service(
-        GOOGLE_APPLICATION_CREDENTIALS, API_NAME, API_VERSION, SCOPES
-    )
+
+def creatSchedules(x):
+    service = Create_Service(CLIENT_SECRET_FILE, API_NAME, API_VERSION, SCOPES)
     today = datetime.now().date()
     for i in x:
         dict_ = i
@@ -29,12 +30,8 @@ def creatSchedules(x, militaryTime):
         event = dict["event"]
         startTime = dict["startTime"]
         endTime = dict["endTime"]
-        # format is initially set for regular 12 hour time format
-        frmt = "YYYY-MM-DD HH:mm A"
-        # If the events are in military time, the format is adjusted
-        if militaryTime:
-            frmt = "YYYY-MM-DD HH:mm"
 
+        frmt = "YYYY-MM-DD HH:mm"
         startTime = arrow.get(str(today) + " " + startTime, frmt).isoformat()
         endTime = arrow.get(str(today) + " " + endTime, frmt).isoformat()
 
@@ -58,3 +55,7 @@ def creatSchedules(x, militaryTime):
         print("summary: ", event_result["summary"])
         print("starts at: ", event_result["start"]["dateTime"])
         print("ends at: ", event_result["end"]["dateTime"])
+        # print(event_result)
+
+
+creatSchedules(scheduleDict)
