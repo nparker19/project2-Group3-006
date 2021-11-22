@@ -1,6 +1,7 @@
 from __future__ import print_function
 from pprint import pprint
 from datetime import datetime, timedelta
+import json
 
 # from httplib2 import Http
 # from apiclient.discovery import build
@@ -9,14 +10,17 @@ import os
 import arrow
 from googleSetup import Create_Service
 
-CLIENT_SECRET_FILE = "credentials.json"
+credentials = json.dumps(os.getenv("GOOGLE_APPLICATION_CREDENTIALS"))
+GOOGLE_APPLICATION_CREDENTIALS = json.loads(credentials)
 API_NAME = "calendar"
 API_VERSION = "v3"
 SCOPES = ["https://www.googleapis.com/auth/calendar"]
 
 
-def creatSchedules(x):
-    service = Create_Service(CLIENT_SECRET_FILE, API_NAME, API_VERSION, SCOPES)
+def creatSchedules(x, militaryTime):
+    service = Create_Service(
+        GOOGLE_APPLICATION_CREDENTIALS, API_NAME, API_VERSION, SCOPES
+    )
     today = datetime.now().date()
     for i in x:
         dict_ = i
@@ -25,7 +29,10 @@ def creatSchedules(x):
         startTime = dict["startTime"]
         endTime = dict["endTime"]
 
-        frmt = "YYYY-MM-DD HH:mm"
+        frmt = "YYYY-MM-DD HH:mm A"
+        if militaryTime:
+            frmt = "YYYY-MM-DD HH:mm"
+
         startTime = arrow.get(str(today) + " " + startTime, frmt).isoformat()
         endTime = arrow.get(str(today) + " " + endTime, frmt).isoformat()
 
