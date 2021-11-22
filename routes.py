@@ -10,6 +10,8 @@ from functools import wraps
 import flask
 from flask_login import login_user, current_user, LoginManager
 from flask_login.utils import login_required
+from methods import suggest
+import json
 
 from createSchedule import createSchedules
 from checkConnection import checkConnect
@@ -142,9 +144,22 @@ def logout():
 
 
 # This route will handle the fetch API Post call from the new schedule html
-@app.route("/suggest", methods=["POST"])
-def suggest():
-    pass
+@app.route("/suggestions", methods=["POST"])
+def suggestions():
+
+    scheduleDict = flask.request.json.get("scheduleDict")
+    print(scheduleDict)
+
+    message = ""
+    try:
+        message = suggest(scheduleDict)
+    except ValueError:
+        message = "Invalid time entered. Pls enter time in 00:00 AM/PM format"
+        return flask.jsonify(
+            {"schedule_server": scheduleDict, "message_server": message}
+        )
+
+    return flask.jsonify({"schedule_server": scheduleDict, "message_server": message})
 
 
 bp = flask.Blueprint("bp", __name__, template_folder="./build")

@@ -6,18 +6,14 @@ def suggest(scheduleDict):
     eventList = []
     suggestList = []
     for item in scheduleDict:
-
-        try:
-            task_time = datetime.strptime(item["time"], "%I:%M %p")
-            timeList.append(task_time)
-            eventList.append(item["event"])
-        except ValueError:
-            print("Incorrect format")
+        task_time = datetime.strptime(item["time"], "%I:%M %p")
+        timeList.append(task_time)
+        eventList.append(item["event"])
 
     if len(timeList) != 0:
-        start = timeList[0]
+        initialTime = timeList[0]
         for i in range(1, len(timeList)):
-            time_difference = timeList[i] - start
+            time_difference = timeList[i] - initialTime
             if time_difference >= timedelta(hours=10):
                 suggestList.append(
                     "You have a large amount of time between "
@@ -44,19 +40,18 @@ def suggest(scheduleDict):
                     + eventList[i - 1]
                     + " and "
                     + eventList[i]
-                    + ". This would be a great time to study or get in quick nap"
+                    + ". This would be a great time to study or get in quick nap."
                 )
-            start = timeList[i]
+            initialTime = timeList[i]
 
-    for i in suggestList:
-        print(i + "    ")
+    return suggestList
 
 
 if __name__ == "__main__":
     suggest(
         scheduleDict=[
             {"event": "class", "time": "09:00 AM"},
-            {"event": "meeting", "time": "10:30 AM"},
+            {"event": "meeting", "time": "10:30 PM"},
             {"event": "meeting2", "time": "06:00 PM"},
         ]
     )
