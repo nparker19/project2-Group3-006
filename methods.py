@@ -1,4 +1,5 @@
-from datetime import datetime, timedelta
+from datetime import timedelta, datetime, time
+
 
 """
     A function which takes in a schedule list with times (in chronological order as a string),
@@ -25,8 +26,9 @@ def suggest(scheduleDict, suggestDict, militaryTime):
             timeEndList.append(task_end_time)
             eventList.append(item["event"])
 
-        initialTime = timeEndList[0]
-        for i in range(1, len(timeStartList)):
+        initialTime = datetime.strptime("8:00 AM", "%I:%M %p")
+
+        for i in range(0, len(timeStartList)):
             time_difference = timeStartList[i] - initialTime
             for item in suggestDict:
                 t = datetime.strptime(item["duration"], "%I:%M")
@@ -36,8 +38,14 @@ def suggest(scheduleDict, suggestDict, militaryTime):
                     start = initialTime.time().strftime("%I:%M %p")
                     end = timeStartList[i].time().strftime("%I:%M %p")
 
+                    startSuggest = initialTime + timedelta(minutes=30)
+                    endSuggest = startSuggest + timedelta(
+                        hours=t.hour, minutes=t.minute
+                    )
+                    stringStartSuggest = startSuggest.time().strftime("%I:%M %p")
+                    stringEndSuggest = endSuggest.time().strftime("%I:%M %p")
                     suggestList.append(
-                        f"You have enough time to {suggest} between {start} and {end} today "
+                        f"You have enough time to {suggest} between {start} and {end}. Would you like to {suggest} from {stringStartSuggest} to {stringEndSuggest} today?"
                     )
             initialTime = timeEndList[i]
     return suggestList
@@ -59,3 +67,23 @@ def sortDictTimeRegular(scheduleDict):
             scheduleDict, key=lambda x: datetime.strptime(x["startTime"], "%I:%M %p")
         )
     return scheduleDict
+
+
+if __name__ == "__main__":
+    scheduleDict = sortDictTimeMilitary(
+        scheduleDict=[
+            {"event": "class1", "startTime": "15:45", "endTime": "17:00"},
+            {"event": "meeting1", "startTime": "10:00", "endTime": "11:00"},
+            {"event": "group meeting", "startTime": "22:30", "endTime": "23:00"},
+        ]
+    )
+    ans = suggest(
+        scheduleDict,
+        suggestDict=[
+            {"suggestion": "workout", "duration": "02:00"},
+            {"suggestion": "study", "duration": "03:45"},
+        ],
+        militaryTime=True,
+    )
+
+    print(ans)
