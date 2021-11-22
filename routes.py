@@ -12,7 +12,7 @@ from flask_login import login_user, current_user, LoginManager
 from flask_login.utils import login_required
 from methods import suggest, sortDictTimeMilitary, sortDictTimeRegular
 import json
-
+from googleSetup import Create_Service
 from createSchedule import creatSchedules
 from checkConnection import checkConnect
 
@@ -199,23 +199,36 @@ def suggestions():
         }
     )
 
-
 @app.route("/complete", methods=["POST"])
 def complete():
-    militaryTime = True
     scheduleDate = flask.request.json.get("currentDate")
     scheduleDict = flask.request.json.get("scheduleDict")
+    militaryTime = False
+    # First try to sort schedule in regular time format
     try:
-        scheduleDict = sortDictTimeMilitary(scheduleDict)
+        scheduleDict = sortDictTimeRegular(scheduleDict)
     except ValueError:
+        # If a value error arises, try to sort in military time format and adjust boolean value
         try:
-            checkConnect()
-            creatSchedules(scheduleDict)
-        except KeyError:
-            pass
+            militaryTime = True
+            scheduleDict = sortDictTimeMilitary(scheduleDict)
+        # If another error arises the times entered are invalid and an error is thrown back to the user
+        except:
+            message = ["Invalid time entered"]
+            return flask.jsonify(
+                {
+                    "schedule_server": scheduleDict,
+                    "message_server": message,
+                }
+            )
+
+    try:
+        checkConnect()
+        creatSchedules(scheduleDict, militaryTime)
+    except KeyError:
+        pass
 
     return flask.jsonify({"schedule_server": scheduleDict})
-
 
 bp = flask.Blueprint("bp", __name__, template_folder="./build")
 
