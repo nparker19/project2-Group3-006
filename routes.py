@@ -13,6 +13,9 @@ from flask_login.utils import login_required
 from methods import suggest
 import json
 
+from createSchedule import createSchedules
+from checkConnection import checkConnect
+
 login_manager = LoginManager()
 login_manager.login_view = "login"
 login_manager.init_app(app)
@@ -160,6 +163,29 @@ def suggestions():
 
 
 bp = flask.Blueprint("bp", __name__, template_folder="./build")
+
+
+@app.route("/complete", methods=["POST"])
+def complete():
+
+    currentDate = flask.request.json.get("currentDate")
+    scheduleDict = flask.request.json.get("scheduleDict")
+    if len(scheduleDict) != 0:
+        scheduleDict = sorted(
+            scheduleDict, key=lambda x: datetime.strptime(x["startTime"], "%H:%M")
+        )    
+        try:
+            checkConnect()
+            createSchedules(scheduleDict)
+        except KeyError:
+            pass
+
+    return flask.jsonify({"schedule_server": scheduleDict})
+
+bp = flask.Blueprint("bp", __name__, template_folder="./build")
+
+
+
 
 
 @bp.route("/index")
