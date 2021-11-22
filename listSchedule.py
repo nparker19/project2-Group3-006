@@ -1,4 +1,6 @@
 import datetime
+import dateutil
+from dateutil.parser import *
 import json
 import os
 from dotenv import load_dotenv, find_dotenv
@@ -10,6 +12,12 @@ GOOGLE_APPLICATION_CREDENTIALS = json.loads(credentials)
 API_NAME = "calendar"
 API_VERSION = "v3"
 SCOPES = ["https://www.googleapis.com/auth/calendar"]
+
+def isoformatStringFormat(x):
+    d_ = dateutil.parser.parse(x)
+    dtt = datetime.strptime(str(d_), "%Y-%m-%d %H:%M:%S")    
+    # print(dtt)
+    return dtt.strftime("%A, %b %d %Y, %H:%M")
 
 
 def listSchedules():
@@ -32,12 +40,39 @@ def listSchedules():
     )
     events = events_result.get("items", [])
 
+    events_= []
+    starts_ = []
+    ends_ = []
+    summarys_ = []
+    ids_ = []
+
     if not events:
         print("No upcoming events found.")
     for event in events:
         start = event["start"].get("dateTime", event["start"].get("date"))
-        print(start, event["summary"])
-        print(listSchedules())
-
+        
+        print("\n")
+        end = event['end'].get('dateTime')
+        # print(isoformatStringFormat('2021-11-21T23:30:00'))  
+        print("\n")
+        
+        summarys_.append(event["summary"])
+        ids_.append(event['id'])
+        starts_.append(isoformatStringFormat(start))
+        ends_.append(isoformatStringFormat(end))
+        
+        print("\n")
+        print(summarys_)
+        print(ids_)
+        print(starts_)
+        print(ends_)
+                
+        return {
+            "events_" : events_,
+            "starts_" : starts_,
+            "ends_": ends_,
+            "summarys_" : summarys_,
+            "ids_": ids_,        
+        }
 
 listSchedules()
