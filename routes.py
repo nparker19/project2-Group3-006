@@ -12,7 +12,7 @@ from flask_login import login_user, current_user, LoginManager
 from flask_login.utils import login_required
 from methods import suggest, sortDictTimeMilitary, sortDictTimeRegular
 import json
-
+from googleSetup import Create_Service
 from createSchedule import creatSchedules
 from checkConnection import checkConnect
 
@@ -199,7 +199,6 @@ def suggestions():
         }
     )
 
-
 @app.route("/complete", methods=["POST"])
 def complete():
     scheduleDate = flask.request.json.get("currentDate")
@@ -230,7 +229,6 @@ def complete():
         pass
 
     return flask.jsonify({"schedule_server": scheduleDict})
-
 
 bp = flask.Blueprint("bp", __name__, template_folder="./build")
 
