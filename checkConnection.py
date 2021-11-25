@@ -17,7 +17,6 @@ def checkConnect():
     service = Create_Service(
         GOOGLE_APPLICATION_CREDENTIALS, API_NAME, API_VERSION, SCOPES
     )
-
     print(dir(service))
 
 

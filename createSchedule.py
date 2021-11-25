@@ -15,7 +15,7 @@ SCOPES = ["https://www.googleapis.com/auth/calendar"]
 
 def creatSchedules(x):
     service = Create_Service(
-        GOOGLE_APPLICATION_CREDENTIALS, API_NAME, API_VERSION, SCOPES
+        GOOGLE_APPLICATION_CREDENTIALS, API_NAME, APIVERSION, SCOPES
     )
     today = datetime.now().date()
     for i in x:
