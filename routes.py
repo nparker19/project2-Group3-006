@@ -11,14 +11,13 @@ import flask
 from flask_login import login_user, current_user, LoginManager
 from flask_login.utils import login_required
 
-# from methods import (
-#     suggest,
-#     sortDictTimeRegular,
-#     convertScheduleToRegTime,
-# )
 
-from methods import suggest, sortDictTimeMilitary, sortDictTimeRegular
-import json
+from methods import (
+    suggest,
+    sortDictTimeRegular,
+    convertScheduleToRegTime,
+)
+
 from googleSetup import Create_Service
 from createSchedule import creatSchedules
 from checkConnection import checkConnect
