@@ -10,18 +10,14 @@ from functools import wraps
 import flask
 from flask_login import login_user, current_user, LoginManager
 from flask_login.utils import login_required
-<<<<<<< HEAD
+
 from methods import (
     suggest,
     sortDictTimeRegular,
     convertScheduleToRegTime,
 )
 
-=======
-from methods import suggest, sortDictTimeMilitary, sortDictTimeRegular
-import json
 from googleSetup import Create_Service
->>>>>>> 9f30aea285ddd44c8e51efe30be31b01696cdce4
 from createSchedule import creatSchedules
 from checkConnection import checkConnect
 
