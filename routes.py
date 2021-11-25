@@ -4,15 +4,24 @@ from app import app, db
 from models import User
 import os
 from authlib.integrations.flask_client import OAuth
-from datetime import timedelta, datetime
+from datetime import timedelta
 from flask import session, request
 from functools import wraps
 import flask
 from flask_login import login_user, current_user, LoginManager
 from flask_login.utils import login_required
+<<<<<<< HEAD
+from methods import (
+    suggest,
+    sortDictTimeRegular,
+    convertScheduleToRegTime,
+)
+
+=======
 from methods import suggest, sortDictTimeMilitary, sortDictTimeRegular
 import json
 from googleSetup import Create_Service
+>>>>>>> 9f30aea285ddd44c8e51efe30be31b01696cdce4
 from createSchedule import creatSchedules
 from checkConnection import checkConnect
 from listSchedule import listSchedules
@@ -179,73 +188,77 @@ def logout():
     return redirect("landingpage")
 
 
-# This route will handle the fetch API Post call from the create schedule page
+# This route accepts the unsorted schedule from the client and returns to the client a sorted schedule
+@app.route("/sorting", methods=["POST"])
+def sorting():
+    errorMessage = []
+    unsortedSchedule = flask.request.json.get("unsortedSchedule")
+    try:
+        convertedDict = convertScheduleToRegTime(unsortedSchedule)
+        sortedSchedule = sortDictTimeRegular(convertedDict)
+    except ValueError:
+        errorMessage.append("Invalid Time entered.")
+        return flask.jsonify({"message_server": errorMessage})
+
+    return flask.jsonify(
+        {
+            "message_server": errorMessage,
+            "server_sorted_Schedule": sortedSchedule,
+        }
+    )
+
+
+# This route handles the fetch API most call for when the "receive suggestions" button is pressed.
 @app.route("/suggestions", methods=["POST"])
 def suggestions():
-
+    """
+    This method takes in a schedule dictionary and a suggestions dictionary from the client,
+    and returns schedule suggestions to the client.
+    """
+    errorMessage = []
     scheduleDict = flask.request.json.get("scheduleDict")
     suggestDict = flask.request.json.get("suggestDict")
-    message = []
-    # Boolean value will keep track of time format
-    militaryTime = False
-    # First try to sort schedule in regular time format
     try:
-        scheduleDict = sortDictTimeRegular(scheduleDict)
-    except ValueError:
-        # If a value error arises, try to sort in military time format and adjust boolean value
-        try:
-            militaryTime = True
-            scheduleDict = sortDictTimeMilitary(scheduleDict)
-        # If another error arises the times entered are invalid and an error is thrown back to the user
-        except:
-            message = ["Invalid time entered"]
-            return flask.jsonify(
-                {
-                    "schedule_server": scheduleDict,
-                    "suggest_server": suggestDict,
-                    "message_server": message,
-                }
-            )
-    message = suggest(scheduleDict, suggestDict, militaryTime)
-    print(message)
+        suggestionsList = suggest(scheduleDict, suggestDict)
+    except Exception as error:
+        errorMessage.append(
+            f"We were unable to retrieve your schedule suggestions. Error: {error}"
+        )
+        return flask.jsonify(
+            {
+                "message_server": errorMessage,
+            }
+        )
     return flask.jsonify(
         {
             "schedule_server": scheduleDict,
             "suggest_server": suggestDict,
-            "message_server": message,
+            "suggestions_server": suggestionsList,
+            "message_server": errorMessage,
         }
     )
 
 @app.route("/complete", methods=["POST"])
 def complete():
+    errorMessage = []
     scheduleDate = flask.request.json.get("currentDate")
     scheduleDict = flask.request.json.get("scheduleDict")
-    militaryTime = False
-    # First try to sort schedule in regular time format
-    try:
-        scheduleDict = sortDictTimeRegular(scheduleDict)
-    except ValueError:
-        # If a value error arises, try to sort in military time format and adjust boolean value
-        try:
-            militaryTime = True
-            scheduleDict = sortDictTimeMilitary(scheduleDict)
-        # If another error arises the times entered are invalid and an error is thrown back to the user
-        except:
-            message = ["Invalid time entered"]
-            return flask.jsonify(
-                {
-                    "schedule_server": scheduleDict,
-                    "message_server": message,
-                }
-            )
 
     try:
         checkConnect()
-        creatSchedules(scheduleDict, militaryTime)
-    except KeyError:
-        pass
-
-    return flask.jsonify({"schedule_server": scheduleDict})
+        creatSchedules(scheduleDict)
+    except Exception as error:
+        errorMessage.append(
+            f"Calendar was not successfully saved to google calendar. Error: {error}"
+        )
+        return flask.jsonify(
+            {
+                "message_server": errorMessage,
+            }
+        )
+    return flask.jsonify(
+        {"schedule_server": scheduleDict, "message_server": errorMessage}
+    )
 
 bp = flask.Blueprint("bp", __name__, template_folder="./build")
 
