@@ -90,6 +90,7 @@ a button {
   padding: 10px;
 }
 
+
 .inputs input {
   padding: 10px;
 }
@@ -105,6 +106,7 @@ input[type="time"] {
   padding: 5px;
   box-shadow: 0 0 15px 4px rgba(0, 0, 0, 0.06);
   border-radius: 10px;
+
   border-color: black;
 }
 
@@ -131,6 +133,7 @@ input[type="time"] {
 .save {
   padding-top: 10px;
 }
+
 
 .delete-btn {
   background: transparent;
@@ -309,3 +312,4 @@ header .container {
   width: 120%;
   transform: translate(15%, 25px);
 }
+

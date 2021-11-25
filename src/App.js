@@ -4,6 +4,7 @@ import React, { useState, useRef } from "react";
 function App() {
   const [scheduleDict, setScheduleDict] = useState([]);
   const [suggestDict, setSuggestDict] = useState([]);
+
   const eventInput = useRef("");
   const startTimeInput = useRef("");
   const endTimeInput = useRef("");
@@ -12,18 +13,22 @@ function App() {
   const suggestDuration = useRef("");
   const suggestInput = useRef("");
 
+
   //React component which returns the schedule list
   function Schedule(props) {
+
     function onDelete() {
       const newDict = scheduleDict.filter((item) => item.event !== props.item);
       setScheduleDict(newDict);
     }
     return (
+
       <li>
         <button class="delete-btn" onClick={onDelete}>
           {props.item} from {props.startTime} to {props.endTime}
         </button>
       </li>
+
     );
   }
   //React component which returns the suggestions list
@@ -41,6 +46,7 @@ function App() {
       </li>
     );
   }
+
   //Function which handles the add schedule event button
   function onAddClick() {
     let newEvent = eventInput.current.value;
@@ -50,12 +56,37 @@ function App() {
       ...scheduleDict,
       { event: newEvent, startTime: newStartTime, endTime: newEndTime },
     ];
+    //Schedule is automatically sorted upon event addition
+    fetch("/sorting", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ "unsortedSchedule": newScheduleDict }),
+    }).then(response => response.json()).then(data => {
+      if (data.message_server.length === 1) {
+        alert(data.message_server[0]);
+      } else {
+        setScheduleDict(data.server_sorted_Schedule);
+        eventInput.current.value = "";
+        startTimeInput.current.value = "";
+        endTimeInput.current.value = "";
+      }
+    });
 
-    setScheduleDict(newScheduleDict);
+  }
+  //Function which handles the add an event suggestion button
+  function onAddClickSuggest() {
 
-    eventInput.current.value = "";
-    startTimeInput.current.value = "";
-    endTimeInput.current.value = "";
+    let newSuggest = suggestInput.current.value;
+    let newSuggestDuration = suggestDuration.current.value;
+
+    let newSuggestDict = [...suggestDict, { "suggestion": newSuggest, "duration": newSuggestDuration }];
+
+    setSuggestDict(newSuggestDict);
+
+    suggestInput.current.value = "";
+    suggestDuration.current.value = "";
   }
   //Function which handles the add an event suggestion button
   function onAddClickSuggest() {
@@ -71,11 +102,13 @@ function App() {
   }
 
   function onSaveClick() {
+
     fetch("/suggestions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
+
       body: JSON.stringify({ scheduleDict: scheduleDict, suggestDict: suggestDict }),
     })
       .then((response) => response.json())
@@ -130,6 +163,7 @@ function App() {
           }
         }
       });
+
   }
 
   function onCompleteClick() {
@@ -146,12 +180,18 @@ function App() {
     })
       .then((response) => response.json())
       .then((data) => {
-        setScheduleDict(data.schedule_server);
-        window.location.replace("/");
+        if (data.message_server.length === 1) {
+          alert(data.message_server[0]);
+        } else {
+          setScheduleDict(data.schedule_server);
+          alert("Schedule was successfully saved to your google calendar! You will be redirected to the home page after exiting out of this message");
+          setTimeout(function () { window.location.replace("/") }, 3000);
+        }
       });
   }
 
   return (
+
     <div class="big-wrapper standard">
       <header>
         <div class="container">
@@ -237,6 +277,7 @@ function App() {
             </div>
 
             <div class="editSchedule inputs" align="center">
+
               <input ref={eventInput} type="text" placeholder="Input event" data-testid="event_input" />
               <label for="start">start time: </label>
               <input ref={startTimeInput} type="time" id="start" data-testid="start_input" />
@@ -263,6 +304,7 @@ function App() {
         </button>
       </div>
     </div>
+
   );
 }
 
