@@ -4,36 +4,44 @@ import App from './App';
 
 test('renders buttons', () => {
   render(<App />);
-  const addButton = screen.getByText('Add Artist');
+  const addButton = screen.getByText('Add Event');
   expect(addButton).toBeInTheDocument();
-  const saveButton = screen.getByText('Save');
+  const saveButton = screen.getByText('Receive suggestions');
   expect(saveButton).toBeInTheDocument();
+  const completeButton = screen.getByText('Complete Schedule and save to google calendar');
+  expect(completeButton).toBeInTheDocument();
 });
 
-test('add artist', () => {
+test('add event', () => {
   render(<App />);
-  const addButton = screen.getByText('Add Artist');
-  const textInput = screen.getByTestId('text_input');
-  fireEvent.change(textInput, { target: { value: 'Pinegrove' } });
+  const addButton = screen.getByText('Add Event');
+  const eventInput = screen.getByTestId('event_input');
+
+  fireEvent.change(eventInput, { target: { value: 'Analysis II' } });
   fireEvent.click(addButton);
 
-  const artistEntry = screen.getByText('Pinegrove');
-  const deleteButton = screen.getByText('Delete');
-  expect(artistEntry).toBeInTheDocument();
+  const eventEntry = screen.getByText((content) => content.startsWith('Analysis'));
+  const deleteButton = screen.getByText('X');
+  expect(eventEntry).toBeInTheDocument();
   expect(deleteButton).toBeInTheDocument();
 });
 
-test('delete artist', () => {
+test('delete event', () => {
   render(<App />);
-  const addButton = screen.getByText('Add Artist');
-  const textInput = screen.getByTestId('text_input');
-  fireEvent.change(textInput, { target: { value: 'Pinegrove' } });
+  const addButton = screen.getByText('Add Event');
+  const eventInput = screen.getByTestId('event_input');
+
+
+
+  fireEvent.change(eventInput, { target: { value: 'Analysis II' } });
   fireEvent.click(addButton);
 
-  const artistEntry = screen.getByText('Pinegrove');
-  const deleteButton = screen.getByText('Delete');
-  expect(artistEntry).toBeInTheDocument();
+  const eventEntry = screen.getByText((content) => content.startsWith('Analysis'));
+  const deleteButton = screen.getByText('X');
+  expect(eventEntry).toBeInTheDocument();
+  expect(deleteButton).toBeInTheDocument();
 
   fireEvent.click(deleteButton);
-  expect(artistEntry).not.toBeInTheDocument();
+  expect(eventEntry).not.toBeInTheDocument();
+  expect(deleteButton).not.toBeInTheDocument();
 });
