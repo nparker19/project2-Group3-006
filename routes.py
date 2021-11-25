@@ -15,6 +15,7 @@ import json
 from googleSetup import Create_Service
 from createSchedule import creatSchedules
 from checkConnection import checkConnect
+from listSchedule import listSchedules
 
 login_manager = LoginManager()
 login_manager.login_view = "login"
@@ -137,7 +138,23 @@ def hello_world():
         email_user = User(email=email)
         db.session.add(email_user)
         db.session.commit()
-    return flask.render_template("home.html", currentUserEmail=email_user)
+    
+    try:
+        listEvents = listSchedules()
+        # print(listEvents)
+    except:
+        print("No list")
+    
+    return flask.render_template(
+        "home.html",
+        currentUserEmail=email_user,
+        len = len(listEvents),
+        events_ = listEvents["events_"],
+        summarys_ = listEvents["summarys_"],
+        starts_ = listEvents["starts_"],
+        ends_ = listEvents["ends_"],
+        ids_ = listEvents["ids_"]
+    )
 
 
 @app.route("/login/google")
@@ -247,7 +264,7 @@ app.register_blueprint(bp)
 
 if __name__ == "__main__":
     app.run(
-        # host=os.getenv("IP", "0.0.0.0"),
-        # port=int(os.getenv("PORT", "8080")),
+        host=os.getenv("IP", "0.0.0.0"),
+        port=int(os.getenv("PORT", "8080")),
         debug=True,
     )

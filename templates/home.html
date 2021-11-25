@@ -268,10 +268,16 @@
         </div>
     </main>
 
+    <div>
+        {% for i in range(0, len) %}
+            <p><h1> {{ summarys_[i]}} : {{starts_[i]}} => {{ends_[i]}} </h1></p>
+            <!--<p><h1> {{ ids_[i] }}</h1></p> -->                               
+        {% endfor %} 
+    </div>
+
     <!-- JavaScript Files -->
 
     <script src="https://kit.fontawesome.com/a81368914c.js"></script>
     <script src="./app.js"></script>
 </body>
-
 </html>
