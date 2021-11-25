@@ -10,21 +10,13 @@ from functools import wraps
 import flask
 from flask_login import login_user, current_user, LoginManager
 from flask_login.utils import login_required
+from methods import (
+    suggest,
+    sortDictTimeRegular,
+    convertScheduleToRegTime,
+)
 
-# from methods import (
-#     suggest,
-#     sortDictTimeRegular,
-#     convertScheduleToRegTime,
-# )
-
-from methods import suggest, sortDictTimeMilitary, sortDictTimeRegular
-import json
-from googleSetup import Create_Service
 from createSchedule import creatSchedules
-from checkConnection import checkConnect
-from listSchedule import listSchedules
-
-from createSchedule import createSchedules
 from checkConnection import checkConnect
 
 login_manager = LoginManager()
@@ -148,23 +140,7 @@ def hello_world():
         email_user = User(email=email)
         db.session.add(email_user)
         db.session.commit()
-    
-    try:
-        listEvents = listSchedules()
-        # print(listEvents)
-    except:
-        print("No list")
-    
-    return flask.render_template(
-        "home.html",
-        currentUserEmail=email_user,
-        len = len(listEvents),
-        events_ = listEvents["events_"],
-        summarys_ = listEvents["summarys_"],
-        starts_ = listEvents["starts_"],
-        ends_ = listEvents["ends_"],
-        ids_ = listEvents["ids_"]
-    )
+    return flask.render_template("home.html", currentUserEmail=email_user)
 
 
 @app.route("/login/google")
@@ -239,6 +215,7 @@ def suggestions():
         }
     )
 
+
 @app.route("/complete", methods=["POST"])
 def complete():
     errorMessage = []
@@ -261,30 +238,8 @@ def complete():
         {"schedule_server": scheduleDict, "message_server": errorMessage}
     )
 
-bp = flask.Blueprint("bp", __name__, template_folder="./build")
-
-
-@app.route("/complete", methods=["POST"])
-def complete():
-
-    currentDate = flask.request.json.get("currentDate")
-    scheduleDict = flask.request.json.get("scheduleDict")
-    if len(scheduleDict) != 0:
-        scheduleDict = sorted(
-            scheduleDict, key=lambda x: datetime.strptime(x["startTime"], "%H:%M")
-        )    
-        try:
-            checkConnect()
-            createSchedules(scheduleDict)
-        except KeyError:
-            pass
-
-    return flask.jsonify({"schedule_server": scheduleDict})
 
 bp = flask.Blueprint("bp", __name__, template_folder="./build")
-
-
-
 
 
 @bp.route("/index")
@@ -299,10 +254,9 @@ def index():
 
 app.register_blueprint(bp)
 
-
 if __name__ == "__main__":
     app.run(
-        host=os.getenv("IP", "0.0.0.0"),
-        port=int(os.getenv("PORT", "8080")),
+        # host=os.getenv("IP", "0.0.0.0"),
+        # port=int(os.getenv("PORT", "8080")),
         debug=True,
     )
