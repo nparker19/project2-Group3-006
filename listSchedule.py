@@ -6,6 +6,7 @@ import os
 from dotenv import load_dotenv, find_dotenv
 from googleSetup import Create_Service
 
+
 load_dotenv(find_dotenv())
 credentials = json.dumps(os.getenv("GOOGLE_APPLICATION_CREDENTIALS"))
 GOOGLE_APPLICATION_CREDENTIALS = json.loads(credentials)
@@ -19,20 +20,20 @@ def isoformatStringFormat(x):
     # print(dtt)
     return dtt.strftime("%A, %b %d %Y, %H:%M")
 
-
 def listSchedules():
     service = Create_Service(
         GOOGLE_APPLICATION_CREDENTIALS, API_NAME, API_VERSION, SCOPES
     )
     # Call the Calendar API
+
     now = datetime.datetime.utcnow().isoformat() + "Z"
-    print("Getting List of 5 shedules")
+    print("Getting List of 10 shedules")
     events_result = (
         service.events()
         .list(
             calendarId="primary",
             timeMin=now,
-            maxResults=5,
+            maxResults=10,
             singleEvents=True,
             orderBy="startTime",
         )
@@ -49,23 +50,17 @@ def listSchedules():
     if not events:
         print("No upcoming events found.")
     for event in events:
+
         start = event["start"].get("dateTime", event["start"].get("date"))
         
         print("\n")
-        end = event['end'].get('dateTime')
-        # print(isoformatStringFormat('2021-11-21T23:30:00'))  
+        end = event['end'].get('dateTime')  
         print("\n")
         
         summarys_.append(event["summary"])
         ids_.append(event['id'])
         starts_.append(isoformatStringFormat(start))
         ends_.append(isoformatStringFormat(end))
-        
-        print("\n")
-        print(summarys_)
-        print(ids_)
-        print(starts_)
-        print(ends_)
                 
         return {
             "events_" : events_,
