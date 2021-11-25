@@ -8,17 +8,18 @@ function App() {
   const startTimeInput = useRef('');
   const endTimeInput = useRef('');
   const dateInput = useRef('');
-  const messages = useRef('');
   const suggestDuration = useRef('');
   const suggestInput = useRef('');
 
   //React component which returns the schedule list
   function Schedule(props) {
+
     function onDelete() {
       const newDict = scheduleDict.filter((item) => item.event !== props.item);
       setScheduleDict(newDict);
     }
     return (
+
       <h2>
         {props.item} from {props.startTime} to {props.endTime}
         <button onClick={onDelete}>X</button>
@@ -36,6 +37,7 @@ function App() {
       <h2>{props.suggest} for {props.duration} hours<button onClick={onDelete}>X</button></h2>
     );
   }
+
   //Function which handles the add schedule event button
   function onAddClick() {
     let newEvent = eventInput.current.value;
@@ -45,12 +47,25 @@ function App() {
       ...scheduleDict,
       { event: newEvent, startTime: newStartTime, endTime: newEndTime },
     ];
+    //Schedule is automatically sorted upon event addition
+    fetch("/sorting", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ "unsortedSchedule": newScheduleDict }),
+    }).then(response => response.json()).then(data => {
+      if (data.message_server.length === 1) {
+        alert(data.message_server[0]);
+      } else {
+        setScheduleDict(data.server_sorted_Schedule);
+        eventInput.current.value = "";
+        startTimeInput.current.value = "";
+        endTimeInput.current.value = "";
+      }
+    });
 
-    setScheduleDict(newScheduleDict);
 
-    eventInput.current.value = "";
-    startTimeInput.current.value = "";
-    endTimeInput.current.value = "";
 
   }
   //Function which handles the add an event suggestion button
@@ -68,19 +83,62 @@ function App() {
   }
 
   function onSaveClick() {
+
     fetch("/suggestions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ "scheduleDict": scheduleDict, "suggestDict": suggestDict, "messages": messages }),
+      body: JSON.stringify({ "scheduleDict": scheduleDict, "suggestDict": suggestDict }),
     }).then(response => response.json()).then(data => {
-      for (let i = 0; i < data.message_server.length; i++) {
-        alert(data.message_server[i]);
+      if (data.message_server.length === 1) {
+        alert(data.message_server[0]);
+      } else {
+        var scheduleUpdate = data.schedule_server;
+        var suggestUpdate = data.suggest_server;
+        var addedSuggestions = [];
+        var suggestList = data.suggestions_server;
+
+        for (var i in suggestList) {
+          var suggestNotif = suggestList[i];
+          var suggest = suggestNotif.suggestion;
+          //If statement makes sure that a suggestion for this event has not been accepted already, and if the user accepts the suggestion
+          if (addedSuggestions.indexOf(suggestNotif.suggestEvent) === -1 && window.confirm(suggest) === true) {
+
+            let newScheduleDict = [
+              ...scheduleUpdate,
+              { event: suggestNotif.suggestEvent, startTime: suggestNotif.suggestStartTime, endTime: suggestNotif.suggestEndTime }
+            ];
+            scheduleUpdate = newScheduleDict;
+            //Schedule is kept in order by sorting function on the server side
+            fetch("/sorting", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ "unsortedSchedule": scheduleUpdate }),
+            }).then(response => response.json()).then(data => {
+              if (data.message_server.length === 1) {
+                alert(data.message_server[0]);
+              } else {
+                setScheduleDict(data.server_sorted_Schedule);
+              }
+            });
+            // eslint-disable-next-line
+            suggestUpdate = suggestUpdate.filter((item) => item.suggestion !== suggestNotif.suggestEvent);
+            setSuggestDict(suggestUpdate);
+            //Event is now added to the addedSuggestions list so that other suggestions for this even do not appear
+            addedSuggestions.push(suggestNotif.suggestEvent);
+
+          }
+
+        }
+
       }
-      setScheduleDict(data.schedule_server);
-      setSuggestDict(data.suggest_server);
+
     });
+
+
   }
 
   function onCompleteClick() {
@@ -97,8 +155,13 @@ function App() {
     })
       .then((response) => response.json())
       .then((data) => {
-        setScheduleDict(data.schedule_server);
-        window.location.replace("/");
+        if (data.message_server.length === 1) {
+          alert(data.message_server[0]);
+        } else {
+          setScheduleDict(data.schedule_server);
+          alert("Schedule was successfully saved to your google calendar! You will be redirected to the home page after exiting out of this message");
+          setTimeout(function () { window.location.replace("/") }, 3000);
+        }
       });
   }
 
@@ -109,7 +172,7 @@ function App() {
           <div class="display" align="center">
             <h1>What I would like to do</h1>
             <div class="suggestList" align="center">
-              <h2>{suggestDict.map((dictItem) => <Suggest suggest={dictItem.suggestion} duration={dictItem.duration} />)}</h2>
+              <h2>{suggestDict.map((suggestNotif) => <Suggest suggest={suggestNotif.suggestion} duration={suggestNotif.duration} />)}</h2>
             </div>
 
             <input ref={suggestInput} type="text" placeholder="Input activity" />
@@ -125,7 +188,7 @@ function App() {
             <input ref={dateInput} type="date" />
 
             <div class="scheduleList" align="center">
-              <h2>{scheduleDict.map((dictItem) => <Schedule item={dictItem.event} startTime={dictItem.startTime} endTime={dictItem.endTime} />)}</h2>
+              <h2>{scheduleDict.map((suggestNotif) => <Schedule item={suggestNotif.event} startTime={suggestNotif.startTime} endTime={suggestNotif.endTime} />)}</h2>
             </div>
 
             <div class="editSchedule" align="center">
@@ -142,7 +205,7 @@ function App() {
         </td>
       </table>
       <div class="Save" align="center">
-        <button onClick={() => onSaveClick()}> Save Schedule and receive suggestions</button>
+        <button onClick={() => onSaveClick()}> Receive suggestions</button>
       </div>
       <div class="Complete" align="center">
         <button onClick={() => onCompleteClick()}> Complete Schedule and save to google calendar</button>
