@@ -76,15 +76,59 @@ function App() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ scheduleDict: scheduleDict, suggestDict: suggestDict, messages: messages }),
+      body: JSON.stringify({ scheduleDict: scheduleDict, suggestDict: suggestDict }),
     })
       .then((response) => response.json())
       .then((data) => {
-        for (let i = 0; i < data.message_server.length; i++) {
-          alert(data.message_server[i]);
+        if (data.message_server.length === 1) {
+          alert(data.message_server[0]);
+        } else {
+          var scheduleUpdate = data.schedule_server;
+          var suggestUpdate = data.suggest_server;
+          var addedSuggestions = [];
+          var suggestList = data.suggestions_server;
+
+          for (var i in suggestList) {
+            var suggestNotif = suggestList[i];
+            var suggest = suggestNotif.suggestion;
+            //If statement makes sure that a suggestion for this event has not been accepted already, and if the user accepts the suggestion
+            if (
+              addedSuggestions.indexOf(suggestNotif.suggestEvent) === -1 &&
+              window.confirm(suggest) === true
+            ) {
+              let newScheduleDict = [
+                ...scheduleUpdate,
+                {
+                  event: suggestNotif.suggestEvent,
+                  startTime: suggestNotif.suggestStartTime,
+                  endTime: suggestNotif.suggestEndTime,
+                },
+              ];
+              scheduleUpdate = newScheduleDict;
+              //Schedule is kept in order by sorting function on the server side
+              fetch("/sorting", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ unsortedSchedule: scheduleUpdate }),
+              })
+                .then((response) => response.json())
+                .then((data) => {
+                  if (data.message_server.length === 1) {
+                    alert(data.message_server[0]);
+                  } else {
+                    setScheduleDict(data.server_sorted_Schedule);
+                  }
+                });
+              // eslint-disable-next-line
+              suggestUpdate = suggestUpdate.filter((item) => item.suggestion !== suggestNotif.suggestEvent);
+              setSuggestDict(suggestUpdate);
+              //Event is now added to the addedSuggestions list so that other suggestions for this even do not appear
+              addedSuggestions.push(suggestNotif.suggestEvent);
+            }
+          }
         }
-        setScheduleDict(data.schedule_server);
-        setSuggestDict(data.suggest_server);
       });
   }
 
@@ -210,13 +254,11 @@ function App() {
       </table>
       <div class="Save" align="center">
         <button class="btn btn1" onClick={() => onSaveClick()}>
-          {" "}
           Save Schedule and receive suggestions
         </button>
       </div>
       <div class="Complete" align="center">
         <button class="btn btn1" onClick={() => onCompleteClick()}>
-          {" "}
           Complete Schedule and save to google calendar
         </button>
       </div>
