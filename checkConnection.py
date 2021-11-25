@@ -21,4 +21,4 @@ def checkConnect():
     print(dir(service))
 
 
-checkConnect()
+# checkConnect()
