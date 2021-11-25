@@ -10,21 +10,22 @@ from functools import wraps
 import flask
 from flask_login import login_user, current_user, LoginManager
 from flask_login.utils import login_required
-<<<<<<< HEAD
-from methods import (
-    suggest,
-    sortDictTimeRegular,
-    convertScheduleToRegTime,
-)
 
-=======
+# from methods import (
+#     suggest,
+#     sortDictTimeRegular,
+#     convertScheduleToRegTime,
+# )
+
 from methods import suggest, sortDictTimeMilitary, sortDictTimeRegular
 import json
 from googleSetup import Create_Service
->>>>>>> 9f30aea285ddd44c8e51efe30be31b01696cdce4
 from createSchedule import creatSchedules
 from checkConnection import checkConnect
 from listSchedule import listSchedules
+
+from createSchedule import createSchedules
+from checkConnection import checkConnect
 
 login_manager = LoginManager()
 login_manager.login_view = "login"
@@ -263,6 +264,29 @@ def complete():
 bp = flask.Blueprint("bp", __name__, template_folder="./build")
 
 
+@app.route("/complete", methods=["POST"])
+def complete():
+
+    currentDate = flask.request.json.get("currentDate")
+    scheduleDict = flask.request.json.get("scheduleDict")
+    if len(scheduleDict) != 0:
+        scheduleDict = sorted(
+            scheduleDict, key=lambda x: datetime.strptime(x["startTime"], "%H:%M")
+        )    
+        try:
+            checkConnect()
+            createSchedules(scheduleDict)
+        except KeyError:
+            pass
+
+    return flask.jsonify({"schedule_server": scheduleDict})
+
+bp = flask.Blueprint("bp", __name__, template_folder="./build")
+
+
+
+
+
 @bp.route("/index")
 def index():
     """
@@ -274,6 +298,7 @@ def index():
 
 
 app.register_blueprint(bp)
+
 
 if __name__ == "__main__":
     app.run(
