@@ -88,5 +88,5 @@ class suggestionHelperFunctionTests(unittest.TestCase):
         self.assertEqual(convertScheduleToRegTime(inputDict), outputDict)
 
 
-if __name__ == "__main__":
+if __name__ == "__p2-nparker19__":
     unittest.main()
