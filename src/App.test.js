@@ -6,10 +6,10 @@ test("renders buttons", () => {
   render(<App />);
 
 
-  const addButton = screen.getByText("Add Event");
-  expect(addButton).toBeInTheDocument();
-  const addButton = screen.getByText("Add Activity");
-  expect(addButton).toBeInTheDocument();
+  const addEventButton = screen.getByText("Add Event");
+  expect(addEventButton).toBeInTheDocument();
+  const addActivityButton = screen.getByText("Add Activity");
+  expect(addActivityButton).toBeInTheDocument();
   const saveButton = screen.getByText("Receive suggestions");
   expect(saveButton).toBeInTheDocument();
   const completeButton = screen.getByText("Complete Schedule and save to google calendar");
