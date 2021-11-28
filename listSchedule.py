@@ -49,14 +49,11 @@ def listSchedules():
     if not events:
         print("No upcoming events found.")
     for event in events:
-        start = event["start"].get("dateTime", event["start"].get("date"))
-        
-        print("\n")
-        end = event['end'].get('dateTime')  
-        print("\n")
-        
+        start = event["start"].get("dateTime", event["start"].get("date"))   
+        end = event['end'].get('dateTime')          
         summarys_.append(event["summary"])
         ids_.append(event['id'])
+        
         starts_.append(isoformatStringFormat(start))
         ends_.append(isoformatStringFormat(end))
                 
