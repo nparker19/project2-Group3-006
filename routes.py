@@ -5,13 +5,24 @@ from models import User
 import os
 from authlib.integrations.flask_client import OAuth
 from datetime import timedelta
-from flask import session
+from flask import session, request
 from functools import wraps
 import flask
 from flask_login import login_user, current_user, LoginManager
 from flask_login.utils import login_required
-from methods import suggest
+
+# from methods import (
+#     suggest,
+#     sortDictTimeRegular,
+#     convertScheduleToRegTime,
+# )
+
+from methods import suggest, sortDictTimeMilitary, sortDictTimeRegular
 import json
+from googleSetup import Create_Service
+from createSchedule import creatSchedules
+from checkConnection import checkConnect
+from listSchedule import listSchedules
 
 from createSchedule import createSchedules
 from checkConnection import checkConnect
@@ -24,6 +35,26 @@ login_manager.init_app(app)
 @login_manager.user_loader
 def load_user(user_name):
     return User.query.get(user_name)
+
+
+@app.route("/landingpage")
+def landingpage():
+    return flask.render_template("landingpage.html")
+
+
+@app.route("/functionality")
+def functionality():
+    return flask.render_template("functionality.html")
+
+
+@app.route("/purpose")
+def purpose():
+    return flask.render_template("purpose.html")
+
+
+@app.route("/contact")
+def contact():
+    return flask.render_template("contact.html")
 
 
 @app.route("/signup")
@@ -117,8 +148,23 @@ def hello_world():
         email_user = User(email=email)
         db.session.add(email_user)
         db.session.commit()
-    return flask.render_template("home.html", currentUserEmail=email_user)
-    # return f"Hello, you are logged in as {email}!"
+    
+    try:
+        listEvents = listSchedules()
+        # print(listEvents)
+    except:
+        print("No list")
+    
+    return flask.render_template(
+        "home.html",
+        currentUserEmail=email_user,
+        len = len(listEvents),
+        events_ = listEvents["events_"],
+        summarys_ = listEvents["summarys_"],
+        starts_ = listEvents["starts_"],
+        ends_ = listEvents["ends_"],
+        ids_ = listEvents["ids_"]
+    )
 
 
 @app.route("/login/google")
@@ -140,27 +186,80 @@ def main():
 def logout():
     for key in list(session.keys()):
         session.pop(key)
-    return redirect("/")
+    return redirect("landingpage")
 
 
-# This route will handle the fetch API Post call from the new schedule html
+# This route accepts the unsorted schedule from the client and returns to the client a sorted schedule
+@app.route("/sorting", methods=["POST"])
+def sorting():
+    errorMessage = []
+    unsortedSchedule = flask.request.json.get("unsortedSchedule")
+    try:
+        convertedDict = convertScheduleToRegTime(unsortedSchedule)
+        sortedSchedule = sortDictTimeRegular(convertedDict)
+    except ValueError:
+        errorMessage.append("Invalid Time entered.")
+        return flask.jsonify({"message_server": errorMessage})
+
+    return flask.jsonify(
+        {
+            "message_server": errorMessage,
+            "server_sorted_Schedule": sortedSchedule,
+        }
+    )
+
+
+# This route handles the fetch API most call for when the "receive suggestions" button is pressed.
 @app.route("/suggestions", methods=["POST"])
 def suggestions():
-
+    """
+    This method takes in a schedule dictionary and a suggestions dictionary from the client,
+    and returns schedule suggestions to the client.
+    """
+    errorMessage = []
     scheduleDict = flask.request.json.get("scheduleDict")
-    print(scheduleDict)
-
-    message = ""
+    suggestDict = flask.request.json.get("suggestDict")
     try:
-        message = suggest(scheduleDict)
-    except ValueError:
-        message = "Invalid time entered. Pls enter time in 00:00 AM/PM format"
-        return flask.jsonify(
-            {"schedule_server": scheduleDict, "message_server": message}
+        suggestionsList = suggest(scheduleDict, suggestDict)
+    except Exception as error:
+        errorMessage.append(
+            f"We were unable to retrieve your schedule suggestions. Error: {error}"
         )
+        return flask.jsonify(
+            {
+                "message_server": errorMessage,
+            }
+        )
+    return flask.jsonify(
+        {
+            "schedule_server": scheduleDict,
+            "suggest_server": suggestDict,
+            "suggestions_server": suggestionsList,
+            "message_server": errorMessage,
+        }
+    )
 
-    return flask.jsonify({"schedule_server": scheduleDict, "message_server": message})
+@app.route("/complete", methods=["POST"])
+def complete():
+    errorMessage = []
+    scheduleDate = flask.request.json.get("currentDate")
+    scheduleDict = flask.request.json.get("scheduleDict")
 
+    try:
+        checkConnect()
+        creatSchedules(scheduleDict)
+    except Exception as error:
+        errorMessage.append(
+            f"Calendar was not successfully saved to google calendar. Error: {error}"
+        )
+        return flask.jsonify(
+            {
+                "message_server": errorMessage,
+            }
+        )
+    return flask.jsonify(
+        {"schedule_server": scheduleDict, "message_server": errorMessage}
+    )
 
 bp = flask.Blueprint("bp", __name__, template_folder="./build")
 
@@ -191,8 +290,8 @@ bp = flask.Blueprint("bp", __name__, template_folder="./build")
 @bp.route("/index")
 def index():
     """
-    Create schedule page which allows the user to edit
-    their current daily schedule and save to their google calendar
+    Renders the creat schedule page which allows the user to edit
+    their current daily schedule, receive suggestions, and save to their google calendar
     """
 
     return flask.render_template("index.html")
@@ -200,4 +299,10 @@ def index():
 
 app.register_blueprint(bp)
 
-app.run(debug=True)
+
+if __name__ == "__main__":
+    app.run(
+        host=os.getenv("IP", "0.0.0.0"),
+        port=int(os.getenv("PORT", "8080")),
+        debug=True,
+    )
