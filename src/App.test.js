@@ -19,7 +19,7 @@ test("renders buttons", () => {
 test("add suggestion", () => {
   render(<App />);
   const addButton = screen.getByText("Add Activity");
-  const eventInput = screen.getByTestId("activity_input");
+  const eventInput = screen.getByTestId('activity_input');
   const hourInput = screen.getByTestId('hour_input');
   const minuteInput = screen.getByTestId('hour_input');
 
