@@ -21,7 +21,7 @@ test("add suggestion", () => {
   const addButton = screen.getByText("Add Activity");
   const eventInput = screen.getByTestId('activity_input');
   const hourInput = screen.getByTestId('hour_input');
-  const minuteInput = screen.getByTestId('hour_input');
+  const minuteInput = screen.getByTestId('minute_input');
 
   fireEvent.change(eventInput, { target: { value: "Workout" } });
   fireEvent.change(hourInput, { target: { value: "2" } });

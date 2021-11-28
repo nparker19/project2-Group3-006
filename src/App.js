@@ -235,9 +235,9 @@ function App() {
             <div class="inputs">
               <input ref={suggestInput} type="text" placeholder="Input activity" data-testid="activity_input" />
 
-              <input id='h' ref={hourDur} type='number' min='0' max='24' />
+              <input id='h' ref={hourDur} type='number' min='0' max='24' data-testid="hour_input" />
               <label for='h'>hours</label>
-              <input id='m' ref={minDur} type='number' min='0' max='59' />
+              <input id='m' ref={minDur} type='number' min='0' max='59' data-testid="minute_input" />
               <label for='m'>minutes</label>
 
 
