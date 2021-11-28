@@ -14,41 +14,78 @@ parent = os.path.dirname(current)
 # the sys.path.
 sys.path.append(parent)
 
-from methods import suggest, sortDictTimeMilitary
+from methods import suggest, convertScheduleToRegTime
 
 INPUT = "INPUT"
 EXPECTED_OUTPUT = "EXPECTED_OUTPUT"
 
 
-class getSuggestionsTests(unittest.TestCase):
+class suggestionHelperFunctionTests(unittest.TestCase):
     def test_suggestions_function1(self):
-        self.assertEqual(suggest([]), [])
+        self.assertEqual(suggest([], []), [])
 
     def test_suggestions_function2(self):
-        inputDict = [
-            {"event": "class", "startTime": "09:00", "endTime": "10:45"},
-            {"event": "meeting", "startTime": "18:30", "endTime": "19:00"},
-            {"event": "meeting2", "startTime": "22:00", "endTime": "23:15"},
+        inputScheduleDict = [
+            [
+                {"endTime": "11:00 AM", "event": "IM meeting", "startTime": "10:00 AM"},
+                {"endTime": "05:00 PM", "event": "class", "startTime": "03:45 PM"},
+            ]
         ]
-        outputList = [
-            "You have over 5 hours of free time between class and meeting. You could get in a workout and a study session!",
-            "You have a few hours of free time between meeting and meeting2. This would be a great time to study or get in quick nap.",
-        ]
-        self.assertEqual(suggest(inputDict), outputList)
-
-    def test_military_sort(self):
-        inputDict = [
-            {"event": "class", "startTime": "09:00", "endTime": "10:45"},
-            {"event": "meeting2", "startTime": "22:00", "endTime": "23:15"},
-            {"event": "meeting", "startTime": "18:30", "endTime": "19:00"},
+        inputSuggestDict = [
+            [
+                {"suggestion": "workout", "duration": "1 hour(s) 45 minute(s)"},
+                {"suggestion": "study", "duration": "2 hour(s) 0 minute(s)"},
+            ]
         ]
         outputDict = [
-            {"event": "class", "startTime": "09:00", "endTime": "10:45"},
-            {"event": "meeting", "startTime": "18:30", "endTime": "19:00"},
-            {"event": "meeting2", "startTime": "22:00", "endTime": "23:15"},
+            [
+                {
+                    "suggestStartTime": "11:30 AM",
+                    "suggestEndTime": "01:15 PM",
+                    "suggestEvent": "workout",
+                    "suggestion": "You have enough time to workout between 11:00 AM and 03:45 PM. Would you like to workout from 11:30 AM to 01:15 PM today? (click OK to add to schedule, and click cancel to view any other suggestions)",
+                },
+                {
+                    "suggestStartTime": "11:30 AM",
+                    "suggestEndTime": "01:30 PM",
+                    "suggestEvent": "study",
+                    "suggestion": "You have enough time to study between 11:00 AM and 03:45 PM. Would you like to study from 11:30 AM to 01:30 PM today? (click OK to add to schedule, and click cancel to view any other suggestions)",
+                },
+                {
+                    "suggestStartTime": "05:30 PM",
+                    "suggestEndTime": "07:15 PM",
+                    "suggestEvent": "workout",
+                    "suggestion": "You have enough time to workout between 05:00 PM and 11:59 PM. Would you like to workout from 05:30 PM to 07:15 PM today? (click OK to add to schedule, and click cancel to view any other suggestions)",
+                },
+                {
+                    "suggestStartTime": "05:30 PM",
+                    "suggestEndTime": "07:30 PM",
+                    "suggestEvent": "study",
+                    "suggestion": "You have enough time to study between 05:00 PM and 11:59 PM. Would you like to study from 05:30 PM to 07:30 PM today? (click OK to add to schedule, and click cancel to view any other suggestions)",
+                },
+            ]
+        ]
+        self.assertEqual(suggest(inputScheduleDict, inputSuggestDict), outputDict)
+
+    def test_timeConverter(self):
+        inputDict = [
+            [
+                {"endTime": "09:00", "event": "nap", "startTime": "8:15"},
+                {"endTime": "11:00 AM", "event": "meeting", "startTime": "10:00 AM"},
+                {"endTime": "17:00", "event": "class", "startTime": "15:45"},
+                {"event": "workout", "startTime": "05:30 PM", "endTime": "06:30 PM"},
+            ]
+        ]
+        outputDict = [
+            [
+                {"event": "nap", "startTime": "08:15 AM", "endTime": "09:00 AM"},
+                {"event": "meeting", "startTime": "10:00 AM", "endTime": "11:00 AM"},
+                {"event": "class", "startTime": "03:45 PM", "endTime": "05:00 PM"},
+                {"event": "workout", "startTime": "05:30 PM", "endTime": "06:30 PM"},
+            ]
         ]
 
-        self.assertEqual(suggest(inputDict), outputDict)
+        self.assertEqual(convertScheduleToRegTime(inputDict), outputDict)
 
 
 if __name__ == "__main__":

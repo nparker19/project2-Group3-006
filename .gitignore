@@ -6,4 +6,3 @@ __pycache__
 /coverage
 /build
 token_files
-credentials.json

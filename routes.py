@@ -1,3 +1,4 @@
+from types import prepare_class
 from flask.helpers import url_for
 from werkzeug.utils import redirect
 from app import app, db
@@ -253,6 +254,17 @@ def index():
 
 
 app.register_blueprint(bp)
+
+
+def addUserEmailDB(email_user):
+    email_user = User.query.filter_by(email=email_user).first()
+    if email_user:
+        pass
+    else:
+        new_email_user = User(email=email_user)
+        db.session.add(new_email_user)
+        db.session.commit()
+
 
 if __name__ == "__main__":
     app.run(

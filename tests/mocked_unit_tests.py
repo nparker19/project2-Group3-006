@@ -16,94 +16,50 @@ parent = os.path.dirname(current)
 # the sys.path.
 sys.path.append(parent)
 
-
-"""
-from app import update_db_ids_for_user, Artist
-from genius import get_lyrics_link
+from models import User
+from routes import addUserEmailDB
 
 INPUT = "INPUT"
 EXPECTED_OUTPUT = "EXPECTED_OUTPUT"
 
 
-class UpdateDBIDsTests(unittest.TestCase):
+class UpdateDBTests(unittest.TestCase):
     def setUp(self):
-        self.db_mock = [Artist(artist_id="foo", username="John")]
+        self.db_mock = [User(email="chipaj")]
 
-    def mock_add_to_db(self, artist):
-        self.db_mock.append(artist)
+    def mock_add_to_db(self, email_user):
+        self.db_mock.append(email_user)
 
-    def mock_delete_from_db(self, artist):
+    def mock_delete_from_db(self, email_user):
         self.db_mock = [
-            entry for entry in self.db_mock if entry.artist_id != artist.artist_id
+            entry for entry in self.db_mock if entry.email != email_user.email
         ]
 
     def mock_db_commit(self):
         pass
 
     def test_update_db_ids_for_user(self):
-        with patch("app.Artist.query") as mock_query:
+        with patch("app.User.query") as mock_query:
             with patch("app.db.session.add", self.mock_add_to_db):
                 with patch("app.db.session.delete", self.mock_delete_from_db):
                     with patch("app.db.session.commit", self.mock_db_commit):
                         mock_filtered = MagicMock()
                         mock_filtered.all.return_value = self.db_mock
-                        # Hard-coding in some logic from test case 3.
-                        # This is because SQLAlchemy is just kinda hard to mock
-                        # in some instances
-                        mock_filtered.filter.return_value = [
-                            Artist(artist_id="bar", username="John")
-                        ]
+
+                        mock_filtered.filter.return_value = [User(email="chipaj")]
                         mock_query.filter_by.return_value = mock_filtered
 
-                        # Now that setup is done...
-                        # 1) Try to add the same ID to the DB. Should be a no-op.
-                        update_db_ids_for_user("John", {"foo"})
+                        # Mocked test 1 (Adding an email which already exists in the DB)
+                        addUserEmailDB("chipaj")
                         self.assertEqual(len(self.db_mock), 1)
-                        self.assertEqual(self.db_mock[0].artist_id, "foo")
+                        self.assertEqual(self.db_mock[0].email, "chipaj")
 
-                        # 2) Try to add a new ID to the DB. Should expand the DB
-                        # collection
-                        update_db_ids_for_user("John", {"foo", "bar"})
+                        # Mocked test 1 (Adding an email which does not already exists in the DB)
+                        addUserEmailDB("chipaj9912")
                         self.assertEqual(len(self.db_mock), 2)
-                        self.assertEqual(self.db_mock[0].artist_id, "foo")
-                        self.assertEqual(self.db_mock[1].artist_id, "bar")
-
-                        # 3) Pass in a list of valid IDs that doesn't include a prior
-                        # one. Should replace "bar" with "baz"
-                        update_db_ids_for_user("John", {"foo", "baz"})
-                        self.assertEqual(len(self.db_mock), 2)
-                        self.assertEqual(self.db_mock[0].artist_id, "foo")
-                        self.assertEqual(self.db_mock[1].artist_id, "baz")
+                        self.assertEqual(self.db_mock[0].email, "chipaj")
+                        self.assertEqual(self.db_mock[1].artist_id, "chipaj9912")
 
 
-class GetLyricsLinkTests(unittest.TestCase):
-    def test_get_lyrics_link(self):
-        with patch("genius.requests.get") as mock_requests_get:
-            mock_response = MagicMock()
-            # side_effect lets us set a list of return values.
-            # Each successive call to mock_response.all() will generate the next
-            # side effect
-            mock_response.json.side_effect = [
-                {},
-                {
-                    "response": {
-                        "hits": [
-                            {
-                                "result": {
-                                    "url": "https://www.youtube.com/watch?v=q6EoRBvdVPQ"
-                                }
-                            }
-                        ]
-                    }
-                },
-            ]
-            mock_requests_get.return_value = mock_response
-
-            self.assertEqual(get_lyrics_link("Song Name"), None)
-            self.assertEqual(
-                get_lyrics_link("Song Name 2"),
-                "https://www.youtube.com/watch?v=q6EoRBvdVPQ",
-            )
-"""
 if __name__ == "__main__":
     unittest.main()
