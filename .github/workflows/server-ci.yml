@@ -44,4 +44,6 @@ jobs:
         run: find . -name '*.py' -exec pylint {} \;
         
       - name: Run tests
-        run: python -m unittest
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: echo "$DATABASE_URL"; python -m unittest
