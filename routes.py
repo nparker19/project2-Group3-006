@@ -22,10 +22,6 @@ from googleSetup import Create_Service
 from createSchedule import creatSchedules
 from checkConnection import checkConnect
 from listSchedule import listSchedules
-
-from createSchedule import createSchedules
-from checkConnection import checkConnect
-
 login_manager = LoginManager()
 login_manager.login_view = "login"
 login_manager.init_app(app)
@@ -36,7 +32,7 @@ def load_user(user_name):
     return User.query.get(user_name)
 
 
-@app.route("/landingpage")
+@app.route("/landingpage") 
 def landingpage():
     return flask.render_template("landingpage.html")
 
