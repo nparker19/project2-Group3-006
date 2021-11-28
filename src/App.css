@@ -1,3 +1,6 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap");
+@import url("http://fonts.cdnfonts.com/css/gotham");
+
 .App {
   text-align: center;
 }
@@ -38,94 +41,275 @@
 }
 
 body {
-  background-color: gray;
+  background-color: #fffbff;
   line-height: 1.5;
 }
 
 .display {
-  border: 5px solid black;
-  background: #6984a7;
-  padding:10px;
+  padding: 10px;
 }
 
 h1 {
-  font-family: 'Lucida Sans';
+  font-family: "Gotham Thin", sans-serif;
   font-size: 28;
   text-align: center;
   text-shadow: 2px 2px 2px white;
-  color: black
+  color: black;
 }
 
 h2 {
-  font-family: 'Lucida Sans';
+  font-family: "Gotham Thin", sans-serif;
   font-size: 15px;
   text-align: center;
   color: black;
 }
 
+.title {
+  font-family: "Gotham Thin", sans-serif;
+  font-size: 22px;
+}
 
-button{
-  background-color: rgb(173, 187, 187);
+button {
+  background-color: rgb(235, 219, 230);
   border-color: black;
-  color:black;
+  color: black;
   border-radius: 20%;
 }
-a button{
+a button {
   background-color: rgb(173, 187, 187);
   border-color: black;
-  color:black;
+  color: black;
   border-radius: 20%;
+}
 
+.inputs {
+  padding: 25px;
+}
+
+.inputs label {
+  padding: 10px;
 }
 
 
+.inputs input {
+  padding: 10px;
+}
 
-input[type=text] {
+input[type="text"] {
   padding: 5px;
-  box-shadow:0 0 15px 4px rgba(0,0,0,0.06);
-  border-radius:10px;
+  box-shadow: 0 0 15px 4px rgba(0, 0, 0, 0.06);
+  border-radius: 10px;
   border-color: black;
 }
 
-input[type=time] {
+input[type="time"] {
   padding: 5px;
-  box-shadow:0 0 15px 4px rgba(0,0,0,0.06);
-  border-radius:10px;
+  box-shadow: 0 0 15px 4px rgba(0, 0, 0, 0.06);
+  border-radius: 10px;
+
   border-color: black;
 }
 
-.scheduleList{
+.scheduleList {
   height: 325px;
-  width: 350px;
+  width: 500px;
   padding: 5px;
+  border-radius: 50px;
   overflow-y: auto;
-  border: 2px solid black;
-  background-color: white;
+  border: 2px solid #f7e202;
 }
-.suggestList{
+.suggestList {
   height: 325px;
-  width: 350px;
+  width: 500px;
   padding: 5px;
+  border-radius: 50px;
   overflow-y: auto;
-  border: 2px solid black;
-  background-color: white;
+  border: 2px solid #f7e202;
 }
 
-.editList{
+.editList {
   padding-top: 30px;
 }
-.save{
+.save {
   padding-top: 10px;
 }
 
-table{
+
+.delete-btn {
+  background: transparent;
+  font-size: 17px;
+  border-width: 0;
+}
+
+.delete-btn:hover {
+  text-decoration: line-through;
+}
+
+table {
   padding: auto;
-  height:500px;
+  height: 500px;
 }
-table td.schedule{
-  width: 700px;
-  background-color: black;
-}
-table td.suggestions{
+table td.schedule {
   width: 500px;
 }
+table td.suggestions {
+  width: 500px;
+}
+
+.standard {
+  --mainColor: #f55eaa;
+  --hoverColor: #f7e202;
+  --backgroundColor: #fffbff;
+  --lightOne: #919191;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+}
+
+a {
+  text-decoration: none;
+}
+
+.big-wrapper {
+  position: fixed;
+  /* change to relative if it doesnt scroll*/
+  padding: 1.7rem 0 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+  min-height: 100vh;
+  overflow: hidden;
+  background-color: var(--backgroundColor);
+}
+
+.container {
+  position: relative;
+  margin: 0 auto;
+  padding: 0 3rem;
+  z-index: 10;
+  max-width: 81rem;
+  width: 100%;
+}
+
+header .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.overlay {
+  display: none;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.logo img {
+  width: 40px;
+  margin-right: 0.6rem;
+  margin-top: -0.6rem;
+}
+
+.logo h3 {
+  color: var(--darkTwo);
+  font-size: 1.55rem;
+  line-height: 1.2;
+  font-weight: 700;
+}
+
+.links ul {
+  display: flex;
+  list-style: none;
+  align-items: center;
+}
+
+.links a {
+  color: var(--lightTwo);
+  margin-left: 4.5rem;
+  display: inline-block;
+  transition: 0.3s;
+}
+
+.links a:hover {
+  color: var(--hoverColor);
+  transform: scale(1.05);
+}
+
+.btn {
+  display: inline-block;
+  padding: 0.9rem 1.9rem;
+  color: #fff !important;
+  background-color: var(--mainColor);
+  border-radius: 16px;
+  border-width: 0;
+  text-transform: capitalize;
+  transition: 0.3s;
+}
+
+.line {
+  margin: 20px;
+}
+
+.input-btn {
+  padding: 10px;
+}
+
+.btn:hover {
+  background-color: var(--hoverColor);
+  transform: scale(1) !important;
+}
+
+.hamburger-menu {
+  position: relative;
+  z-index: 99;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  display: none;
+}
+
+.showcase-area .container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  align-items: center;
+  justify-content: center;
+}
+
+.big-title {
+  font-size: 1.4rem;
+  color: var(--darkOne);
+  text-transform: capitalize;
+  line-height: 1.4;
+}
+
+.btn1 {
+  margin: 2px;
+}
+
+.text {
+  color: var(--lightOne);
+  font-size: 1.1rem;
+  margin: 1.9rem 0 2.5rem;
+  max-width: 600px;
+  line-height: 2.3;
+}
+
+.person {
+  width: 120%;
+  transform: translate(15%, 25px);
+}
+

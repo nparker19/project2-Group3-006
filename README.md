@@ -1,6 +1,7 @@
 # Start of Project 2, for Group 3 (Section 006)
 https://git.heroku.com/nameless-basin-16999.git
 
+
 # TODOit App
 ### TODOit is web application that allow user to schedule their daily tasks and then get time suggestions for other activies that can be added to schedules, and finally schedules are added to user google calender and update
 - ***User is able to login with gmail account***
@@ -8,7 +9,7 @@ https://git.heroku.com/nameless-basin-16999.git
 - ***TODOit application pops up with suggestions for other activities that can be added in-between times***
 - ***such such gym time, walking out, nap time, study time and other lifestyle-related activities***
 - ***User can choose to update schedule tasks and submitted schedule***
-- ***app then save schedule to Google calendar - with reminder set in place already***
+- ***app then save schedule to Google calendar - with  reminder set in place already***
 ### TODOit app is essentially design to fill help user manage and scheudule thier busy daily activities such that they can fill-in other essentiall event based on app suggestion. It is interesting that that many ToDo app by this particularly unique for the pop-up suggestions design.  
 
 ## This app is designed using Flask web framework as a tool for linking every pecies of the applications together a whole. 
@@ -30,7 +31,7 @@ pip install -r requirments.txt
 
 ## Problem and Technical Issues in the course of design
 - Setting up the Heroku app deployment was a huge challenge. Everthing for the deploymet was fine except for linking the Google Calender API credentials to Heroku config var: thid is still a challenge. 
-- Also deleting from the calendar updae was a challenges> it is someworth a difficult task to fetch and delete directly via html form from google calendar
+- Also deleting from the calendar updae was a challenges> it is someworth a difficult task to fetch and delete directly via html from google calendar
 
 ##  possible addition to app
 - this may include scaling up the app such that user can add list of activities that the TODit app can add pop-ups of suggestion
