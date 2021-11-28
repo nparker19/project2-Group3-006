@@ -61,5 +61,5 @@ class UpdateDBTests(unittest.TestCase):
                         self.assertEqual(self.db_mock[1].artist_id, "chipaj9912")
 
 
-if __name__ == "__p2-nparker19__":
+if __name__ == "__main__":
     unittest.main()
