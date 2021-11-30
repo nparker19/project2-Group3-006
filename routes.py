@@ -25,26 +25,21 @@ login_manager = LoginManager()
 login_manager.login_view = "login"
 login_manager.init_app(app)
 
-
 @login_manager.user_loader
 def load_user(user_name):
     return User_DB.query.get(user_name)
-
 
 @app.route("/landingpage")
 def landingpage():
     return flask.render_template("landingpage.html")
 
-
 @app.route("/functionality")
 def functionality():
     return flask.render_template("functionality.html")
 
-
 @app.route("/purpose")
 def purpose():
     return flask.render_template("purpose.html")
-
 
 @app.route("/contact")
 def contact():
@@ -255,9 +250,7 @@ def complete():
         {"schedule_server": scheduleDict, "message_server": errorMessage}
     )
 
-
 bp = flask.Blueprint("bp", __name__, template_folder="./build")
-
 
 @bp.route("/index")
 def index():
@@ -267,7 +260,6 @@ def index():
     """
 
     return flask.render_template("index.html")
-
 
 app.register_blueprint(bp)
 
