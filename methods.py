@@ -1,5 +1,4 @@
 from datetime import timedelta, datetime
-from models import User
 
 
 def suggest(scheduleDict, suggestDict):
@@ -131,13 +130,3 @@ def convertScheduleToRegTime(scheduleDict):
                 }
             )
     return convertedDict
-
-
-def addUserEmailDB(email_user):
-    email_user = User.query.filter_by(email=email_user).first()
-    if email_user:
-        pass
-    else:
-        new_email_user = User(email=email_user)
-        db.session.add(new_email_user)
-        db.session.commit()
