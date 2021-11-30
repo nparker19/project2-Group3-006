@@ -80,12 +80,16 @@ function App() {
     let newSuggest = suggestInput.current.value;
     var hourDuration;
     var minDuration;
-
-    hourDuration = hourDur.current.value;
-
-
-    minDuration = minDur.current.value;
-
+    if (hourDur.current.value === "") {
+      hourDuration = '0';
+    } else {
+      hourDuration = hourDur.current.value;
+    }
+    if (minDur.current.value === "") {
+      minDuration = '0';
+    } else {
+      minDuration = minDur.current.value;
+    }
 
     let newSuggestDuration = hourDuration + ' hour(s) ' + minDuration + ' minute(s)';
 
@@ -281,9 +285,9 @@ function App() {
             <div class="editSchedule inputs" align="center">
 
               <input ref={eventInput} type="text" placeholder="Input event" data-testid="event_input" />
-              <label for="start">start time: </label>
+              <label for="start"> start:</label>
               <input ref={startTimeInput} type="time" id="start" data-testid="start_input" />
-              <label for="end">end time: </label>
+              <label for="end"> end:</label>
               <input ref={endTimeInput} type="time" id="end" data-testid="end_input" />
 
               <hr class="line" />
