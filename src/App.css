@@ -43,6 +43,7 @@
 body {
   background-color:white;
   line-height: 1.5;
+  
 }
 
 .display {
@@ -122,7 +123,7 @@ input[type="number"] {
   padding: 5px;
   border-radius: 50px;
   overflow-y: auto;
-  border: 6px solid #f7e202;
+  border: 2px solid black;
 }
 .suggestList {
   height: 325px;
@@ -130,7 +131,7 @@ input[type="number"] {
   padding: 5px;
   border-radius: 50px;
   overflow-y: auto;
-  border: 6px solid #f7e202;
+  border: 2px solid black;
 }
 
 .editList {
@@ -317,4 +318,12 @@ header .container {
 .person {
   width: 120%;
   transform: translate(15%, 25px);
+}
+.shape {
+  position: absolute;
+  z-index: 0;
+  width: 325px;
+  bottom: -180px;
+  left: -15px;
+  opacity: 0.3;
 }

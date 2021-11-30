@@ -10,12 +10,15 @@
             --hoverColor: #f7e202;
             --backgroundColor: #fffbff;
             --lightOne: #919191;
+            background-image: url("https://raw.githubusercontent.com/thanuavi1/lect20/master/image.jpg");
+            background-size: cover;
         }
 
         * {
             padding: 0;
             margin: 0;
             box-sizing: border-box;
+
         }
 
         body {
@@ -129,6 +132,7 @@
             grid-template-columns: repeat(2, 1fr);
             align-items: center;
             justify-content: center;
+
         }
 
         .big-title {
@@ -136,19 +140,21 @@
             color: var(--darkOne);
             text-transform: capitalize;
             line-height: 1.4;
+            transform: translate(15%, -110px);
         }
 
         .text {
-            color: var(--lightOne);
+            color: black;
             font-size: 1.1rem;
-            margin: 1.9rem 0 2.5rem;
+            margin: 1rem 0 2.5rem;
             max-width: 600px;
             line-height: 2.3;
+            transform: translate(15%, -100px);
         }
 
-        .person {
+        .cal {
             width: 120%;
-            transform: translate(15%, 25px);
+            transform: translate(-10%, -70px);
         }
     </style>
 
@@ -157,7 +163,6 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Landing Page</title>
-        <link rel="stylesheet" href="style.css" />
     </head>
 
 <body>
@@ -191,23 +196,17 @@
             <div class="showcase-area">
                 <div class="container">
                     <div class="left">
-                        <div class="big-title">
-                            <h1>Simplify your life,</h1>
-                            <h1>Start Organizing now.</h1>
-                        </div>
-                        <p class="text">
-                            TODOit is a daily schedule application that allows you to input your daily tasks and we will
-                            suggest the optimal times to do the tasks!
-                        </p>
-
-                        <div class="cta">
-                            <a href="signup" class="btn">Get started</a>
-                        </div>
+                        <img src="https://media.gcflearnfree.org/content/560be4f6557fa909dc9cf5a1_09_30_2015/googletips_calendar2.jpg"
+                            alt="Image" class="cal" />
                     </div>
 
                     <div class="right">
-                        <img src="https://raw.githubusercontent.com/thanuavi1/lect20/master/imageedit_3_6893018252.png"
-                            alt="Person Image" class="person" />
+                        <div class="big-title">
+                            <h1>Free up your mental space.</h1>
+                        </div>
+                        <p class="text">
+                            Regain your calmness and clarity by letting TODOit organize your busy schedule.
+                        </p>
                     </div>
                 </div>
             </div>
