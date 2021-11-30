@@ -2,7 +2,7 @@ from types import prepare_class
 from flask.helpers import url_for
 from werkzeug.utils import redirect
 from app import app, db
-from models import User
+from models import User_DB
 import os
 from authlib.integrations.flask_client import OAuth
 from datetime import timedelta
@@ -28,7 +28,7 @@ login_manager.init_app(app)
 
 @login_manager.user_loader
 def load_user(user_name):
-    return User.query.get(user_name)
+    return User_DB.query.get(user_name)
 
 
 @app.route("/landingpage")
@@ -59,11 +59,11 @@ def signup():
 @app.route("/signup", methods=["POST"])
 def signup_post():
     username = flask.request.form.get("username")
-    user = User.query.filter_by(username=username).first()
+    user = User_DB.query.filter_by(username=username).first()
     if user:
         pass
     else:
-        user = User(username=username)
+        user = User_DB(username=username)
         db.session.add(user)
         db.session.commit()
 
@@ -122,7 +122,7 @@ def login():
 @app.route("/login", methods=["POST"])
 def login_post():
     username = flask.request.form.get("username")
-    user = User.query.filter_by(username=username).first()
+    user = User_DB.query.filter_by(username=username).first()
     if user:
         login_user(user)
         return flask.redirect(flask.url_for("index"))
@@ -135,11 +135,11 @@ def login_post():
 @login_required
 def hello_world():
     email = dict(session)["profile"]["email"]
-    email_user = User.query.filter_by(email=email).first()
+    email_user = User_DB.query.filter_by(email=email).first()
     if email_user:
         pass
     else:
-        email_user = User(email=email)
+        email_user = User_DB(email=email)
         db.session.add(email_user)
         db.session.commit()
 
@@ -273,11 +273,11 @@ app.register_blueprint(bp)
 
 
 def addUserEmailDB(userEmail):
-    email_user = User.query.filter_by(email=userEmail).first()
+    email_user = User_DB.query.filter_by(email=userEmail).first()
     if email_user:
         pass
     else:
-        new_email_user = User(email=userEmail)
+        new_email_user = User_DB(email=userEmail)
         db.session.add(new_email_user)
         db.session.commit()
 
