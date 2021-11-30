@@ -9,10 +9,9 @@ function App() {
   const startTimeInput = useRef("");
   const endTimeInput = useRef("");
   const dateInput = useRef("");
-  const messages = useRef("");
-  const suggestDuration = useRef("");
   const suggestInput = useRef("");
-
+  const hourDur = useRef("");
+  const minDur = useRef("");
 
   //React component which returns the schedule list
   function Schedule(props) {
@@ -41,7 +40,7 @@ function App() {
     return (
       <li>
         <button class="delete-btn" onClick={onDelete}>
-          {props.suggest} for {props.duration} hours
+          {props.suggest} for {props.duration}
         </button>
       </li>
     );
@@ -75,30 +74,32 @@ function App() {
     });
 
   }
+
   //Function which handles the add an event suggestion button
   function onAddClickSuggest() {
-
     let newSuggest = suggestInput.current.value;
-    let newSuggestDuration = suggestDuration.current.value;
+    var hourDuration;
+    var minDuration;
+    if (hourDur.current.value === "") {
+      hourDuration = '0';
+    } else {
+      hourDuration = hourDur.current.value;
+    }
+    if (minDur.current.value === "") {
+      minDuration = '0';
+    } else {
+      minDuration = minDur.current.value;
+    }
 
-    let newSuggestDict = [...suggestDict, { "suggestion": newSuggest, "duration": newSuggestDuration }];
+    let newSuggestDuration = hourDuration + ' hour(s) ' + minDuration + ' minute(s)';
+
+    let newSuggestDict = [...suggestDict, { suggestion: newSuggest, duration: newSuggestDuration, }];
 
     setSuggestDict(newSuggestDict);
 
     suggestInput.current.value = "";
-    suggestDuration.current.value = "";
-  }
-  //Function which handles the add an event suggestion button
-  function onAddClickSuggest() {
-    let newSuggest = suggestInput.current.value;
-    let newSuggestDuration = suggestDuration.current.value;
-
-    let newSuggestDict = [...suggestDict, { suggestion: newSuggest, duration: newSuggestDuration }];
-
-    setSuggestDict(newSuggestDict);
-
-    suggestInput.current.value = "";
-    suggestDuration.current.value = "";
+    hourDur.current.value = "";
+    minDur.current.value = "";
   }
 
   function onSaveClick() {
@@ -124,6 +125,7 @@ function App() {
           for (var i in suggestList) {
             var suggestNotif = suggestList[i];
             var suggest = suggestNotif.suggestion;
+
             //If statement makes sure that a suggestion for this event has not been accepted already, and if the user accepts the suggestion
             if (
               addedSuggestions.indexOf(suggestNotif.suggestEvent) === -1 &&
@@ -157,7 +159,7 @@ function App() {
               // eslint-disable-next-line
               suggestUpdate = suggestUpdate.filter((item) => item.suggestion !== suggestNotif.suggestEvent);
               setSuggestDict(suggestUpdate);
-              //Event is now added to the addedSuggestions list so that other suggestions for this even do not appear
+              //Event is now added to the addedSuggestions list so that other suggestions for this event do not appear
               addedSuggestions.push(suggestNotif.suggestEvent);
             }
           }
@@ -244,14 +246,18 @@ function App() {
             </div>
 
             <div class="inputs">
-              <input ref={suggestInput} type="text" placeholder="Input activity" />
-              <label for="len">Duration: </label>
-              <input ref={suggestDuration} type="text" placeholder="00:00 (Hour:Min)" id="len" />
+              <input ref={suggestInput} type="text" placeholder="Input activity" data-testid="activity_input" />
+              <label>  </label>
+              <input id='h' ref={hourDur} type='number' min='0' max='24' placeholder='0' data-testid="hour_input" />
+              <label for='h'>hours</label>
+              <input id='m' ref={minDur} type='number' min='0' max='59' placeholder='0' data-testid="minute_input" />
+              <label for='m'>minutes</label>
+
 
               <hr class="line" />
 
               <button class="btn input-btn" onClick={() => onAddClickSuggest()}>
-                Add Event
+                Add Activity
               </button>
             </div>
           </div>
@@ -279,9 +285,9 @@ function App() {
             <div class="editSchedule inputs" align="center">
 
               <input ref={eventInput} type="text" placeholder="Input event" data-testid="event_input" />
-              <label for="start">start time: </label>
+              <label for="start"> start:</label>
               <input ref={startTimeInput} type="time" id="start" data-testid="start_input" />
-              <label for="end">end time: </label>
+              <label for="end"> end:</label>
               <input ref={endTimeInput} type="time" id="end" data-testid="end_input" />
 
               <hr class="line" />
@@ -295,7 +301,7 @@ function App() {
       </table>
       <div class="Save" align="center">
         <button class="btn btn1" onClick={() => onSaveClick()}>
-          Save Schedule and receive suggestions
+          Receive suggestions
         </button>
       </div>
       <div class="Complete" align="center">

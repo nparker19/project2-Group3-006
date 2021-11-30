@@ -1,3 +1,4 @@
+from types import prepare_class
 from flask.helpers import url_for
 from werkzeug.utils import redirect
 from app import app, db
@@ -10,18 +11,16 @@ from functools import wraps
 import flask
 from flask_login import login_user, current_user, LoginManager
 from flask_login.utils import login_required
-
-
 from methods import (
     suggest,
     sortDictTimeRegular,
     convertScheduleToRegTime,
 )
 
-from googleSetup import Create_Service
 from createSchedule import creatSchedules
 from checkConnection import checkConnect
 from listSchedule import listSchedules
+
 login_manager = LoginManager()
 login_manager.login_view = "login"
 login_manager.init_app(app)
@@ -32,7 +31,7 @@ def load_user(user_name):
     return User.query.get(user_name)
 
 
-@app.route("/landingpage") 
+@app.route("/landingpage")
 def landingpage():
     return flask.render_template("landingpage.html")
 
@@ -143,22 +142,21 @@ def hello_world():
         email_user = User(email=email)
         db.session.add(email_user)
         db.session.commit()
-    
+
     try:
         listEvents = listSchedules()
-        # print(listEvents)
     except:
         print("No list")
-    
+
     return flask.render_template(
         "home.html",
         currentUserEmail=email_user,
-        len = len(listEvents),
-        events_ = listEvents["events_"],
-        summarys_ = listEvents["summarys_"],
-        starts_ = listEvents["starts_"],
-        ends_ = listEvents["ends_"],
-        ids_ = listEvents["ids_"]
+        len=len(listEvents),
+        events_=listEvents["events_"],
+        summarys_=listEvents["summarys_"],
+        starts_=listEvents["starts_"],
+        ends_=listEvents["ends_"],
+        ids_=listEvents["ids_"],
     )
 
 
@@ -234,6 +232,7 @@ def suggestions():
         }
     )
 
+
 @app.route("/complete", methods=["POST"])
 def complete():
     errorMessage = []
@@ -256,30 +255,8 @@ def complete():
         {"schedule_server": scheduleDict, "message_server": errorMessage}
     )
 
-bp = flask.Blueprint("bp", __name__, template_folder="./build")
-
-
-@app.route("/complete", methods=["POST"])
-def complete():
-
-    currentDate = flask.request.json.get("currentDate")
-    scheduleDict = flask.request.json.get("scheduleDict")
-    if len(scheduleDict) != 0:
-        scheduleDict = sorted(
-            scheduleDict, key=lambda x: datetime.strptime(x["startTime"], "%H:%M")
-        )    
-        try:
-            checkConnect()
-            createSchedules(scheduleDict)
-        except KeyError:
-            pass
-
-    return flask.jsonify({"schedule_server": scheduleDict})
 
 bp = flask.Blueprint("bp", __name__, template_folder="./build")
-
-
-
 
 
 @bp.route("/index")
@@ -295,9 +272,19 @@ def index():
 app.register_blueprint(bp)
 
 
+def addUserEmailDB(userEmail):
+    email_user = User.query.filter_by(email=userEmail).first()
+    if email_user:
+        pass
+    else:
+        new_email_user = User(email=userEmail)
+        db.session.add(new_email_user)
+        db.session.commit()
+
+
 if __name__ == "__main__":
     app.run(
-        host=os.getenv("IP", "0.0.0.0"),
-        port=int(os.getenv("PORT", "8080")),
+        # host=os.getenv("IP", "0.0.0.0"),
+        # port=int(os.getenv("PORT", "8080")),
         debug=True,
     )
