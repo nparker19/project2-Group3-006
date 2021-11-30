@@ -153,6 +153,11 @@ function App() {
 
   return (
     <div class="big-wrapper standard">
+      <img
+        src="https://raw.githubusercontent.com/thanuavi1/lect20/master/Untitled%20design-2.png"
+        alt=""
+        class="shape"
+      />
       <header>
         <div class="container">
           <div class="logo">
