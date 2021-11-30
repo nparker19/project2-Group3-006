@@ -5,7 +5,7 @@ name: Python Server CI
 # Controls when the action will run. 
 on:
   push:
-    branches: [ p2-nparker19 ]
+    branches: [ main ]
   pull_request:
     branches: [ main ]
 
