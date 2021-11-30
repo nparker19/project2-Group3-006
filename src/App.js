@@ -78,7 +78,16 @@ function App() {
   //Function which handles the add an event suggestion button
   function onAddClickSuggest() {
     let newSuggest = suggestInput.current.value;
-    let newSuggestDuration = hourDur.current.value + ' hour(s) ' + minDur.current.value + ' minute(s)';
+    var hourDuration;
+    var minDuration;
+
+    hourDuration = hourDur.current.value;
+
+
+    minDuration = minDur.current.value;
+
+
+    let newSuggestDuration = hourDuration + ' hour(s) ' + minDuration + ' minute(s)';
 
     let newSuggestDict = [...suggestDict, { suggestion: newSuggest, duration: newSuggestDuration, }];
 
@@ -234,10 +243,10 @@ function App() {
 
             <div class="inputs">
               <input ref={suggestInput} type="text" placeholder="Input activity" data-testid="activity_input" />
-              <h1> </h1>
-              <input id='h' ref={hourDur} type='number' min='0' max='24' data-testid="hour_input" />
+              <label>  </label>
+              <input id='h' ref={hourDur} type='number' min='0' max='24' placeholder='0' data-testid="hour_input" />
               <label for='h'>hours</label>
-              <input id='m' ref={minDur} type='number' min='0' max='59' data-testid="minute_input" />
+              <input id='m' ref={minDur} type='number' min='0' max='59' placeholder='0' data-testid="minute_input" />
               <label for='m'>minutes</label>
 
 

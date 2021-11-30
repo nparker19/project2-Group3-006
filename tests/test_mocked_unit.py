@@ -30,35 +30,33 @@ class UpdateDBTests(unittest.TestCase):
     def mock_add_to_db(self, email_user):
         self.db_mock.append(email_user)
 
-    def mock_delete_from_db(self, email_user):
-        self.db_mock = [
-            entry for entry in self.db_mock if entry.email != email_user.email
-        ]
-
     def mock_db_commit(self):
         pass
 
+    def side_effect_function():
+        return None
+
     def test_update_db_ids_for_user(self):
-        with patch("app.User.query") as mock_query:
-            with patch("app.db.session.add", self.mock_add_to_db):
-                with patch("app.db.session.delete", self.mock_delete_from_db):
-                    with patch("app.db.session.commit", self.mock_db_commit):
-                        mock_filtered = MagicMock()
-                        mock_filtered.all.return_value = self.db_mock
+        with patch("routes.User.query") as mock_query:
+            with patch("routes.db.session.add", self.mock_add_to_db):
+                with patch("routes.db.session.commit", self.mock_db_commit):
 
-                        mock_filtered.filter.return_value = [User(email="chipaj")]
-                        mock_query.filter_by.return_value = mock_filtered
+                    mock_filtered = MagicMock()
 
-                        # Mocked test 1 (Adding an email which already exists in the DB)
-                        addUserEmailDB("chipaj")
-                        self.assertEqual(len(self.db_mock), 1)
-                        self.assertEqual(self.db_mock[0].email, "chipaj")
+                    # Setup for first mocked test where we try adding an email already in the database
+                    mock_filtered.first.return_value = User(email="chipaj")
+                    mock_query.filter_by.return_value = mock_filtered
 
-                        # Mocked test 1 (Adding an email which does not already exists in the DB)
-                        addUserEmailDB("chipaj9912")
-                        self.assertEqual(len(self.db_mock), 2)
-                        self.assertEqual(self.db_mock[0].email, "chipaj")
-                        self.assertEqual(self.db_mock[1].artist_id, "chipaj9912")
+                    addUserEmailDB("chipaj")
+                    self.assertEqual(len(self.db_mock), 1)
+                    self.assertEqual(self.db_mock[0].email, "chipaj")
+                    # Second mocked test, where we add an email not in the database already
+                    mock_filtered.first.return_value = None
+
+                    addUserEmailDB("nparker19")
+                    self.assertEqual(len(self.db_mock), 2)
+                    self.assertEqual(self.db_mock[0].email, "chipaj")
+                    self.assertEqual(self.db_mock[1].email, "nparker19")
 
 
 if __name__ == "__main__":

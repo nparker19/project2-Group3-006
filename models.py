@@ -1,5 +1,6 @@
 from app import db
 from flask_login import UserMixin
+import os
 
 
 class User(UserMixin, db.Model):
@@ -13,4 +14,5 @@ class User(UserMixin, db.Model):
         return self.email
 
 
-db.create_all()
+if os.getenv("DATABASE_URL") is not None:  # so our unit tests run in GitHub
+    db.create_all()

@@ -141,6 +141,7 @@ def hello_world():
         email_user = User(email=email)
         db.session.add(email_user)
         db.session.commit()
+
     return flask.render_template("home.html", currentUserEmail=email_user)
 
 
@@ -256,12 +257,12 @@ def index():
 app.register_blueprint(bp)
 
 
-def addUserEmailDB(email_user):
-    email_user = User.query.filter_by(email=email_user).first()
+def addUserEmailDB(userEmail):
+    email_user = User.query.filter_by(email=userEmail).first()
     if email_user:
         pass
     else:
-        new_email_user = User(email=email_user)
+        new_email_user = User(email=userEmail)
         db.session.add(new_email_user)
         db.session.commit()
 
