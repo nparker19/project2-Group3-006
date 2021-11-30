@@ -4,42 +4,31 @@ import App from "./App";
 
 test("renders buttons", () => {
   render(<App />);
-  const addButton = screen.getByText("Add Event");
-  expect(addButton).toBeInTheDocument();
-  const saveButton = screen.getByText("Save Schedule and receive suggestions");
+
+
+  const addEventButton = screen.getByText("Add Event");
+  expect(addEventButton).toBeInTheDocument();
+  const addActivityButton = screen.getByText("Add Activity");
+  expect(addActivityButton).toBeInTheDocument();
+  const saveButton = screen.getByText("Receive suggestions");
   expect(saveButton).toBeInTheDocument();
   const completeButton = screen.getByText("Complete Schedule and save to google calendar");
   expect(completeButton).toBeInTheDocument();
 });
 
-test("add event", () => {
+test("add suggestion", () => {
   render(<App />);
-  const addButton = screen.getByText("Add Event");
-  const eventInput = screen.getByTestId("event_input");
+  const addButton = screen.getByText("Add Activity");
+  const eventInput = screen.getByTestId('activity_input');
+  const hourInput = screen.getByTestId('hour_input');
+  const minuteInput = screen.getByTestId('minute_input');
 
-  fireEvent.change(eventInput, { target: { value: "Analysis II" } });
+  fireEvent.change(eventInput, { target: { value: "Workout" } });
+  fireEvent.change(hourInput, { target: { value: "2" } });
+  fireEvent.change(minuteInput, { target: { value: "45" } });
   fireEvent.click(addButton);
 
-  const eventEntry = screen.getByText((content) => content.startsWith("Analysis"));
-  const deleteButton = screen.getByText("X");
+  const eventEntry = screen.getByText((content) => content.startsWith("Workout"));
   expect(eventEntry).toBeInTheDocument();
-  expect(deleteButton).toBeInTheDocument();
 });
 
-test("delete event", () => {
-  render(<App />);
-  const addButton = screen.getByText("Add Event");
-  const eventInput = screen.getByTestId("event_input");
-
-  fireEvent.change(eventInput, { target: { value: "Analysis II" } });
-  fireEvent.click(addButton);
-
-  const eventEntry = screen.getByText((content) => content.startsWith("Analysis"));
-  const deleteButton = screen.getByText("X");
-  expect(eventEntry).toBeInTheDocument();
-  expect(deleteButton).toBeInTheDocument();
-
-  fireEvent.click(deleteButton);
-  expect(eventEntry).not.toBeInTheDocument();
-  expect(deleteButton).not.toBeInTheDocument();
-});

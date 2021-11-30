@@ -41,7 +41,7 @@
 }
 
 body {
-  background-color: #fffbff;
+  background-color:white;
   line-height: 1.5;
   
 }
@@ -68,6 +68,7 @@ h2 {
 .title {
   font-family: "Gotham Thin", sans-serif;
   font-size: 22px;
+  font-weight: bold;
 }
 
 button {
@@ -109,6 +110,13 @@ input[type="time"] {
   border-color: black;
 }
 
+input[type="number"] {
+  padding: 5px;
+  box-shadow: 0 0 15px 4px rgba(0, 0, 0, 0.06);
+  border-radius: 10px;
+  border-color: black;
+}
+
 .scheduleList {
   height: 325px;
   width: 500px;
@@ -132,6 +140,7 @@ input[type="time"] {
 .save {
   padding-top: 10px;
 }
+
 
 .delete-btn {
   background: transparent;
@@ -176,7 +185,7 @@ a {
 }
 
 .big-wrapper {
-  position: fixed;
+  position: relative;
   /* change to relative if it doesnt scroll*/
   padding: 1.7rem 0 2rem;
   display: flex;
@@ -247,7 +256,7 @@ header .container {
 .btn {
   display: inline-block;
   padding: 0.9rem 1.9rem;
-  color: #fff !important;
+  color:#fff !important;
   background-color: var(--mainColor);
   border-radius: 16px;
   border-width: 0;
