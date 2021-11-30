@@ -2,7 +2,7 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ p2-nparker19 ]
+    branches: [ main ]
   pull_request:
     branches: [ main ]
 
