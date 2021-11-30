@@ -268,7 +268,14 @@
         </div>
     </main>
 
-
+    <div>
+        {% for i in range(0, len) %}
+        <p>
+        <h1> {{csummarys_[i]}} : {{starts_[i]}} => {{ends_[i]}} </h1>
+        </p>
+        <!--<p><h1> {{ ids_[i] }}</h1></p> -->
+        {% endfor %}
+    </div>
 
     <!-- JavaScript Files -->
 

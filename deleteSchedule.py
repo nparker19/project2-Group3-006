@@ -21,7 +21,7 @@ def deleteSchedules():
         GOOGLE_APPLICATION_CREDENTIALS, API_NAME, API_VERSION, SCOPES
     )
 
-    if 
+    
     try:
         service.events().delete(
             calendarId='primary',
@@ -31,5 +31,5 @@ def deleteSchedules():
         print("Failed to delete event")
     
     print("Schedule deleted")
-os.lseek
-delectSched()
+    os.lseek
+deleteSchedules()

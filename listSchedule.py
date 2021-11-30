@@ -59,6 +59,7 @@ def listSchedules():
         
         summarys_.append(event["summary"])
         ids_.append(event['id'])
+        
         starts_.append(isoformatStringFormat(start))
         ends_.append(isoformatStringFormat(end))
                 
