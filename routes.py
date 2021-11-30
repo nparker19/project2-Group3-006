@@ -143,20 +143,9 @@ def hello_world():
         db.session.add(email_user)
         db.session.commit()
 
-    try:
-        listEvents = listSchedules()
-    except:
-        print("No list")
-
     return flask.render_template(
         "home.html",
         currentUserEmail=email_user,
-        len=len(listEvents),
-        events_=listEvents["events_"],
-        summarys_=listEvents["summarys_"],
-        starts_=listEvents["starts_"],
-        ends_=listEvents["ends_"],
-        ids_=listEvents["ids_"],
     )
 
 

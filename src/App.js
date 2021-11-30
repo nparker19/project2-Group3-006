@@ -168,29 +168,7 @@ function App() {
 
   }
 
-  function onCompleteClick() {
-    const response_data = JSON.stringify({
-      scheduleDict: scheduleDict,
-      currentDate: dateInput.current.value,
-    });
-    fetch("/complete", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: response_data,
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.message_server.length === 1) {
-          alert(data.message_server[0]);
-        } else {
-          setScheduleDict(data.schedule_server);
-          alert("Schedule was successfully saved to your google calendar! You will be redirected to the home page after exiting out of this message");
-          setTimeout(function () { window.location.replace("/") }, 3000);
-        }
-      });
-  }
+
 
   return (
 
@@ -234,7 +212,7 @@ function App() {
       <table>
         <td class="suggestions">
           <div class="display" align="center">
-            <h2 class="title">What I would like to do</h2>
+            <h2 class="title">What I want to do</h2>
             <div class="suggestList" align="center">
               <ul>
                 <li>
@@ -302,11 +280,6 @@ function App() {
       <div class="Save" align="center">
         <button class="btn btn1" onClick={() => onSaveClick()}>
           Receive suggestions
-        </button>
-      </div>
-      <div class="Complete" align="center">
-        <button class="btn btn1" onClick={() => onCompleteClick()}>
-          Complete Schedule and save to google calendar
         </button>
       </div>
     </div>
