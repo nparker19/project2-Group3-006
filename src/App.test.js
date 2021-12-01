@@ -12,8 +12,6 @@ test("renders buttons", () => {
   expect(addActivityButton).toBeInTheDocument();
   const saveButton = screen.getByText("Receive suggestions");
   expect(saveButton).toBeInTheDocument();
-  const completeButton = screen.getByText("Complete Schedule and save to google calendar");
-  expect(completeButton).toBeInTheDocument();
 });
 
 test("add suggestion", () => {
