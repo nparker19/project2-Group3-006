@@ -25,21 +25,26 @@ login_manager = LoginManager()
 login_manager.login_view = "login"
 login_manager.init_app(app)
 
+
 @login_manager.user_loader
 def load_user(user_name):
     return User_DB.query.get(user_name)
+
 
 @app.route("/landingpage")
 def landingpage():
     return flask.render_template("landingpage.html")
 
+
 @app.route("/functionality")
 def functionality():
     return flask.render_template("functionality.html")
 
+
 @app.route("/purpose")
 def purpose():
     return flask.render_template("purpose.html")
+
 
 @app.route("/contact")
 def contact():
@@ -51,20 +56,6 @@ def signup():
     return flask.render_template("signup.html")
 
 
-@app.route("/signup", methods=["POST"])
-def signup_post():
-    username = flask.request.form.get("username")
-    user = User_DB.query.filter_by(username=username).first()
-    if user:
-        pass
-    else:
-        user = User_DB(username=username)
-        db.session.add(user)
-        db.session.commit()
-
-    return flask.redirect(flask.url_for("login"))
-
-
 # login required function for google authentication
 def login_required(f):
     @wraps(f)
@@ -73,7 +64,7 @@ def login_required(f):
 
         if user:
             return f(*args, **kwargs)
-        return flask.redirect(flask.url_for("login"))
+        return flask.redirect(flask.url_for("landingpage"))
 
     return decorated_function
 
@@ -112,18 +103,6 @@ def authorize():
 @app.route("/login")
 def login():
     return flask.render_template("login.html")
-
-
-@app.route("/login", methods=["POST"])
-def login_post():
-    username = flask.request.form.get("username")
-    user = User_DB.query.filter_by(username=username).first()
-    if user:
-        login_user(user)
-        return flask.redirect(flask.url_for("index"))
-
-    else:
-        return flask.jsonify({"status": 401, "reason": "Username or Password Error"})
 
 
 @app.route("/")
@@ -239,7 +218,9 @@ def complete():
         {"schedule_server": scheduleDict, "message_server": errorMessage}
     )
 
+
 bp = flask.Blueprint("bp", __name__, template_folder="./build")
+
 
 @bp.route("/index")
 def index():
@@ -249,6 +230,7 @@ def index():
     """
 
     return flask.render_template("index.html")
+
 
 app.register_blueprint(bp)
 
