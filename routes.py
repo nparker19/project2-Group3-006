@@ -1,8 +1,10 @@
 from types import prepare_class
 from flask.helpers import url_for
 from werkzeug.utils import redirect
-from app import app, db
-from models import User_DB
+from flask_login import UserMixin
+
+# from app import app, db
+# from models import User_DB
 import os
 from authlib.integrations.flask_client import OAuth
 from datetime import timedelta
@@ -20,6 +22,35 @@ from methods import (
 from createSchedule import creatSchedules
 from checkConnection import checkConnect
 from listSchedule import listSchedules
+from flask_sqlalchemy import SQLAlchemy
+from dotenv import load_dotenv, find_dotenv
+
+load_dotenv(find_dotenv())
+
+app = flask.Flask(__name__, static_folder="./build/static")
+
+db_url = os.getenv("DATABASE_URL")
+if db_url.startswith("postgres://"):
+    db_url = db_url.replace("postgres://", "postgresql://", 1)
+app.config["SQLALCHEMY_DATABASE_URI"] = db_url
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+app.secret_key = b"I am a secret key!"
+db = SQLAlchemy(app)
+
+
+class User_DB(UserMixin, db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(80))
+
+    def __repr__(self):
+        return f"<User {self.email}>"
+
+    def get_username(self):
+        return self.email
+
+
+if os.getenv("DATABASE_URL") is not None:  # so our unit tests run in GitHub
+    db.create_all()
 
 login_manager = LoginManager()
 login_manager.login_view = "login"
