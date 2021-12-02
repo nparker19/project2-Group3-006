@@ -42,13 +42,18 @@ def suggest(scheduleDict, suggestDict):
             time_difference = floorTime - initialTime
 
             for item in suggestDict:
-
-                suggestDuration = datetime.strptime(item["duration"], "%I:%M")
-
+                try:
+                    suggestDuration = datetime.strptime(
+                        item["duration"], "%I hour(s) %M minute(s)"
+                    )
+                    hourCatch = suggestDuration.hour
+                except:
+                    suggestDuration = datetime.strptime(
+                        item["duration"], "0 hour(s) %M minute(s)"
+                    )
+                    hourCatch = 0
                 # delta is time differance needed to fit the suggestion into the current Schedule. It allows for a one hour buffer
-                delta = timedelta(
-                    hours=suggestDuration.hour + 1, minutes=suggestDuration.minute
-                )
+                delta = timedelta(hours=hourCatch + 1, minutes=suggestDuration.minute)
                 if time_difference > delta:
                     suggest = item["suggestion"]
                     start = initialTime.time().strftime("%I:%M %p")
@@ -56,7 +61,7 @@ def suggest(scheduleDict, suggestDict):
 
                     startSuggest = initialTime + timedelta(minutes=30)
                     endSuggest = startSuggest + timedelta(
-                        hours=suggestDuration.hour, minutes=suggestDuration.minute
+                        hours=hourCatch, minutes=suggestDuration.minute
                     )
                     stringStartSuggest = startSuggest.time().strftime("%I:%M %p")
                     stringEndSuggest = endSuggest.time().strftime("%I:%M %p")
@@ -123,5 +128,4 @@ def convertScheduleToRegTime(scheduleDict):
                     "endTime": convertedItemEnd,
                 }
             )
-
     return convertedDict

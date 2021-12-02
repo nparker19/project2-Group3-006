@@ -41,8 +41,9 @@
 }
 
 body {
-  background-color: #fffbff;
+  background-color:white;
   line-height: 1.5;
+  
 }
 
 .display {
@@ -67,6 +68,7 @@ h2 {
 .title {
   font-family: "Gotham Thin", sans-serif;
   font-size: 22px;
+  font-weight: bold;
 }
 
 button {
@@ -90,7 +92,6 @@ a button {
   padding: 10px;
 }
 
-
 .inputs input {
   padding: 10px;
 }
@@ -106,7 +107,13 @@ input[type="time"] {
   padding: 5px;
   box-shadow: 0 0 15px 4px rgba(0, 0, 0, 0.06);
   border-radius: 10px;
+  border-color: black;
+}
 
+input[type="number"] {
+  padding: 5px;
+  box-shadow: 0 0 15px 4px rgba(0, 0, 0, 0.06);
+  border-radius: 10px;
   border-color: black;
 }
 
@@ -116,7 +123,7 @@ input[type="time"] {
   padding: 5px;
   border-radius: 50px;
   overflow-y: auto;
-  border: 2px solid #f7e202;
+  border: 2px solid black;
 }
 .suggestList {
   height: 325px;
@@ -124,7 +131,7 @@ input[type="time"] {
   padding: 5px;
   border-radius: 50px;
   overflow-y: auto;
-  border: 2px solid #f7e202;
+  border: 2px solid black;
 }
 
 .editList {
@@ -178,7 +185,7 @@ a {
 }
 
 .big-wrapper {
-  position: fixed;
+  position: relative;
   /* change to relative if it doesnt scroll*/
   padding: 1.7rem 0 2rem;
   display: flex;
@@ -249,7 +256,7 @@ header .container {
 .btn {
   display: inline-block;
   padding: 0.9rem 1.9rem;
-  color: #fff !important;
+  color:#fff !important;
   background-color: var(--mainColor);
   border-radius: 16px;
   border-width: 0;
@@ -312,4 +319,11 @@ header .container {
   width: 120%;
   transform: translate(15%, 25px);
 }
-
+.shape {
+  position: absolute;
+  z-index: 0;
+  width: 325px;
+  bottom: -180px;
+  left: -15px;
+  opacity: 0.3;
+}
