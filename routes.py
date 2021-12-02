@@ -27,7 +27,7 @@ from dotenv import load_dotenv, find_dotenv
 
 load_dotenv(find_dotenv())
 
-app = flask.Flask(__name__, static_folder="./build/static", static_url_path="/")
+app = flask.Flask(__name__, static_folder="./build/static")
 
 db_url = os.getenv("DATABASE_URL")
 if db_url.startswith("postgres://"):
@@ -55,11 +55,6 @@ if os.getenv("DATABASE_URL") is not None:  # so our unit tests run in GitHub
 login_manager = LoginManager()
 login_manager.login_view = "login"
 login_manager.init_app(app)
-
-
-@app.errorhandler(404)
-def not_found(e):
-    return app.send_static_file("index.html")
 
 
 @login_manager.user_loader
