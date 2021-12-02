@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <style>
+        @import url(//fonts.googleapis.com/css?family=Montserrat:300,500);
+        @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap");
+
+        .standard {
+            --mainColor: #f7e202;
+            --hoverColor: #f55eaa;
+            --backgroundColor: #fffbff;
+            --lightOne: #919191;
+            background-image: url("https://raw.githubusercontent.com/thanuavi1/lect20/master/image.jpg");
+            background-size: cover;
+        }
+
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Poppins", sans-serif;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+
+        .big-wrapper {
+            position: fixed;
+            /* change to relative if it doesnt scroll*/
+            padding: 1.7rem 0 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 100%;
+            min-height: 100vh;
+            overflow: hidden;
+            background-color: var(--backgroundColor);
+        }
+
+        .container {
+            position: relative;
+            margin: 0 auto;
+            padding: 0 3rem;
+            z-index: 10;
+            max-width: 81rem;
+            width: 100%;
+        }
+
+        header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .overlay {
+            display: none;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .logo img {
+            width: 40px;
+            margin-right: 0.6rem;
+            margin-top: -0.6rem;
+        }
+
+        .logo h3 {
+            color: var(--darkTwo);
+            font-size: 1.55rem;
+            line-height: 1.2;
+            font-weight: 700;
+        }
+
+        .links ul {
+            display: flex;
+            list-style: none;
+            align-items: center;
+        }
+
+        .links a {
+            color: var(--lightTwo);
+            margin-left: 4.5rem;
+            display: inline-block;
+            transition: 0.3s;
+        }
+
+        .links a:hover {
+            color: var(--hoverColor);
+            transform: scale(1.05);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.9rem 1.9rem;
+            color: #fff !important;
+            background-color: var(--mainColor);
+            border-radius: 16px;
+            text-transform: capitalize;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            background-color: var(--hoverColor);
+            transform: scale(1) !important;
+        }
+
+        .hamburger-menu {
+            position: relative;
+            z-index: 99;
+            width: 2rem;
+            height: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            display: none;
+        }
+
+
+        .showcase-area .container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .center {
+            margin: auto;
+            width: 50%;
+            padding: 10px;
+        }
+
+        .big-title {
+            font-size: 1.4rem;
+            color: var(--darkOne);
+            text-transform: capitalize;
+            line-height: 1.4;
+        }
+
+        .text {
+            color: black;
+            font-size: 1.1rem;
+            margin: 1.9rem 0 2.5rem;
+            max-width: 600px;
+            line-height: 2.3;
+        }
+
+        .team4 {
+            font-family: "Montserrat", sans-serif;
+            color: black;
+            font-weight: 300;
+        }
+
+        .team4 h3,
+        .team4 h6 {
+            color: black;
+        }
+
+        .team4 .headtxt {
+            color: black;
+            line-height: 24px;
+            font-size: 13px;
+        }
+    </style>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.5.5/css/simple-line-icons.min.css">
+    <script src="https://kit.fontawesome.com/a81368914c.js"></script>
+    <script src="./app.js"></script>
+</head>
+
+<body>
+    <main>
+        <div class="big-wrapper standard">
+            <header>
+                <div class="container">
+                    <div class="logo">
+                        <img src="https://raw.githubusercontent.com/thanuavi1/lect20/master/imageedit_9_9613764135.png"
+                            alt="Logo" />
+                        <h3>TODOit.</h3>
+                    </div>
+                    <div class="links">
+                        <ul>
+                            <li><a href="landingpage">Home</a></li>
+                            <li><a href="purpose">Purpose</a></li>
+                            <li><a href="contact">About Us</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="overlay"></div>
+
+                    <div class="hamburger-menu ">
+                        <div class="bar"></div>
+                    </div>
+                </div>
+            </header>
+</body>
+
+</body>
+
+<div class="py-5 team4">
+    <div class="container">
+        <div class="row justify-content-center mb-4">
+            <div class="col-md-7 text-center">
+                <h3 class="mb-3">Our Team</h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-3 mb-4 center">
+                <div class="row">
+                    <div class="col-md-12">
+                        <img src="https://raw.githubusercontent.com/thanuavi1/lect20/master/IMG_0940_Original.jpeg"
+                            alt="wrapkit" class="img-fluid rounded-circle" />
+                    </div>
+                    <div class="col-md-12 text-center">
+                        <div class="pt-2">
+                            <h5 class="mt-4 font-weight-medium mb-0">Thanu Avirneni</h5>
+                            <h6 class="headtxt mb-3">Front and Back End Developer </h6>
+                            <p>Bachelors in Computer Science at GSU. Masters in Analytics at Georgia Tech, pursuing a
+                                career as a Data
+                                Analyst.</p>
+                            <ul class="list-inline">
+                                <li class="list-inline-item"><a href="https://www.facebook.com/thanu.avirneni.1/"
+                                        class="text-decoration-none d-block px-1"><i
+                                            class="icon-social-facebook"></i></a></li>
+                                <li class="list-inline-item"><a href="#" class="text-decoration-none d-block px-1"><i
+                                            class="icon-social-twitter"></i></a></li>
+                                <li class="list-inline-item"><a href="https://www.instagram.com/thanu_avi/"
+                                        class="text-decoration-none d-block px-1"><i
+                                            class="icon-social-instagram"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-lg-3 mb-4 center">
+                <div class="row">
+                    <div class="col-md-13">
+                        <img src="https://cdn.discordapp.com/attachments/902261635425656883/911832643132334130/IMG_0064.jpg"
+                            alt="wrapkit" class="img-fluid rounded-circle" />
+                    </div>
+                    <div class="col-md-12 text-center">
+                        <div class="pt-2">
+                            <h5 class="mt-4 font-weight-medium mb-0">Nora Parker</h5>
+                            <h6 class="headtxt mb-3">Front and Back End Developer</h6>
+                            <p>Bachelors in Mathematics
+                                with a concentration in
+                                Computer Science at GSU. Pursuing a career as an Operations Analyst.</p>
+                            <ul class="list-inline">
+                                <li class="list-inline-item"><a href="#" class="text-decoration-none d-block px-1"><i
+                                            class="icon-social-facebook"></i></a></li>
+                                <li class="list-inline-item"><a href="#" class="text-decoration-none d-block px-1"><i
+                                            class="icon-social-twitter"></i></a></li>
+                                <li class="list-inline-item"><a href="#" class="text-decoration-none d-block px-1"><i
+                                            class="icon-social-instagram"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-lg-3 mb-4 center">
+                <div class="row">
+                    <div class="col-md-12">
+                        <img src="https://cdn.discordapp.com/attachments/902261635425656883/912008325401550898/C5DD6683-AFC9-4F6B-864A-4C0595E6841F.jpg"
+                            alt="wrapkit" class="img-fluid rounded-circle" />
+                    </div>
+                    <div class="col-md-12 text-center">
+                        <div class="pt-2">
+                            <h5 class="mt-4 font-weight-medium mb-0">Bello Babatunde</h5>
+                            <h6 class="headtxt mb-3">Front and Back End Developer</h6>
+                            <p>MS in Computer Science, Bioinformatics, Currently part of a Bioinformatics research
+                                group as Bioinformatician.
+                            </p>
+                            <ul class="list-inline">
+                                <li class="list-inline-item"><a href="#" class="text-decoration-none d-block px-1"><i
+                                            class="icon-social-facebook"></i></a></li>
+                                <li class="list-inline-item"><a href="#" class="text-decoration-none d-block px-1"><i
+                                            class="icon-social-twitter"></i></a></li>
+                                <li class="list-inline-item"><a href="#" class="text-decoration-none d-block px-1"><i
+                                            class="icon-social-instagram"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
