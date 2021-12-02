@@ -85,6 +85,9 @@ google = oauth.register(
     api_base_url="https://www.googleapis.com/oauth2/v1/",
     userinfo_endpoint="https://openidconnect.googleapis.com/v1/userinfo",
     client_kwargs={"scope": "openid email profile"},
+    OAUTHLIB_INSECURE_TRANSPORT=os.getenv("OAUTHLIB_INSECURE_TRANSPORT"),
+    OAUTHLIB_STRICT_TOKEN_TYPE="Bearer",
+    redirect_uri="http://127.0.0.1:8080/",
 )
 
 
@@ -247,7 +250,6 @@ def addUserEmailDB(userEmail):
 
 if __name__ == "__main__":
     app.run(
-        # host=os.getenv("IP", "0.0.0.0"),
-        # port=int(os.getenv("PORT", "8080")),
-        debug=True,
+        host=os.getenv("IP", "127.0.0.1"),
+        port=int(os.getenv("PORT", "8080")),
     )
