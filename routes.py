@@ -26,6 +26,11 @@ login_manager.login_view = "login"
 login_manager.init_app(app)
 
 
+@app.errorhandler(404)
+def not_found(e):
+    return app.send_static_file("index.html")
+
+
 @login_manager.user_loader
 def load_user(user_name):
     return User_DB.query.get(user_name)
