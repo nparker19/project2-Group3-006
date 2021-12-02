@@ -21,7 +21,6 @@ def isoformatStringFormat(x):
     # print(dtt)
     return dtt.strftime("%A, %b %d %Y, %H:%M")
 
-
 def listSchedules():
     service = Create_Service(
         GOOGLE_APPLICATION_CREDENTIALS, API_NAME, API_VERSION, SCOPES

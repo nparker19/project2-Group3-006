@@ -101,6 +101,18 @@ function App() {
     hourDur.current.value = "";
     minDur.current.value = "";
   }
+  //Function which handles the add an event suggestion button
+  function onAddClickSuggest() {
+    let newSuggest = suggestInput.current.value;
+    let newSuggestDuration = suggestDuration.current.value;
+
+    let newSuggestDict = [...suggestDict, { suggestion: newSuggest, duration: newSuggestDuration }];
+
+    setSuggestDict(newSuggestDict);
+
+    suggestInput.current.value = "";
+    suggestDuration.current.value = "";
+  }
 
   function onSaveClick() {
 

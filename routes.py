@@ -222,6 +222,9 @@ def complete():
 bp = flask.Blueprint("bp", __name__, template_folder="./build")
 
 
+
+
+
 @bp.route("/index")
 def index():
     """

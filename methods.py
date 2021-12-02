@@ -95,7 +95,6 @@ def sortDictTimeRegular(scheduleDict):
 
 
 def convertScheduleToRegTime(scheduleDict):
-
     """
     This function converts a dictionary with both 12hr (ie 10:00 AM) and 24 hr (23:00, 1:00) time formats
     to the same 12 hour format.
