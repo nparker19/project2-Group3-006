@@ -9,6 +9,8 @@ from datetime import timedelta
 from flask import session, request
 from functools import wraps
 import flask
+from flask import session
+from functools import wraps
 from flask_login import login_user, current_user, LoginManager
 from flask_login.utils import login_required
 from methods import (
@@ -219,10 +221,8 @@ def complete():
     )
 
 
+
 bp = flask.Blueprint("bp", __name__, template_folder="./build")
-
-
-
 
 
 @bp.route("/index")

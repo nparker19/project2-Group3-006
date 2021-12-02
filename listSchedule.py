@@ -6,7 +6,6 @@ import os
 from dotenv import load_dotenv, find_dotenv
 from googleSetup import Create_Service
 
-
 load_dotenv(find_dotenv())
 credentials = json.dumps(os.getenv("GOOGLE_APPLICATION_CREDENTIALS"))
 GOOGLE_APPLICATION_CREDENTIALS = json.loads(credentials)
