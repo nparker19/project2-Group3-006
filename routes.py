@@ -67,7 +67,7 @@ def load_user(user_name):
     return User_DB.query.get(user_name)
 
 
-@app.route("/landingpage")
+@app.route("/")
 def landingpage():
     return flask.render_template("landingpage.html")
 
@@ -136,7 +136,7 @@ def authorize():
     user = oauth.google.userinfo()
     session["profile"] = user_info
     session.permanent = True
-    return redirect("/")
+    return redirect("/start")
 
 
 @app.route("/login")
@@ -144,7 +144,7 @@ def login():
     return flask.render_template("login.html")
 
 
-@app.route("/")
+@app.route("/start")
 @login_required
 def hello_world():
     email = dict(session)["profile"]["email"]
@@ -287,5 +287,5 @@ def addUserEmailDB(userEmail):
 if __name__ == "__main__":
     app.run(
         host=os.getenv("IP", "127.0.0.1"),
-        # port=int(os.getenv("PORT", "8080")),
+        port=int(os.getenv("PORT", "8080")),
     )
