@@ -27,7 +27,7 @@ from dotenv import load_dotenv, find_dotenv
 
 load_dotenv(find_dotenv())
 
-app = flask.Flask(__name__, static_folder="./build/static")
+app = flask.Flask(__name__, static_folder="./build/static", static_url_path="/")
 
 db_url = os.getenv("DATABASE_URL")
 if db_url.startswith("postgres://"):
