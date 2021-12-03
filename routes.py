@@ -3,6 +3,10 @@ this script is the central to the app and calls major functions
 in other part of the entire application. The route and html rendering
 are defined here
 """
+
+from flask.helpers import url_for
+from werkzeug.utils import redirect
+from models import User_DB
 import os
 from datetime import timedelta
 from functools import wraps
@@ -22,7 +26,7 @@ from methods import (
 )
 
 
-# from googlecalmethods import check_connect,create_schedules
+from googlecalmethods import check_connect,create_schedules
 # # from listschedule import list_schedules
 
 login_manager = LoginManager()
