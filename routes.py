@@ -1,20 +1,27 @@
+from types import prepare_class
 from flask.helpers import url_for
 from werkzeug.utils import redirect
 from app import app, db
-from models import User
+from models import User_DB
 import os
 from authlib.integrations.flask_client import OAuth
 from datetime import timedelta
+from flask import session, request
+from functools import wraps
 import flask
 from flask import session
 from functools import wraps
 from flask_login import login_user, current_user, LoginManager
 from flask_login.utils import login_required
-from methods import suggest, sortDictTimeMilitary, sortDictTimeRegular
-import json
+from methods import (
+    suggest,
+    sortDictTimeRegular,
+    convertScheduleToRegTime,
+)
 
 from createSchedule import creatSchedules
 from checkConnection import checkConnect
+from listSchedule import listSchedules
 
 login_manager = LoginManager()
 login_manager.login_view = "login"
@@ -23,26 +30,32 @@ login_manager.init_app(app)
 
 @login_manager.user_loader
 def load_user(user_name):
-    return User.query.get(user_name)
+    return User_DB.query.get(user_name)
+
+
+@app.route("/landingpage")
+def landingpage():
+    return flask.render_template("landingpage.html")
+
+
+@app.route("/functionality")
+def functionality():
+    return flask.render_template("functionality.html")
+
+
+@app.route("/purpose")
+def purpose():
+    return flask.render_template("purpose.html")
+
+
+@app.route("/contact")
+def contact():
+    return flask.render_template("contact.html")
 
 
 @app.route("/signup")
 def signup():
     return flask.render_template("signup.html")
-
-
-@app.route("/signup", methods=["POST"])
-def signup_post():
-    username = flask.request.form.get("username")
-    user = User.query.filter_by(username=username).first()
-    if user:
-        pass
-    else:
-        user = User(username=username)
-        db.session.add(user)
-        db.session.commit()
-
-    return flask.redirect(flask.url_for("login"))
 
 
 # login required function for google authentication
@@ -53,7 +66,7 @@ def login_required(f):
 
         if user:
             return f(*args, **kwargs)
-        return flask.redirect(flask.url_for("login"))
+        return flask.redirect(flask.url_for("landingpage"))
 
     return decorated_function
 
@@ -94,30 +107,22 @@ def login():
     return flask.render_template("login.html")
 
 
-@app.route("/login", methods=["POST"])
-def login_post():
-    username = flask.request.form.get("username")
-    user = User.query.filter_by(username=username).first()
-    if user:
-        login_user(user)
-        return flask.redirect(flask.url_for("index"))
-
-    else:
-        return flask.jsonify({"status": 401, "reason": "Username or Password Error"})
-
-
 @app.route("/")
 @login_required
 def hello_world():
     email = dict(session)["profile"]["email"]
-    email_user = User.query.filter_by(email=email).first()
+    email_user = User_DB.query.filter_by(email=email).first()
     if email_user:
         pass
     else:
-        email_user = User(email=email)
+        email_user = User_DB(email=email)
         db.session.add(email_user)
         db.session.commit()
-    return flask.render_template("home.html", currentUserEmail=email_user)
+
+    return flask.render_template(
+        "home.html",
+        currentUserEmail=email_user,
+    )
 
 
 @app.route("/login/google")
@@ -139,65 +144,82 @@ def main():
 def logout():
     for key in list(session.keys()):
         session.pop(key)
-    return redirect("/")
+    return redirect("landingpage")
 
 
-# This route will handle the fetch API Post call from the create schedule page
+# This route accepts the unsorted schedule from the client and returns to the client a sorted schedule
+@app.route("/sorting", methods=["POST"])
+def sorting():
+    errorMessage = []
+    unsortedSchedule = flask.request.json.get("unsortedSchedule")
+    try:
+        convertedDict = convertScheduleToRegTime(unsortedSchedule)
+        sortedSchedule = sortDictTimeRegular(convertedDict)
+    except ValueError:
+        errorMessage.append("Invalid Time entered.")
+        return flask.jsonify({"message_server": errorMessage})
+
+    return flask.jsonify(
+        {
+            "message_server": errorMessage,
+            "server_sorted_Schedule": sortedSchedule,
+        }
+    )
+
+
+# This route handles the fetch API most call for when the "receive suggestions" button is pressed.
 @app.route("/suggestions", methods=["POST"])
 def suggestions():
-
+    """
+    This method takes in a schedule dictionary and a suggestions dictionary from the client,
+    and returns schedule suggestions to the client.
+    """
+    errorMessage = []
     scheduleDict = flask.request.json.get("scheduleDict")
     suggestDict = flask.request.json.get("suggestDict")
-    message = []
-    militaryTime = False
     try:
-        scheduleDict = sortDictTimeRegular(scheduleDict)
-    except ValueError:
-        try:
-            militaryTime = True
-            scheduleDict = sortDictTimeMilitary(scheduleDict)
-        except:
-            message = ["Invalid time entered"]
-            return flask.jsonify(
-                {
-                    "schedule_server": scheduleDict,
-                    "suggest_server": suggestDict,
-                    "message_server": message,
-                }
-            )
-    message = ["success"]
+        suggestionsList = suggest(scheduleDict, suggestDict)
+    except Exception as error:
+        errorMessage.append(
+            f"We were unable to retrieve your schedule suggestions. Error: {error}"
+        )
+        return flask.jsonify(
+            {
+                "message_server": errorMessage,
+            }
+        )
     return flask.jsonify(
         {
             "schedule_server": scheduleDict,
             "suggest_server": suggestDict,
-            "message_server": message,
+            "suggestions_server": suggestionsList,
+            "message_server": errorMessage,
         }
     )
 
 
 @app.route("/complete", methods=["POST"])
 def complete():
-    militaryTime = True
+    errorMessage = []
     scheduleDate = flask.request.json.get("currentDate")
     scheduleDict = flask.request.json.get("scheduleDict")
-    try:
-        scheduleDict = sortDictTimeMilitary(scheduleDict)
-    except ValueError:
-        try:
-            scheduleDict = sortDictTimeRegular(scheduleDict)
-            militaryTime = False
-        except:
-            message = ["Invalid time entered"]
-            return flask.jsonify(
-                {"schedule_server": scheduleDict, "message_server": message}
-            )
+
     try:
         checkConnect()
-        creatSchedules(scheduleDict, militaryTime)
-    except KeyError:
-        pass
+        creatSchedules(scheduleDict)
+    except Exception as error:
+        errorMessage.append(
+            f"Calendar was not successfully saved to google calendar. Error: {error}"
+        )
+        return flask.jsonify(
+            {
+                "message_server": errorMessage,
+            }
+        )
+    return flask.jsonify(
+        {"schedule_server": scheduleDict, "message_server": errorMessage}
+    )
 
-    return flask.jsonify({"schedule_server": scheduleDict})
 
 
 bp = flask.Blueprint("bp", __name__, template_folder="./build")
@@ -215,7 +237,20 @@ def index():
 
 app.register_blueprint(bp)
 
-app.run(
-    # host=os.getenv("IP", "0.0.0.0"),
-    # port=int(os.getenv("PORT", 8080)),
-)
+
+def addUserEmailDB(userEmail):
+    email_user = User_DB.query.filter_by(email=userEmail).first()
+    if email_user:
+        pass
+    else:
+        new_email_user = User_DB(email=userEmail)
+        db.session.add(new_email_user)
+        db.session.commit()
+
+
+if __name__ == "__main__":
+    app.run(
+        # host=os.getenv("IP", "0.0.0.0"),
+        # port=int(os.getenv("PORT", "8080")),
+        debug=True,
+    )

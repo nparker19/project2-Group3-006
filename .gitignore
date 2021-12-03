@@ -1,6 +1,10 @@
 .env
-__pycache__/
-token_files/
-node_modules/
+__pycache__
+/node_modules
+/.pnp
+.pnp.js
+/coverage
+/build
+token_files
 credentials.json
 credentials.json~parent of 0b7f3c7d... added README contents, and home.html update
