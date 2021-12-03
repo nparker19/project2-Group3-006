@@ -281,10 +281,8 @@ def index():
     return flask.render_template("index.html")
 app.register_blueprint(bp)
 
-def add_user_emaildb(userEmail):
-    """
-    function query user database
-    """
+
+def addUserEmailDB(userEmail):
     email_user = User_DB.query.filter_by(email=userEmail).first()
     if email_user:
         pass
