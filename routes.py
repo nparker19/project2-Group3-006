@@ -4,8 +4,9 @@ in other part of the entire application. The route and html rendering
 are defined here
 """
 from datetime import timedelta
-from flask import session
 from functools import wraps
+from flask import session
+import os
 import flask
 from flask_login import current_user, LoginManager
 from flask_login.utils import login_required
@@ -103,13 +104,13 @@ google = oauth.register(
     OAUTHLIB_STRICT_TOKEN_TYPE="Bearer",
 )
 
-# W0621: Redefining name 'google' from outer scope (line 92) 
+# W0621: Redefining name 'google' from outer scope (line 92)
 # (redefined-outer-name)
-# routes.py:116:4: E0237: Assigning to attribute 'permanent' 
+# routes.py:116:4: E0237: Assigning to attribute 'permanent'
 # not defined in class slots (assigning-non-slot)
-# routes.py:139:8: E1101: Instance of 'scoped_session' has 
+# routes.py:139:8: E1101: Instance of 'scoped_session' has
 # no 'add' member (no-member)
-# routes.py:140:8: E1101: Instance of 'scoped_session' has 
+# routes.py:140:8: E1101: Instance of 'scoped_session' has
 # no 'commit' member (no-member)
 
 @app.route("/authorize")
@@ -190,7 +191,7 @@ def sorting():
     This route accepts the unsorted schedule from the client
     and returns to the client a sorted schedule
     """
-    errorMessage = []
+    error_message = []
     unsortedSchedule = flask.request.json.get("unsortedSchedule")
     try:
         convertedDict = convert_schedule_to_reg_time(unsortedSchedule)
@@ -239,7 +240,7 @@ def suggestions():
 # disable pylint
 # routes.py:211:11: W0703: Catching too general exception Exception (broad-except)
 # routes.py:241:11: W0703: Catching too general exception Exception (broad-except)
-# routes.py:264:0: C0103: Argument name "userEmail" 
+# routes.py:264:0: C0103: Argument name "userEmail"
 # doesn't conform to snake_case naming style (invalid-name)
 # routes.py:273:8: E1101: Instance of 'scoped_session' has no 'add' member (no-member)
 # routes.py:274:8: E1101: Instance of 'scoped_session' has no 'commit' member (no-member)

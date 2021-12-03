@@ -31,8 +31,8 @@ pip install -r requirments.txt
 - For set up react component set up and running see https://create-react-app.dev/docs/getting-started/
 
 ## Problem and Technical Issues in the course of design
-- Setting up the Heroku app deployment was a huge challenge. Everthing for the deploymet was fine except for linking the Google Calender API credentials to Heroku config var: thid is still a challenge. 
-- Also deleting from the calendar updae was a challenges> it is someworth a difficult task to fetch and delete directly via html from google calendar
+- Setting up the Heroku app deployment was a huge challenge. Everthing for the deploymet was fine except for linking the Google Calender API credentials to Heroku config var: thid is still a challenge but we finally got it done - deployed
+
 
 ##  possible addition to app
 - this may include scaling up the app such that user can add list of activities that the TODit app can add pop-ups of suggestion
