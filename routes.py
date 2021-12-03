@@ -3,22 +3,18 @@ this script is the central to the app and calls major functions
 in other part of the entire application. The route and html rendering
 are defined here
 """
-
-from flask.helpers import url_for
-from werkzeug.utils import redirect
-from models import User_DB
-import os
 from datetime import timedelta
 from functools import wraps
-from authlib.integrations.flask_client import OAuth
+import os
 from flask.helpers import url_for
 from werkzeug.utils import redirect
 import flask
 from flask import session
 from flask_login import current_user, LoginManager
 from flask_login.utils import login_required
-from app import app, db
+from authlib.integrations.flask_client import OAuth
 from models import User_DB
+from app import app, db
 from methods import (
     suggest,
     sort_dict_time_regular,
