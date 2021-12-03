@@ -1,5 +1,5 @@
 """
-this script is to call gooogle calender API for use in app
+This script is to call gooogle calender API for use in app
 """
 import pickle
 import os
@@ -18,6 +18,15 @@ def create_service(client_secret_file, api_name, api_version, *scopes, prefix=""
     """
     # decide to keep variable as this despict pylint suggestion:
     # pylint: disable=C0103
+    # pylint: disable=W0621: Redefining name 'API_VERSION' from outer scope (line 69) 
+    # (redefined-outer-name)
+    # pylint: disable=W0621: Redefining name 'SCOPES' from outer scope (line 70) 
+    # (redefined-outer-name)
+    # pylint: disable=W0621: Redefining name 'service' from outer scope (line 74) 
+    # (redefined-outer-name)
+    # pylint: disable= R1721: Unnecessary use of a comprehension,
+    # use list(scopes[0]) instead. (unnecessary-comprehension)
+    
     CLIENT_SECRET_FILE = client_secret_file
     API_SERVICE_NAME = api_name
     API_VERSION = api_version
@@ -42,7 +51,8 @@ def create_service(client_secret_file, api_name, api_version, *scopes, prefix=""
         else:
             flow = InstalledAppFlow.from_client_secrets_file(CLIENT_SECRET_FILE, SCOPES)
             cred = flow.run_local_server()
-
+       
+        # pylin: disable W0703: Catching too general exception Exception (broad-except)
         with open(os.path.join(working_dir, token_dir, pickle_file), "wb") as token:
             pickle.dump(cred, token)
     # refuse to follow pylint suggestion here to

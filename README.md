@@ -10,6 +10,7 @@ https://git.heroku.com/nameless-basin-16999.git
 - ***such such gym time, walking out, nap time, study time and other lifestyle-related activities***
 - ***User can choose to update schedule tasks and submitted schedule***
 - ***app then save schedule to Google calendar - with  reminder set in place already***
+
 ### TODOit app is essentially design to fill help user manage and scheudule thier busy daily activities such that they can fill-in other essentiall event based on app suggestion. It is interesting that that many ToDo app by this particularly unique for the pop-up suggestions design.  
 
 ## This app is designed using Flask web framework as a tool for linking every pecies of the applications together a whole. 
@@ -35,3 +36,17 @@ pip install -r requirments.txt
 
 ##  possible addition to app
 - this may include scaling up the app such that user can add list of activities that the TODit app can add pop-ups of suggestion
+- Google calender operation will be implemanted and fixed challenges arround token_expiration
+
+## list pylint disable in the codes
+    "--errors-only" to ignore none error
+     "--load-plugins", to ignore plugins
+    "--pylint_flask_sqlalchemy" to ignore flask sqlalchemy 
+     "--pylint_flask" : to ignore flask import and function
+    "--disable=C0103", to ignore style style for database 
+    "--disable=W0621",  to ignore style standard that's not error
+    "--disable=R0914",  to ignore calling standard complain
+    "--disable=R1721", "--disable=W0703", to ignore exceptions complaint 
+    "--disable=E1101", to ignore non error suggestions due to instance
+    "--disable=W0702", to ignore a logic recommendation
+

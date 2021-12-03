@@ -1,6 +1,6 @@
 """
 the script is check the google authentication is working,
-the is to collect imput from web interface
+the is to collect imput from wepy interface
 and pass it to google API service to create calender when
 createschedule function is called
 """
@@ -53,6 +53,8 @@ def create_schedules(xitems):
         start_time = arrow.get(str(today) + " " + start_time, frmt).isoformat()
         end_time = arrow.get(str(today) + " " + end_time, frmt).isoformat()
 
+        # disable pylint googlecalmethods.py:57:12: E1101: 
+        # Instance of 'Resource' has no 'events' member (no-member)
         event_result = (
             service.events()
             .insert(
@@ -68,7 +70,9 @@ def create_schedules(xitems):
             .execute()
         )
     print(event_result)
-
+    
+    # disable pylint py:72:0: C0103: Argument name "x" 
+    # doesn't conform to snake_case naming style (invalid-name)
 def isoformat_string_format(x):
     """
     This method to convert isoformat time from API to string format
@@ -77,7 +81,8 @@ def isoformat_string_format(x):
     dtt = datetime.strptime(str(date_), "%Y-%m-%d %H:%M:%S")
     return dtt.strftime("%A, %b %d %Y, %H:%M")
 
-
+# disable pylint py:94:8: E1101: Instance of 'Resource'
+#  has no 'events' member (no-member)
 def list_schedules():
     """
     This script call google calendar API and
@@ -124,7 +129,8 @@ def list_schedules():
             "summarys_": summarys_,
             "ids_": ids_,
         }
-
+# disable pylint py:136:8: E1101: Instance of 'Resource' 
+# has no 'events' member (no-member)
 def delete_schedules():
     """
     the function is to delete the event from google calender

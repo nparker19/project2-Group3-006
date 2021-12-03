@@ -21,7 +21,6 @@ from methods import (
     convert_schedule_to_regtime,
 )
 
-
 from googlecalmethods import check_connect,create_schedules
 # # from listschedule import list_schedules
 
@@ -71,6 +70,10 @@ def signup():
     """
     return flask.render_template("signup.html")
 
+# #disable pylint
+# routes.py:74:0: E0102: function already defined line 14 (function-redefined)
+# routes.py:74:0: C0103: Argument name "f" doesn't conform to snake_case naming style (invalid-name)
+
 # login required function for google authentication
 def login_required(f):
     """
@@ -102,6 +105,15 @@ google = oauth.register(
     userinfo_endpoint="https://openidconnect.googleapis.com/v1/userinfo",
     client_kwargs={"scope": "openid email profile"},
 )
+
+# W0621: Redefining name 'google' from outer scope (line 92) 
+# (redefined-outer-name)
+# routes.py:116:4: E0237: Assigning to attribute 'permanent' 
+# not defined in class slots (assigning-non-slot)
+# routes.py:139:8: E1101: Instance of 'scoped_session' has 
+# no 'add' member (no-member)
+# routes.py:140:8: E1101: Instance of 'scoped_session' has 
+# no 'commit' member (no-member)
 
 @app.route("/authorize")
 def authorize():
@@ -226,6 +238,13 @@ def suggestions():
             "message_server": error_message,
         }
     )
+
+# disable pylint
+# routes.py:211:11: W0703: Catching too general exception Exception (broad-except)
+# routes.py:241:11: W0703: Catching too general exception Exception (broad-except)
+# routes.py:264:0: C0103: Argument name "userEmail" doesn't conform to snake_case naming style (invalid-name)
+# routes.py:273:8: E1101: Instance of 'scoped_session' has no 'add' member (no-member)
+# routes.py:274:8: E1101: Instance of 'scoped_session' has no 'commit' member (no-member)
 
 @app.route("/complete", methods=["POST"])
 def complete():

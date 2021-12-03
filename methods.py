@@ -1,10 +1,18 @@
 '''
 A function which takes in a schedule list with times (in chronological order as a string),
 and a list of items not currently in the schedule along with their durations.
-It outputs a list of suggestions on where to fit the items into the current schedule.
+It outputs a list of suggestions on where to fit the items into the current  schedules.
 '''
 from datetime import timedelta, datetime
 
+# disable pylint: methods.py:66:20: W0621: 
+# Redefining name 'suggest' from outer scope (line 8) (redefined-outer-name)
+# disable pylint methods.py:81:0: C0301: 
+# Line too long (269/100) (line-too-long)
+# disable pylint methods.py:66:20: W0621: Redefining name 'suggest' 
+# from outer scope (line 8) (redefined-outer-name)
+# disable pylint methods.py:85:12: R1723: 
+# Unnecessary "else" after "break" (no-else-break)
 def suggest(schedule_dict, suggest_dict):
     """
     A function which takes in a schedule list with times (in chronological order as a string),
