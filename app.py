@@ -1,5 +1,8 @@
-import flask
+"""
+This function is to set up the flask object/class
+"""
 import os
+import flask
 from flask_sqlalchemy import SQLAlchemy
 from dotenv import load_dotenv, find_dotenv
 
