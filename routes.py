@@ -6,7 +6,7 @@ from models import User_DB
 import os
 from authlib.integrations.flask_client import OAuth
 from datetime import timedelta
-from flask import session, request
+from flask import session
 from functools import wraps
 import flask
 from flask_login import current_user, LoginManager

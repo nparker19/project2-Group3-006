@@ -38,3 +38,5 @@ pip install -r requirments.txt
 
 ## Linting
 - Disabled pylint C0330 (bad-continuation) in methods.py. Split up a string in order to avoid a different pylint error.However, the way black formated the indentation and spacing, disagreed with pylint. Anytime the spacing/indentation was fixed, black reformatted the spacing and indentation.
+-Disabled eslint error: Function declared in a loop contains unsafe references to variable(s) 'i'  no-loop-func
+Disabled this error because the function was just removing the object referenced at i from a dictionary declared outside of the loop. No unsafe actions resulted from this.
