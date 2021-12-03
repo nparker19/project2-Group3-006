@@ -242,7 +242,8 @@ def suggestions():
 # disable pylint
 # routes.py:211:11: W0703: Catching too general exception Exception (broad-except)
 # routes.py:241:11: W0703: Catching too general exception Exception (broad-except)
-# routes.py:264:0: C0103: Argument name "userEmail" doesn't conform to snake_case naming style (invalid-name)
+# routes.py:264:0: C0103: Argument name "userEmail" 
+# doesn't conform to snake_case naming style (invalid-name)
 # routes.py:273:8: E1101: Instance of 'scoped_session' has no 'add' member (no-member)
 # routes.py:274:8: E1101: Instance of 'scoped_session' has no 'commit' member (no-member)
 

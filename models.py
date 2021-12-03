@@ -7,7 +7,8 @@ from flask_login import UserMixin
 from app import db
 
 # disabled pylint
-# models.py:11:0: C0103: Class name "User_DB" doesn't conform to PascalCase naming style (invalid-name)
+# models.py:11:0: C0103: Class name "User_DB" doesn't 
+# conform to PascalCase naming style (invalid-name)
 # models.py:15:9: E1101: Instance of 'SQLAlchemy' has no 'Column' member (no-member)
 # models.py:15:19: E1101: Instance of 'SQLAlchemy' has no 'Integer' member (no-member)
 # models.py:16:12: E1101: Instance of 'SQLAlchemy' has no 'Column' member (no-member)

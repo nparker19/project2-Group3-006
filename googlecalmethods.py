@@ -81,7 +81,7 @@ def isoformat_string_format(x):
     dtt = datetime.strptime(str(date_), "%Y-%m-%d %H:%M:%S")
     return dtt.strftime("%A, %b %d %Y, %H:%M")
 
-# disable pylint py:94:8: E1101: Instance of 'Resource'
+# disable pylint py:94:8: E1101:  Instance of 'Resource'
 #  has no 'events' member (no-member)
 def list_schedules():
     """

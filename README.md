@@ -36,7 +36,7 @@ pip install -r requirments.txt
 
 ##  possible addition to app
 - this may include scaling up the app such that user can add list of activities that the TODit app can add pop-ups of suggestion
-- Google calender operation will be implemanted and fixed challenges arround token_expiration
+- Google calender operation will be implemanted and fixed challenges arround token_expiration.
 
 ## list pylint disable in the codes
     "--errors-only" to ignore none error

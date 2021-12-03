@@ -1,5 +1,5 @@
 """
-This script is to call gooogle calender API for use in app
+This script is to call gooogle calender API for use in app.
 """
 import pickle
 import os

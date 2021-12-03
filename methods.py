@@ -1,6 +1,6 @@
 '''
 A function which takes in a schedule list with times (in chronological order as a string),
-and a list of items not currently in the schedule along with their durations.
+and a list of items not currently in the schedules along with their durations.
 It outputs a list of suggestions on where to fit the items into the current  schedules.
 '''
 from datetime import timedelta, datetime
