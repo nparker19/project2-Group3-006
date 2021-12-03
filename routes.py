@@ -4,25 +4,20 @@ in other part of the entire application. The route and html rendering
 are defined here
 """
 from datetime import timedelta
-from functools import wraps
-import os
-from flask.helpers import url_for
-from werkzeug.utils import redirect
-import flask
 from flask import session
+from functools import wraps
+import flask
 from flask_login import current_user, LoginManager
 from flask_login.utils import login_required
 from authlib.integrations.flask_client import OAuth
 from models import User_DB
 from app import app, db
 from methods import (
-    suggest,
+    suggest_generator,
     sort_dict_time_regular,
-    convert_schedule_to_regtime,
+    convert_schedule_to_reg_time,
 )
 
-from googlecalmethods import check_connect,create_schedules
-# # from listschedule import list_schedules
 
 login_manager = LoginManager()
 login_manager.login_view = "login"
@@ -104,6 +99,8 @@ google = oauth.register(
     api_base_url="https://www.googleapis.com/oauth2/v1/",
     userinfo_endpoint="https://openidconnect.googleapis.com/v1/userinfo",
     client_kwargs={"scope": "openid email profile"},
+    OAUTHLIB_INSECURE_TRANSPORT=os.getenv("OAUTHLIB_INSECURE_TRANSPORT"),
+    OAUTHLIB_STRICT_TOKEN_TYPE="Bearer",
 )
 
 # W0621: Redefining name 'google' from outer scope (line 92) 
@@ -186,18 +183,18 @@ def logout():
         session.pop(key)
     return redirect("landingpage")
 
-# This route accepts the unsorted schedule from the client
-# and returns to the client a sorted schedule
-# @app.route("/sorting", methods=["POST"])
+
+@app.route("/sorting", methods=["POST"])
 def sorting():
     """
-    This method directs sort lists
+    This route accepts the unsorted schedule from the client
+    and returns to the client a sorted schedule
     """
-    error_message = []
-    unsorted_schedule = flask.request.json.get("unsorted_schedule")
+    errorMessage = []
+    unsortedSchedule = flask.request.json.get("unsortedSchedule")
     try:
-        converted_dict = convert_schedule_to_regtime(unsorted_schedule)
-        sorted_schedule = sort_dict_time_regular(converted_dict)
+        convertedDict = convert_schedule_to_reg_time(unsortedSchedule)
+        sortedSchedule = sort_dict_time_regular(convertedDict)
     except ValueError:
         error_message.append("Invalid Time entered.")
         return flask.jsonify({"message_server": error_message})
@@ -220,7 +217,7 @@ def suggestions():
     schedule_dict = flask.request.json.get("schedule_dict")
     suggest_dict = flask.request.json.get("suggest_dict")
     try:
-        suggestions_list = suggest(schedule_dict, suggest_dict)
+        suggestionsList = suggest_generator(scheduleDict, suggestDict)
     except Exception as error:
         error_message.append(
             f"We were unable to retrieve your schedule suggestions. Error: {error}"
@@ -247,30 +244,6 @@ def suggestions():
 # routes.py:273:8: E1101: Instance of 'scoped_session' has no 'add' member (no-member)
 # routes.py:274:8: E1101: Instance of 'scoped_session' has no 'commit' member (no-member)
 
-@app.route("/complete", methods=["POST"])
-def complete():
-    """
-    This method takes in schedule dictionary and return dict to server
-    """
-    error_message = []
-    # schedule_date = flask.request.json.get("currentDate")
-    schedule_dict = flask.request.json.get("schedule_dict")
-
-    try:
-        check_connect()
-        create_schedules(schedule_dict)
-    except Exception as error:
-        error_message.append(
-            f"Calendar was not successfully saved to google calendar. Error: {error}"
-        )
-        return flask.jsonify(
-            {
-                "message_server": error_message,
-            }
-        )
-    return flask.jsonify(
-        {"schedule_server": schedule_dict, "message_server": error_message}
-    )
 bp = flask.Blueprint("bp", __name__, template_folder="./build")
 
 @bp.route("/index")
@@ -283,18 +256,17 @@ def index():
 app.register_blueprint(bp)
 
 
-def addUserEmailDB(userEmail):
-    email_user = User_DB.query.filter_by(email=userEmail).first()
+def add_user_email(user_email):
+    email_user = User_DB.query.filter_by(email=user_email).first()
     if email_user:
         pass
     else:
-        new_email_user = User_DB(email=userEmail)
+        new_email_user = User_DB(email=user_email)
         db.session.add(new_email_user)
         db.session.commit()
 
 if __name__ == "__main__":
     app.run(
-        # host=os.getenv("IP", "0.0.0.0"),
-        # port=int(os.getenv("PORT", "8080")),
-        debug=True,
+        host=os.getenv("IP", "0.0.0.0"),
+        port=int(os.getenv("PORT", "8080")),
     )
