@@ -6,22 +6,17 @@ from models import User_DB
 import os
 from authlib.integrations.flask_client import OAuth
 from datetime import timedelta
-from flask import session, request
-from functools import wraps
-import flask
 from flask import session
 from functools import wraps
-from flask_login import login_user, current_user, LoginManager
+import flask
+from flask_login import current_user, LoginManager
 from flask_login.utils import login_required
 from methods import (
-    suggest,
-    sortDictTimeRegular,
-    convertScheduleToRegTime,
+    suggest_generator,
+    sort_dict_time_regular,
+    convert_schedule_to_reg_time,
 )
 
-from createSchedule import creatSchedules
-from checkConnection import checkConnect
-from listSchedule import listSchedules
 
 login_manager = LoginManager()
 login_manager.login_view = "login"
@@ -87,6 +82,8 @@ google = oauth.register(
     api_base_url="https://www.googleapis.com/oauth2/v1/",
     userinfo_endpoint="https://openidconnect.googleapis.com/v1/userinfo",
     client_kwargs={"scope": "openid email profile"},
+    OAUTHLIB_INSECURE_TRANSPORT=os.getenv("OAUTHLIB_INSECURE_TRANSPORT"),
+    OAUTHLIB_STRICT_TOKEN_TYPE="Bearer",
 )
 
 
@@ -147,14 +144,17 @@ def logout():
     return redirect("landingpage")
 
 
-# This route accepts the unsorted schedule from the client and returns to the client a sorted schedule
 @app.route("/sorting", methods=["POST"])
 def sorting():
+    """
+    This route accepts the unsorted schedule from the client
+    and returns to the client a sorted schedule
+    """
     errorMessage = []
     unsortedSchedule = flask.request.json.get("unsortedSchedule")
     try:
-        convertedDict = convertScheduleToRegTime(unsortedSchedule)
-        sortedSchedule = sortDictTimeRegular(convertedDict)
+        convertedDict = convert_schedule_to_reg_time(unsortedSchedule)
+        sortedSchedule = sort_dict_time_regular(convertedDict)
     except ValueError:
         errorMessage.append("Invalid Time entered.")
         return flask.jsonify({"message_server": errorMessage})
@@ -178,7 +178,7 @@ def suggestions():
     scheduleDict = flask.request.json.get("scheduleDict")
     suggestDict = flask.request.json.get("suggestDict")
     try:
-        suggestionsList = suggest(scheduleDict, suggestDict)
+        suggestionsList = suggest_generator(scheduleDict, suggestDict)
     except Exception as error:
         errorMessage.append(
             f"We were unable to retrieve your schedule suggestions. Error: {error}"
@@ -198,30 +198,6 @@ def suggestions():
     )
 
 
-@app.route("/complete", methods=["POST"])
-def complete():
-    errorMessage = []
-    scheduleDate = flask.request.json.get("currentDate")
-    scheduleDict = flask.request.json.get("scheduleDict")
-
-    try:
-        checkConnect()
-        creatSchedules(scheduleDict)
-    except Exception as error:
-        errorMessage.append(
-            f"Calendar was not successfully saved to google calendar. Error: {error}"
-        )
-        return flask.jsonify(
-            {
-                "message_server": errorMessage,
-            }
-        )
-    return flask.jsonify(
-        {"schedule_server": scheduleDict, "message_server": errorMessage}
-    )
-
-
-
 bp = flask.Blueprint("bp", __name__, template_folder="./build")
 
 
@@ -238,19 +214,18 @@ def index():
 app.register_blueprint(bp)
 
 
-def addUserEmailDB(userEmail):
-    email_user = User_DB.query.filter_by(email=userEmail).first()
+def add_user_email(user_email):
+    email_user = User_DB.query.filter_by(email=user_email).first()
     if email_user:
         pass
     else:
-        new_email_user = User_DB(email=userEmail)
+        new_email_user = User_DB(email=user_email)
         db.session.add(new_email_user)
         db.session.commit()
 
 
 if __name__ == "__main__":
     app.run(
-        # host=os.getenv("IP", "0.0.0.0"),
-        # port=int(os.getenv("PORT", "8080")),
-        debug=True,
+        host=os.getenv("IP", "0.0.0.0"),
+        port=int(os.getenv("PORT", "8080")),
     )

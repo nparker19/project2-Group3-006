@@ -17,7 +17,7 @@ https://git.heroku.com/nameless-basin-16999.git
 - Implemented such that use is uniquely identifed in the app and in the linked database for the app.
 - Heroku cloud application is used to eventually host this application and the database for the app operations. 
 - Google Calender API was used mainly to link user activities on the TODOit app to user gmail calender updates and notification (https://developers.google.com/calendar/). 
-- React was also you make the app for responsive and interactive user interface - to make the pap dynamic and ea-sy**
+- React was also you make the app for responsive and interactive user interface - to make the pap dynamic and easy
 
 ## To clone this app repository
 -  user or developer will need to create the their own database set-up
@@ -34,4 +34,9 @@ pip install -r requirments.txt
 - Also deleting from the calendar updae was a challenges> it is someworth a difficult task to fetch and delete directly via html from google calendar
 
 ##  possible addition to app
-- this may include scaling up the app such that user can add list of activities that the TODit app can add pop-ups of suggestion
+- this may include scaling up the app such that user can add list of activities that the TODit app can add pop-ups of suggestion 
+
+## Linting
+- Disabled pylint C0330 (bad-continuation) in methods.py. Split up a string in order to avoid a different pylint error.However, the way black formated the indentation and spacing, disagreed with pylint. Anytime the spacing/indentation was fixed, black reformatted the spacing and indentation.
+-Disabled eslint error: Function declared in a loop contains unsafe references to variable(s) 'i'  no-loop-func
+Disabled this error because the function was just removing the object referenced at i from a dictionary declared outside of the loop. No unsafe actions resulted from this.
