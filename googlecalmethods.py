@@ -1,6 +1,6 @@
 """
 the script is check the google authentication is working,
-the is to collect imput from wepy interface
+the is to collect input from wepy interface
 and pass it to google API service to create calender when
 createschedule function is called
 """

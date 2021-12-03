@@ -1,6 +1,6 @@
 '''
 this script is define and create model
-for the database used  in the app
+for the database  used  in the app
 '''
 import os
 from flask_login import UserMixin
