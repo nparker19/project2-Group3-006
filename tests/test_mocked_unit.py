@@ -16,7 +16,8 @@ parent = os.path.dirname(current)
 # the sys.path.
 sys.path.append(parent)
 
-from routes import User_DB, addUserEmailDB
+from routes import addUserEmailDB
+from models import User_DB
 
 INPUT = "INPUT"
 EXPECTED_OUTPUT = "EXPECTED_OUTPUT"
