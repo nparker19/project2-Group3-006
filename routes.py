@@ -22,8 +22,8 @@ from methods import (
 )
 
 
-from googlecalmethods import check_connect,create_schedules
-# from listschedule import list_schedules
+# from googlecalmethods import check_connect,create_schedules
+# # from listschedule import list_schedules
 
 login_manager = LoginManager()
 login_manager.login_view = "login"
