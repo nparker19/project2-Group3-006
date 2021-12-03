@@ -1,10 +1,8 @@
 from types import prepare_class
 from flask.helpers import url_for
 from werkzeug.utils import redirect
-from flask_login import UserMixin
-
-# from app import app, db
-# from models import User_DB
+from app import app, db
+from models import User_DB
 import os
 from authlib.integrations.flask_client import OAuth
 from datetime import timedelta
@@ -22,35 +20,6 @@ from methods import (
 from createSchedule import creatSchedules
 from checkConnection import checkConnect
 from listSchedule import listSchedules
-from flask_sqlalchemy import SQLAlchemy
-from dotenv import load_dotenv, find_dotenv
-
-load_dotenv(find_dotenv())
-
-app = flask.Flask(__name__, static_folder="./build/static")
-
-db_url = os.getenv("DATABASE_URL")
-if db_url.startswith("postgres://"):
-    db_url = db_url.replace("postgres://", "postgresql://", 1)
-app.config["SQLALCHEMY_DATABASE_URI"] = db_url
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-app.secret_key = b"I am a secret key!"
-db = SQLAlchemy(app)
-
-
-class User_DB(UserMixin, db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(80))
-
-    def __repr__(self):
-        return f"<User {self.email}>"
-
-    def get_username(self):
-        return self.email
-
-
-if os.getenv("DATABASE_URL") is not None:  # so our unit tests run in GitHub
-    db.create_all()
 
 login_manager = LoginManager()
 login_manager.login_view = "login"
@@ -62,7 +31,7 @@ def load_user(user_name):
     return User_DB.query.get(user_name)
 
 
-@app.route("/")
+@app.route("/landingpage")
 def landingpage():
     return flask.render_template("landingpage.html")
 
@@ -118,7 +87,6 @@ google = oauth.register(
     client_kwargs={"scope": "openid email profile"},
     OAUTHLIB_INSECURE_TRANSPORT=os.getenv("OAUTHLIB_INSECURE_TRANSPORT"),
     OAUTHLIB_STRICT_TOKEN_TYPE="Bearer",
-    redirect_uri="http://127.0.0.1:8080/",
 )
 
 
@@ -131,7 +99,7 @@ def authorize():
     user = oauth.google.userinfo()
     session["profile"] = user_info
     session.permanent = True
-    return redirect("/start")
+    return redirect("/")
 
 
 @app.route("/login")
@@ -139,7 +107,7 @@ def login():
     return flask.render_template("login.html")
 
 
-@app.route("/start")
+@app.route("/")
 @login_required
 def hello_world():
     email = dict(session)["profile"]["email"]
@@ -281,6 +249,6 @@ def addUserEmailDB(userEmail):
 
 if __name__ == "__main__":
     app.run(
-        host=os.getenv("IP", "127.0.0.1"),
-        # port=int(os.getenv("PORT", "8080")),
+        host=os.getenv("IP", "0.0.0.0"),
+        port=int(os.getenv("PORT", "8080")),
     )
