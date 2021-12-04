@@ -1,7 +1,7 @@
 # Start of Project 2, for Group 3 (Section 006)
-https://pacific-tor-81329.herokuapp.com/
+- https://pacific-tor-81329.herokuapp.com/
+- REGULAR LOGIN AND SIGNUP FLOW DOES NOT WORK. It is for css purposes only. This was okay'ed with John. Please only use google login when testing the app.
 
-# REGULAR LOGIN AND SIGNUP FLOW DOES NOT WORK. It is for css purposes only. This was okay'ed with John. Please only use google login when testing the app.
 # TODOit App
 ### TODOit is web application that allow user to schedule their daily tasks and then get time suggestions for other activies that can be added to schedules.
 - ***User is able to login with gmail account***
