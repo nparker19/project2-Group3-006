@@ -123,20 +123,20 @@ function App() {
           var suggestList = data.suggestions_server;
 
           for (var i in suggestList) {
-
-            var suggest = suggestList[i].suggestion;
+            var suggestNotif = suggestList[i];
+            var suggest = suggestNotif.suggestion;
 
             //If statement makes sure that a suggestion for this event has not been accepted already, and if the user accepts the suggestion
             if (
-              addedSuggestions.indexOf(suggestList[i].suggestEvent) === -1 &&
+              addedSuggestions.indexOf(suggestNotif.suggestEvent) === -1 &&
               window.confirm(suggest) === true
             ) {
               let newScheduleDict = [
                 ...scheduleUpdate,
                 {
-                  event: suggestList[i].suggestEvent,
-                  startTime: suggestList[i].suggestStartTime,
-                  endTime: suggestList[i].suggestEndTime,
+                  event: suggestNotif.suggestEvent,
+                  startTime: suggestNotif.suggestStartTime,
+                  endTime: suggestNotif.suggestEndTime,
                 },
               ];
               scheduleUpdate = newScheduleDict;
@@ -157,10 +157,10 @@ function App() {
                   }
                 });
               // eslint-disable-next-line
-              suggestUpdate = suggestUpdate.filter((item) => item.suggestion !== suggestList[i].suggestEvent);
+              suggestUpdate = suggestUpdate.filter((item) => item.suggestion !== suggestNotif.suggestEvent);
               setSuggestDict(suggestUpdate);
               //Event is now added to the addedSuggestions list so that other suggestions for this event do not appear
-              addedSuggestions.push(suggestList[i].suggestEvent);
+              addedSuggestions.push(suggestNotif.suggestEvent);
             }
           }
         }
