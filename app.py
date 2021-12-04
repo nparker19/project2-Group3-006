@@ -1,9 +1,5 @@
-"""
-This function is to set up the flask object/class..
-# pass pylint 
-"""
-import os
 import flask
+import os
 from flask_sqlalchemy import SQLAlchemy
 from dotenv import load_dotenv, find_dotenv
 
