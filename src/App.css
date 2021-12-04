@@ -41,9 +41,8 @@
 }
 
 body {
-  background-color:white;
+  background-color: white;
   line-height: 1.5;
-  
 }
 
 .display {
@@ -140,7 +139,6 @@ input[type="number"] {
 .save {
   padding-top: 10px;
 }
-
 
 .delete-btn {
   background: transparent;
@@ -256,7 +254,7 @@ header .container {
 .btn {
   display: inline-block;
   padding: 0.9rem 1.9rem;
-  color:#fff !important;
+  color: #fff !important;
   background-color: var(--mainColor);
   border-radius: 16px;
   border-width: 0;
