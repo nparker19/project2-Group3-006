@@ -3,16 +3,22 @@ this script is the central to the app and calls major functions
 in other part of the entire application. The route and html rendering
 are defined here
 """
+
 from datetime import timedelta
 from functools import wraps
-from flask import session
+from operator import truediv
+from types import prepare_class
 import os
+from flask import session
+from flask.helpers import url_for
+from werkzeug.utils import redirect
 import flask
 from flask_login import current_user, LoginManager
 from flask_login.utils import login_required
 from authlib.integrations.flask_client import OAuth
 from models import User_DB
 from app import app, db
+
 from methods import (
     suggest_generator,
     sort_dict_time_regular,
@@ -119,10 +125,10 @@ def authorize():
     This method handle the user google autherization
     """
     google = oauth.create_client("google")
-    # token = google.authorize_access_token()
+    token = google.authorize_access_token()
     resp = google.get("userinfo")
     user_info = resp.json()
-    # user = oauth.google.userinfo()
+    user = oauth.google.userinfo()
     session["profile"] = user_info
     session.permanent = True
     return redirect("/")
@@ -191,19 +197,19 @@ def sorting():
     This route accepts the unsorted schedule from the client
     and returns to the client a sorted schedule
     """
-    error_message = []
+    errorMessage = []
     unsortedSchedule = flask.request.json.get("unsortedSchedule")
     try:
         convertedDict = convert_schedule_to_reg_time(unsortedSchedule)
         sortedSchedule = sort_dict_time_regular(convertedDict)
     except ValueError:
-        error_message.append("Invalid Time entered.")
-        return flask.jsonify({"message_server": error_message})
+        errorMessage.append("Invalid Time entered.")
+        return flask.jsonify({"message_server": errorMessage})
 
     return flask.jsonify(
         {
-            "message_server": error_message,
-            "server_sorted_Schedule": sorted_schedule,
+            "message_server": errorMessage,
+            "server_sorted_schedule": sortedSchedule,
         }
     )
 
@@ -214,26 +220,26 @@ def suggestions():
     This method takes in a schedule dictionary and a suggestions dictionary from the client,
     and returns schedule suggestions to the client.
     """
-    error_message = []
-    schedule_dict = flask.request.json.get("schedule_dict")
-    suggest_dict = flask.request.json.get("suggest_dict")
+    errorMessage = []
+    scheduleDict= flask.request.json.get("scheduleDict")
+    suggestDict = flask.request.json.get("suggestDict")
     try:
         suggestionsList = suggest_generator(scheduleDict, suggestDict)
     except Exception as error:
-        error_message.append(
+        errorMessage.append(
             f"We were unable to retrieve your schedule suggestions. Error: {error}"
         )
         return flask.jsonify(
             {
-                "message_server": error_message,
+                "message_server": errorMessage,
             }
         )
     return flask.jsonify(
         {
-            "schedule_server": schedule_dict,
-            "suggest_server": suggest_dict,
-            "suggestions_server": suggestions_list,
-            "message_server": error_message,
+            "schedule_server": scheduleDict,
+            "suggest_server": suggestDict,
+            "suggestions_server": suggestionsList,
+            "message_server": errorMessage,
         }
     )
 
@@ -269,5 +275,5 @@ def add_user_email(user_email):
 if __name__ == "__main__":
     app.run(
         host=os.getenv("IP", "0.0.0.0"),
-        port=int(os.getenv("PORT", "8080")),
+        port=int(os.getenv("PORT", "8000")),
     )
